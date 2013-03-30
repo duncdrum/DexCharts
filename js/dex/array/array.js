@@ -28,7 +28,7 @@ dex.array.slice = function(array, rowRange, optLen)
   }
   else if (arguments.length == 2)
   {
-  	if (isArray(rowRange))
+  	if (Array.isArray(rowRange))
   	{
   		range = rowRange;
   	}
@@ -39,7 +39,7 @@ dex.array.slice = function(array, rowRange, optLen)
   }
   else if (arguments.length > 2)
   {
-    if (isArray(rowRange))
+    if (Array.isArray(rowRange))
     {
   	  range = rowRange;
     }

@@ -21,13 +21,13 @@ dex.array.slice = function(array, rowRange, optLen) {
     if (arguments.length < 2) {
         return array;
     } else if (arguments.length == 2) {
-        if (isArray(rowRange)) {
+        if (Array.isArray(rowRange)) {
             range = rowRange;
         } else {
             range = dex.range(rowRange, array.length - rowRange);
         }
     } else if (arguments.length > 2) {
-        if (isArray(rowRange)) {
+        if (Array.isArray(rowRange)) {
             range = rowRange;
         } else {
             range = dex.range(rowRange, optLen);
