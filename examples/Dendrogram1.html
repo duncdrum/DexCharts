@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+.node circle {
+  cursor: pointer;
+  fill: #fff;
+  stroke: black;
+  stroke-width: 3px;
+}
+
+.node text {
+  font-size: 11px;
+}
+
+path.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="../dex.js"></script>
+<script src="../js/dex/component/d3/Dendrogram.js"></script>
+<script>
+// Create an SVG for our chart.
+var svg = d3.select("body").append("svg")
+  .attr("width", 1000)
+  .attr("height", 800)
+  .append("g");
+
+var csv =
+{
+  'header' : d3.range(3).map(function(d) { return "C"+d;}),
+  'data'   : dex.datagen.randomMatrix({"rows":3, "columns": 3, "min": 0, "max":100}),
+};
+
+csv =
+{
+  'header' : [ "C1", "C2", "C3" ],
+  'data'   : [["A", "B", "C"], ["A", "B", "D"]]
+};
+
+// Configure a chart.
+var dendrogram = new Dendrogram(
+  {
+    'parent'       : svg,
+    'height'       : 300,
+    'width'        : 600,
+    'xoffset'      : 100,
+    'rootName'     : '',
+    'rootCategory' : 'Category1',
+    'empty' :
+    {
+    	'size' : 20,
+    	'color' : "grey"
+    },
+    'notEmpty' :
+    {
+    	'size'  : 50,
+    	'color' : 'steelblue'
+    },
+    'csv'          : csv
+  }
+);
+dendrogram.render();
+
+</script>
