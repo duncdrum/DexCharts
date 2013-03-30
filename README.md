@@ -162,8 +162,6 @@ Please download and explore the provided examples.
 ![Pie Chart Example](http://dexvis.files.wordpress.com/2013/03/image21.png?w=386&h=411)
 ### Scatter Plots
 ![Scatter Plot Example](http://dexvis.files.wordpress.com/2013/03/scatterplot1.png?w=663&h=655)
-### Dendrograms
-* Insert example here
 ## Maps
 ### US State Map
 ![US State Map Example](http://dexvis.files.wordpress.com/2013/03/image10.png?w=666&h=368)
