@@ -44,6 +44,7 @@ ClusteredForce.prototype.update = function()
  	var chart  = this.chart;
   var config = this.config;
   var csv    = config.csv;
+  var ri, ci, hi;
 
   var numericHeaders = dex.csv.getNumericColumnNames(csv);
   var numericIndices = dex.csv.getNumericIndices(csv);
@@ -70,7 +71,7 @@ ClusteredForce.prototype.update = function()
 
   var nodes = [];
 
-  this.scaleNodes = function(minRadius, maxRadius)
+  function scaleNodes(minRadius, maxRadius)
   {
     var numericScales = [];
 
@@ -93,12 +94,12 @@ ClusteredForce.prototype.update = function()
       nodes = new Array((csv.data.length-1) * numericIndices.length);
     }
 
-    for (var ri=1; ri<csv.data.length; ri++)
+    for (ri=1; ri<csv.data.length; ri++)
     {
-      for (var ci=0; ci<numericIndices.length; ci++)
+      for (ci=0; ci<numericIndices.length; ci++)
       {
         var label = "<table border='1'>";
-        for (var hi=0; hi<csv.data[ri].length; hi++)
+        for (hi=0; hi<csv.data[ri].length; hi++)
         {
           if (hi == numericIndices[ci])
           {
@@ -122,7 +123,7 @@ ClusteredForce.prototype.update = function()
     }
   }
 
-  this.scaleNodes(config.minRadius, config.maxRadius);
+  scaleNodes(config.minRadius, config.maxRadius);
 
   force = d3.layout.force()
     .nodes(nodes)

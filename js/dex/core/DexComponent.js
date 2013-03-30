@@ -1,18 +1,20 @@
 function DexComponent(userConfig, defaultConfig)
 {
-	// This holds our event registry.
-	this.registry = {};
-	this.debug = false;
+  // This holds our event registry.
+  this.registry =
+  {
+  };
+  this.debug = false;
 
-	//console.log("Instantiating dex component...");
+  //console.log("Instantiating dex component...");
 
-	// Instantiate from another component
-	if (userConfig instanceof DexComponent)
-	{
- 		this.config = dex.object.overlay(userConfig.config, defaultConfig);
- 	}
- 	else
- 	{
+  // Instantiate from another component
+  if ( userConfig instanceof DexComponent)
+  {
+    this.config = dex.object.overlay(userConfig.config, defaultConfig);
+  }
+  else
+  {
     this.config = dex.object.overlay(userConfig, defaultConfig);
     //console.dir(this.config);
   }
@@ -26,10 +28,10 @@ DexComponent.prototype.attr = function(name, value)
   }
   else if (arguments.length == 2)
   {
-  	//console.log("Setting Hieararchical: " + name + "=" + value);
-  	//console.dir(this.config);
+    //console.log("Setting Hieararchical: " + name + "=" + value);
+    //console.dir(this.config);
 
-  	// This will handle the setting of a single attribute
+    // This will handle the setting of a single attribute
     dex.object.setHierarchical(this.config, name, value, '.');
 
     //console.dir(this.config);
@@ -39,16 +41,16 @@ DexComponent.prototype.attr = function(name, value)
 
 DexComponent.prototype.dump = function(message)
 {
-	console.log("========================");
-	if (arguments.length == 1)
-	{ 	
-	  console.log(message);
-	  console.log("========================");
-	}
-	console.log("=== CONFIG ===");
-	console.dir(this.config);
-	console.log("=== REGISTRY ===");
-	console.dir(this.registry);
+  console.log("========================");
+  if (arguments.length == 1)
+  {
+    console.log(message);
+    console.log("========================");
+  }
+  console.log("=== CONFIG ===");
+  console.dir(this.config);
+  console.log("=== REGISTRY ===");
+  console.dir(this.registry);
 };
 
 DexComponent.prototype.addListener = function(eventType, target, method)
@@ -57,41 +59,46 @@ DexComponent.prototype.addListener = function(eventType, target, method)
 
   if (this.debug)
   {
-    console.log("Registering Target: " + eventType + "="+ target);
+    console.log("Registering Target: " + eventType + "=" + target);
   }
   if (!this.registry.hasOwnProperty(eventType))
   {
     this.registry[eventType] = [];
   }
 
-  this.registry[eventType].push({ target : target, method : method });
-  //console.log("this.registry");	
+  this.registry[eventType].push(
+  {
+    target : target,
+    method : method
+  });
+  //console.log("this.registry");
   //console.dir(eventthis.registry);
 };
 
 DexComponent.prototype.notify = function(event)
 {
-  var targets;
+  var targets, i;
 
   if (this.debug)
   {
     console.log("notify: " + event.type);
   }
-  
+
   if (!this.registry.hasOwnProperty(event.type))
   {
-    return;
+    return this;
   }
 
   event.source = this;
   targets = this.registry[event.type];
   //console.log("TARGETS: " + targets.length);
   //console.dir(targets);
-  for (var i=0; i<targets.length; i++)
+  for ( i = 0; i < targets.length; i++)
   {
     //console.dir("Calling Target: " + targets[i]["target"]);
-	  targets[i]["method"](event, targets[i]["target"]);
+    targets[i]["method"](event, targets[i]["target"]);
   }
+  return this;
 };
 
 DexComponent.prototype.render = function()
@@ -101,5 +108,5 @@ DexComponent.prototype.render = function()
 
 DexComponent.prototype.update = function()
 {
-	console.log("Updating component...");
-};
+  console.log("Updating component...");
+}; 

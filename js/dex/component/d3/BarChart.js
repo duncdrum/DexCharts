@@ -132,7 +132,8 @@ BarChart.prototype.update = function()
     .tickFormat(config.yaxis.format());
 
   var chartContainer = config.parent.append("g")
-    .attr("id", config.id)
+    .attr("id", config["id"])
+    .attr("class", config["class"])
     .attr("transform", "translate(" + config.xoffset + "," + config.yoffset + ")");
 
   var data = config.csv.data;

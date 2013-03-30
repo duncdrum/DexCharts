@@ -13,13 +13,45 @@ dex.array = {};
  * @method dex.array.slice
  * @param
  */
-dex.array.slice = function(array, rows)
+dex.array.slice = function(array, rowRange, optLen)
 {
 	var slice = [];
-	
-	for (var i = 0; i<rows.length; i++)
+  var range;
+  var i;
+  
+  // Numeric.
+  // Array.
+  // Object.  Numeric with start and end.
+  if (arguments.length < 2)
+  {
+  	return array;
+  }
+  else if (arguments.length == 2)
+  {
+  	if (isArray(rowRange))
+  	{
+  		range = rowRange;
+  	}
+  	else
+  	{
+  		range = dex.range(rowRange, array.length - rowRange);
+  	}
+  }
+  else if (arguments.length > 2)
+  {
+    if (isArray(rowRange))
+    {
+  	  range = rowRange;
+    }
+    else
+    {
+  	  range = dex.range(rowRange, optLen);
+    }
+  }
+
+	for (i = 0; i<range.length; i++)
 	{
-		slice.push(array[rows[i]]);
+		slice.push(array[range[i]]);
 	}
 
 	return slice;

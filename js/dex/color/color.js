@@ -42,7 +42,7 @@ dex.color.colorScheme = function(colorScheme, numColors)
   else if (colorScheme in colorbrewer)
   {
     //console.log("LENGTH: " + len);
-    
+    var c;
     var effColors = Math.pow(2, Math.ceil(Math.log(numColors) / Math.log(2)));
     //console.log("EFF LENGTH: " + len);
 
@@ -52,14 +52,14 @@ dex.color.colorScheme = function(colorScheme, numColors)
       effColors = 256;
     }
 
-    for (var c=effColors; c >= 2; c--)
+    for (c=effColors; c >= 2; c--)
     {
       if (colorbrewer[colorScheme][c])
       {
         return d3.scale.ordinal().range(colorbrewer[colorScheme][c]);
       }
     }
-    for (var c=effColors; c <= 256; c++)
+    for (c=effColors; c <= 256; c++)
     {
       if (colorbrewer[colorScheme][c])
       {

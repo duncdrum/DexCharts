@@ -9,6 +9,8 @@ dex.object = {};
 
 dex.object.clone = function(obj)
 {
+	var key;
+	
 	// Simple objects just return themselves.
   if (obj === null || typeof obj !== 'object')
   {
@@ -19,7 +21,7 @@ dex.object.clone = function(obj)
   var clone = obj.constructor();
 
   // Iterate over properties.
-  for (var key in obj)
+  for (key in obj)
   {
   	// Call this recursively to support deep cloning.
     clone[key] = dex.object.clone(obj[key]);
@@ -47,13 +49,14 @@ dex.object.overlay = function(top, bottom)
 {
   // Make a clone of the bottom object.
   var overlay = dex.object.clone(bottom);
-
+  var prop;
+  
 	// If we have parameters in the top object, overlay them on top
 	// of the bottom object.
   if (top !== 'undefined')
   {
   	// Iterate over the props in top.
-    for (var prop in top)
+    for (prop in top)
     {
     	// Arrays are special cases. [A] on top of [A,B] should give [A], not [A,B]
     	if (typeof top[prop] == 'object' && overlay[prop] != null &&
@@ -94,7 +97,7 @@ dex.object.contains = function(container, obj)
     }
   }
   return false;
-}
+};
 
 dex.object.setHierarchical = function(hierarchy, name, value, delimiter)
 {
@@ -138,7 +141,23 @@ dex.object.setHierarchical = function(hierarchy, name, value, delimiter)
   	}
   }
   return hierarchy;
-}
+};
+
+dex.object.connect = function(map, values)
+{
+	//dex.console.log("  map:", map, "  values: ", values);
+  if (!values || values.length <= 0)
+  {
+    return this;
+  }
+  if (!map[values[0]])
+  {
+    map[values[0]] = {};
+  }
+  dex.object.connect(map[values[0]], values.slice(1));
+
+  return this;
+};
 
 dex.object.isNumeric = function(obj)
 {

@@ -78,4 +78,4 @@ HorizontalLegend.prototype.update = function()
     .attr("x", config.captionXOffset)
     .text(config.caption)
     .style("font-size", config.captionFontSize);
-}
+};

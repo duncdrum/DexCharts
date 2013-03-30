@@ -25,14 +25,14 @@ Series.prototype.name = function()
   var config = this.config;
   
   return config.name;
-}
+};
 
 Series.prototype.csv = function()
 {
   var config = this.config;
   
   return config.csv;
-}
+};
 
 Series.prototype.dimensions = function()
 {
@@ -40,7 +40,7 @@ Series.prototype.dimensions = function()
   console.log("CSV");
   console.dir(csv);
   return { "rows" : csv.data.length, "columns" : csv.header.length };
-}
+};
 
 Series.prototype.value = function(rowIndex, columnIndex)
 {
@@ -50,7 +50,7 @@ Series.prototype.value = function(rowIndex, columnIndex)
 	  return csv.data[rowIndex][columnIndex];
 	}
 	return csv.data[rowIndex];
-}
+};
 
 Series.prototype.jsonValue = function(rowIndex, columnIndex)
 {
@@ -64,4 +64,4 @@ Series.prototype.jsonValue = function(rowIndex, columnIndex)
 	  return dex.csv.toJson(csv, rowIndex)
 	}
 	return dex.csv.toJson(csv);
-}
+};

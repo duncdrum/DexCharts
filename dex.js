@@ -2,12 +2,39 @@ var dex = {
     version: "0.6"
 };
 
+dex.range = function(start, len) {
+    var i;
+    var range = [];
+    var end = start + len;
+    for (i = start; i < end; i++) {
+        range.push(i);
+    }
+    return range;
+};
+
 dex.array = {};
 
-dex.array.slice = function(array, rows) {
+dex.array.slice = function(array, rowRange, optLen) {
     var slice = [];
-    for (var i = 0; i < rows.length; i++) {
-        slice.push(array[rows[i]]);
+    var range;
+    var i;
+    if (arguments.length < 2) {
+        return array;
+    } else if (arguments.length == 2) {
+        if (isArray(rowRange)) {
+            range = rowRange;
+        } else {
+            range = dex.range(rowRange, array.length - rowRange);
+        }
+    } else if (arguments.length > 2) {
+        if (isArray(rowRange)) {
+            range = rowRange;
+        } else {
+            range = dex.range(rowRange, optLen);
+        }
+    }
+    for (i = 0; i < range.length; i++) {
+        slice.push(array[range[i]]);
     }
     return slice;
 };
@@ -48,16 +75,17 @@ dex.color.colorScheme = function(colorScheme, numColors) {
     } else if (colorScheme == "HiContrast") {
         return d3.scale.ordinal().range(colorbrewer[colorScheme][9]);
     } else if (colorScheme in colorbrewer) {
+        var c;
         var effColors = Math.pow(2, Math.ceil(Math.log(numColors) / Math.log(2)));
         if (effColors > 128) {
             effColors = 256;
         }
-        for (var c = effColors; c >= 2; c--) {
+        for (c = effColors; c >= 2; c--) {
             if (colorbrewer[colorScheme][c]) {
                 return d3.scale.ordinal().range(colorbrewer[colorScheme][c]);
             }
         }
-        for (var c = effColors; c <= 256; c++) {
+        for (c = effColors; c <= 256; c++) {
             if (colorbrewer[colorScheme][c]) {
                 return d3.scale.ordinal().range(colorbrewer[colorScheme][c]);
             }
@@ -71,7 +99,8 @@ dex.color.colorScheme = function(colorScheme, numColors) {
 dex.console = {};
 
 dex.console.log = function() {
-    for (var i = 0; i < arguments.length; i++) {
+    var i;
+    for (i = 0; i < arguments.length; i++) {
         if (typeof arguments[i] == "object") {
             console.dir(arguments[i]);
         } else {
@@ -84,18 +113,19 @@ dex.console.log = function() {
 dex.csv = {};
 
 dex.csv.csv = function(header, data) {
-    return {
+    var csv = {
         header: header,
         data: data
     };
+    return csv;
 };
 
 dex.csv.createMap = function(csv, keyIndex) {
-    var map = {};
-    for (var ri = 0; ri < csv.data.length; ri++) {
-        if (csv.data[ri].length == csv.header.length) {
-            var rowMap = {};
-            for (var ci = 0; ci < csv.header.length; ci++) {
+    var ri, ci, rowMap, map = {};
+    for (ri = 0; ri < csv.data.length; ri += 1) {
+        if (csv.data[ri].length === csv.header.length) {
+            rowMap = {};
+            for (ci = 0; ci < csv.header.length; ci += 1) {
                 rowMap[csv.header[ci]] = csv.data[ri][ci];
             }
             map[csv.data[ri][keyIndex]] = rowMap;
@@ -106,20 +136,21 @@ dex.csv.createMap = function(csv, keyIndex) {
 
 dex.csv.toJson = function(csv, rowIndex, columnIndex) {
     var jsonData = [];
-    if (arguments.length == 3) {
-        var jsonRow = {};
+    var ri, ci, jsonRow;
+    if (arguments.length >= 3) {
+        jsonRow = {};
         jsonRow[csv.header[columnIndex]] = csv.data[rowIndex][columnIndex];
         return jsonRow;
     } else if (arguments.length == 2) {
         var jsonRow = {};
-        for (var ci = 0; ci < csv.header.length; ci++) {
+        for (ci = 0; ci < csv.header.length; ci++) {
             jsonRow[csv.header[ci]] = csv.data[rowIndex][ci];
         }
         return jsonRow;
-    } else {
-        for (var ri = 0; ri < csv.data.length; ri++) {
+    } else if (arguments.length == 1) {
+        for (ri = 0; ri < csv.data.length; ri++) {
             var jsonRow = {};
-            for (var ci = 0; ci < csv.header.length; ci++) {
+            for (ci = 0; ci < csv.header.length; ci++) {
                 jsonRow[csv.header[ci]] = csv.data[ri][ci];
             }
             jsonData.push(jsonRow);
@@ -128,9 +159,44 @@ dex.csv.toJson = function(csv, rowIndex, columnIndex) {
     return jsonData;
 };
 
+dex.csv.toHierarchicalJson = function(csv) {
+    var connections = dex.csv.connections(csv);
+    return getChildren(connections, 0);
+    function getChildren(connections, depth) {
+        var kids = [], cname;
+        if (typeof connections === "undefined") {
+            return kids;
+        }
+        for (cname in connections) {
+            if (connections.hasOwnProperty(cname)) {
+                kids.push(createChild(cname, csv.header[depth], getChildren(connections[cname], depth + 1)));
+            }
+        }
+        return kids;
+    }
+    function createChild(name, category, children) {
+        var child = {
+            name: name,
+            category: category,
+            children: children
+        };
+        return child;
+    }
+};
+
+dex.csv.connections = function(csv) {
+    var connections = {};
+    var ri;
+    for (ri = 0; ri < csv.data.length; ri++) {
+        dex.object.connect(connections, csv.data[ri]);
+    }
+    return connections;
+};
+
 dex.csv.createRowMap = function(csv, keyIndex) {
     var map = {};
-    for (var ri = 0; ri < csv.data.length; ri++) {
+    var ri;
+    for (ri = 0; ri < csv.data.length; ri++) {
         if (csv.data[ri].length == csv.header.length) {
             map[csv.data[ri][keyIndex]] = csv.data[ri];
         }
@@ -140,7 +206,7 @@ dex.csv.createRowMap = function(csv, keyIndex) {
 
 dex.csv.getNumericColumnNames = function(csv) {
     var possibleNumeric = {};
-    var i, j;
+    var i, j, ri, ci;
     var numericColumns = [];
     for (i = 0; i < csv.header.length; i++) {
         possibleNumeric[csv.header[i]] = true;
@@ -183,7 +249,8 @@ dex.csv.getNumericIndices = function(csv) {
 };
 
 dex.csv.isColumnNumeric = function(csv, columnNum) {
-    for (var i = 0; i < csv.data.length; i++) {
+    var i;
+    for (i = 0; i < csv.data.length; i++) {
         if (!dex.object.isNumeric(csv.data[i][columnNum])) {
             return false;
         }
@@ -193,9 +260,10 @@ dex.csv.isColumnNumeric = function(csv, columnNum) {
 
 dex.csv.toMapArray = function(csv) {
     var mapArray = [];
-    for (var i = 0; i < csv.data.length; i++) {
+    var i, j;
+    for (i = 0; i < csv.data.length; i++) {
         var row = {};
-        for (var j = 0; j < csv.header.length; j++) {
+        for (j = 0; j < csv.header.length; j++) {
             row[csv.header[j]] = csv.data[i][j];
         }
         mapArray.push(row);
@@ -206,11 +274,12 @@ dex.csv.toMapArray = function(csv) {
 dex.datagen = {};
 
 dex.datagen.randomMatrix = function(spec) {
+    var ri, ci;
     var matrix = [];
     var range = spec.max - spec.min;
-    for (var ri = 0; ri < spec.rows; ri++) {
+    for (ri = 0; ri < spec.rows; ri++) {
         var row = [];
-        for (var ci = 0; ci < spec.columns; ci++) {
+        for (ci = 0; ci < spec.columns; ci++) {
             row.push(Math.random() * range + spec.min);
         }
         matrix.push(row);
@@ -222,19 +291,20 @@ dex.json = {};
 
 dex.json.toCsv = function(json, header) {
     var csv;
+    var ri, ci;
     var data = [];
     if (arguments.length == 2) {
         if (Array.isArray(json)) {
-            for (var ri = 0; ri < json.length; ri++) {
+            for (ri = 0; ri < json.length; ri++) {
                 var row = [];
-                for (var ci = 0; ci < header.length; ci++) {
+                for (ci = 0; ci < header.length; ci++) {
                     row.push(json[ri][header[ci]]);
                 }
                 data.push(row);
             }
         } else {
             var row = [];
-            for (var ci = 0; ci < header.length; ci++) {
+            for (ci = 0; ci < header.length; ci++) {
                 row.push(json[ri][header[ci]]);
             }
             data.push(row);
@@ -248,18 +318,19 @@ dex.json.toCsv = function(json, header) {
 dex.json.keys = function(json) {
     var keyMap = {};
     var keys = [];
+    var ri, key;
     if (Array.isArray(json)) {
-        for (var ri = 0; ri < json.length; ri++) {
-            for (var key in json[ri]) {
+        for (ri = 0; ri < json.length; ri++) {
+            for (key in json[ri]) {
                 keyMap[key] = true;
             }
         }
     } else {
-        for (var key in json) {
+        for (key in json) {
             keyMap[key] = true;
         }
     }
-    for (var key in keyMap) {
+    for (key in keyMap) {
         keys.push(key);
     }
     return keys;
@@ -269,22 +340,36 @@ dex.matrix = {};
 
 dex.matrix.slice = function(matrix, columns, rows) {
     var slice = [];
+    var ri;
     if (arguments.length === 3) {
-        for (var ri = 0; ri < rows.length; ri++) {
+        for (ri = 0; ri < rows.length; ri++) {
             slice.push(dex.array.slice(matrix[rows[ri]]));
         }
     } else {
-        for (var ri = 0; ri < matrix.length; ri++) {
+        for (ri = 0; ri < matrix.length; ri++) {
             slice.push(dex.array.slice(matrix[ri], columns));
         }
     }
     return slice;
 };
 
+dex.matrix.columnSlice = function(matrix, columns) {
+    var slice = [];
+    var ri;
+    if (arguments.length != 2) {
+        return matrix;
+    }
+    for (ri = 0; ri < rows.length; ri++) {
+        slice.push(dex.array.slice(matrix[rows[ri]], columns));
+    }
+    return slice;
+};
+
 dex.matrix.flatten = function(matrix) {
     var array = [];
-    for (var ri = 0; ri < matrix.length; ri++) {
-        for (var ci = 0; ci < matrix[ri].length; ci++) {
+    var ri, ci;
+    for (ri = 0; ri < matrix.length; ri++) {
+        for (ci = 0; ci < matrix[ri].length; ci++) {
             array.push(matrix[ri][ci]);
         }
     }
@@ -301,9 +386,10 @@ dex.matrix.extent = function(data, indices) {
 
 dex.matrix.combine = function(matrix1, matrix2) {
     var result = [];
-    for (var ri = 0; ri < matrix1.length; ri++) {
-        for (var oci = 0; oci < matrix1[ri].length; oci++) {
-            for (var ici = 0; ici < matrix2[ri].length; ici++) {
+    var ri, oci, ici;
+    for (ri = 0; ri < matrix1.length; ri++) {
+        for (oci = 0; oci < matrix1[ri].length; oci++) {
+            for (ici = 0; ici < matrix2[ri].length; ici++) {
                 result.push([ matrix1[ri][oci], matrix2[ri][ici], oci, ici ]);
             }
         }
@@ -312,7 +398,8 @@ dex.matrix.combine = function(matrix1, matrix2) {
 };
 
 dex.matrix.isColumnNumeric = function(data, columnNum) {
-    for (var i = 1; i < data.length; i++) {
+    var i;
+    for (i = 1; i < data.length; i++) {
         if (!dex.object.isNumeric(data[i][columnNum])) {
             return false;
         }
@@ -322,15 +409,16 @@ dex.matrix.isColumnNumeric = function(data, columnNum) {
 
 dex.matrix.max = function(data, columnNum) {
     var maxValue = data[0][columnNum];
+    var i;
     if (dex.matrix.isColumnNumeric(data, columnNum)) {
         maxValue = parseFloat(data[0][columnNum]);
-        for (var i = 1; i < data.length; i++) {
+        for (i = 1; i < data.length; i++) {
             if (maxValue < parseFloat(data[i][columnNum])) {
                 maxValue = parseFloat(data[i][columnNum]);
             }
         }
     } else {
-        for (var i = 1; i < data.length; i++) {
+        for (i = 1; i < data.length; i++) {
             if (maxValue < data[i][columnNum]) {
                 maxValue = data[i][columnNum];
             }
@@ -341,15 +429,16 @@ dex.matrix.max = function(data, columnNum) {
 
 dex.matrix.min = function(data, columnNum) {
     var minValue = data[0][columnNum];
+    var i;
     if (dex.matrix.isColumnNumeric(data, columnNum)) {
         minValue = parseFloat(data[0][columnNum]);
-        for (var i = 1; i < data.length; i++) {
+        for (i = 1; i < data.length; i++) {
             if (minValue > parseFloat(data[i][columnNum])) {
                 minValue = parseFloat(data[i][columnNum]);
             }
         }
     } else {
-        for (var i = 1; i < data.length; i++) {
+        for (i = 1; i < data.length; i++) {
             if (minValue > data[i][columnNum]) {
                 minValue = data[i][columnNum];
             }
@@ -361,11 +450,12 @@ dex.matrix.min = function(data, columnNum) {
 dex.object = {};
 
 dex.object.clone = function(obj) {
+    var key;
     if (obj === null || typeof obj !== "object") {
         return obj;
     }
     var clone = obj.constructor();
-    for (var key in obj) {
+    for (key in obj) {
         clone[key] = dex.object.clone(obj[key]);
     }
     return clone;
@@ -373,8 +463,9 @@ dex.object.clone = function(obj) {
 
 dex.object.overlay = function(top, bottom) {
     var overlay = dex.object.clone(bottom);
+    var prop;
     if (top !== "undefined") {
-        for (var prop in top) {
+        for (prop in top) {
             if (typeof top[prop] == "object" && overlay[prop] != null && !(top[prop] instanceof Array)) {
                 overlay[prop] = dex.object.overlay(top[prop], overlay[prop]);
             } else {
@@ -415,6 +506,17 @@ dex.object.setHierarchical = function(hierarchy, name, value, delimiter) {
         }
     }
     return hierarchy;
+};
+
+dex.object.connect = function(map, values) {
+    if (!values || values.length <= 0) {
+        return this;
+    }
+    if (!map[values[0]]) {
+        map[values[0]] = {};
+    }
+    dex.object.connect(map[values[0]], values.slice(1));
+    return this;
 };
 
 dex.object.isNumeric = function(obj) {
@@ -467,18 +569,19 @@ DexComponent.prototype.addListener = function(eventType, target, method) {
 };
 
 DexComponent.prototype.notify = function(event) {
-    var targets;
+    var targets, i;
     if (this.debug) {
         console.log("notify: " + event.type);
     }
     if (!this.registry.hasOwnProperty(event.type)) {
-        return;
+        return this;
     }
     event.source = this;
     targets = this.registry[event.type];
-    for (var i = 0; i < targets.length; i++) {
+    for (i = 0; i < targets.length; i++) {
         targets[i]["method"](event, targets[i]["target"]);
     }
+    return this;
 };
 
 DexComponent.prototype.render = function() {

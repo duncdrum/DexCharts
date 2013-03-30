@@ -16,6 +16,7 @@ dex.json = {};
 dex.json.toCsv = function(json, header)
 {
 	var csv;
+	var ri, ci;
   var data = [];
 
 	// Keys are provided.
@@ -23,25 +24,25 @@ dex.json.toCsv = function(json, header)
 	{
     if (Array.isArray(json))
 	  {
-		  for (var ri=0; ri<json.length; ri++)
-		  {
-		  	var row = [];
-		  	for (var ci=0; ci<header.length; ci++)
-		  	{
-		  		row.push(json[ri][header[ci]]);
-		  	}
-		  	data.push(row);
-		  }
+      for ( ri = 0; ri < json.length; ri++)
+      {
+        var row = [];
+        for ( ci = 0; ci < header.length; ci++)
+        {
+          row.push(json[ri][header[ci]]);
+        }
+        data.push(row);
+      }
 	  }
-	  else
-	  {
-	  	var row = [];
-		  for (var ci=0; ci<header.length; ci++)
-		  {
-		  	row.push(json[ri][header[ci]]);
-		  }
-		  data.push(row);
-	  }
+    else
+    {
+      var row = [];
+      for ( ci = 0; ci < header.length; ci++)
+      {
+        row.push(json[ri][header[ci]]);
+      }
+      data.push(row);
+    }
 	  return dex.csv.csv(header, data);
 	}
 	else
@@ -54,12 +55,13 @@ dex.json.keys = function(json)
 {
 	var keyMap = {};
 	var keys = [];
-
+  var ri, key;
+  
 	if (Array.isArray(json))
 	{
-		for (var ri=0; ri<json.length; ri++)
+		for (ri=0; ri<json.length; ri++)
 		{
-			for (var key in json[ri])
+			for (key in json[ri])
 			{
 				keyMap[key] = true;
 			}
@@ -67,16 +69,16 @@ dex.json.keys = function(json)
 	}
 	else
 	{
-		for (var key in json)
+		for (key in json)
 		{
 			keyMap[key] = true;
 		}
 	}
 	
-  for (var key in keyMap)
+  for (key in keyMap)
   {
   	keys.push(key);
   }
   
   return keys;
-}
+};

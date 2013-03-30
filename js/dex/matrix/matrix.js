@@ -3,17 +3,18 @@ dex.matrix = {};
 dex.matrix.slice = function(matrix, columns, rows)
 {
 	var slice = [];
+	var ri;
 	
 	if (arguments.length === 3)
 	{
-    for (var ri=0; ri < rows.length; ri++)
+    for (ri=0; ri < rows.length; ri++)
 	  {
 		  slice.push(dex.array.slice(matrix[rows[ri]]));
 	  }
 	}
 	else
 	{
-		for (var ri=0; ri < matrix.length; ri++)
+		for (ri=0; ri < matrix.length; ri++)
 	  {
 	  	//console.log("RI: " + ri);
 	  	//console.dir(dex.array.slice(matrix[ri], columns));
@@ -21,20 +22,40 @@ dex.matrix.slice = function(matrix, columns, rows)
 	  }
 	}
 	return slice;
-}
+};
+
+dex.matrix.columnSlice = function(matrix, columns)
+{
+	var slice = [];
+	var ri;
+	
+	if (arguments.length != 2)
+	{
+		return matrix;
+	}
+
+  for (ri=0; ri < rows.length; ri++)
+  {
+    slice.push(dex.array.slice(matrix[rows[ri]], columns));
+  }
+
+	return slice;
+};
 
 dex.matrix.flatten = function(matrix)
 {
 	var array = [];
-	for (var ri=0; ri<matrix.length; ri++)
+	var ri, ci;
+	
+	for (ri=0; ri<matrix.length; ri++)
 	{
-		for (var ci=0; ci<matrix[ri].length;ci++)
+		for (ci=0; ci<matrix[ri].length;ci++)
 		{
 			array.push(matrix[ri][ci]);
 		}
 	}
   return array;
-}
+};
 
 dex.matrix.extent = function(data, indices)
 {
@@ -44,32 +65,35 @@ dex.matrix.extent = function(data, indices)
 		values = dex.matrix.slice(data, indices);
 		return d3.extent(dex.matrix.flatten(values));
 	}
-}
+};
 
 // Combine each column in matrix1 with each column in matrix2. 
 dex.matrix.combine = function(matrix1, matrix2)
 {
 	var result = [];
+  var ri, oci, ici;
 	
 	// Iterate over the rows in matrix1:
-	for (var ri=0; ri<matrix1.length; ri++)
+	for (ri=0; ri<matrix1.length; ri++)
 	{
 		// Iterate over the columns in matrix2:
-		for (var oci=0; oci<matrix1[ri].length; oci++)
+		for (oci=0; oci<matrix1[ri].length; oci++)
 		{
 			// Iterate over the columns in matrix2:
-			for (var ici=0; ici<matrix2[ri].length; ici++)
+			for (ici=0; ici<matrix2[ri].length; ici++)
 			{
 				result.push([matrix1[ri][oci], matrix2[ri][ici], oci, ici]);
 			}
 		}
 	}
 	return result;
-}
+};
 
 dex.matrix.isColumnNumeric = function(data, columnNum)
 {
-  for (var i=1; i<data.length; i++)
+	var i;
+	
+  for (i=1; i<data.length; i++)
   {
 	  if (!dex.object.isNumeric(data[i][columnNum]))
 	  {
@@ -77,16 +101,17 @@ dex.matrix.isColumnNumeric = function(data, columnNum)
 	  }
   }
   return true;
-}
+};
 
 dex.matrix.max = function(data, columnNum)
 {
   var maxValue = data[0][columnNum];
-
+  var i;
+  
   if (dex.matrix.isColumnNumeric(data, columnNum))
   {
 	  maxValue = parseFloat(data[0][columnNum]);
-	  for (var i=1; i<data.length; i++)
+	  for (i=1; i<data.length; i++)
     {
       if (maxValue < parseFloat(data[i][columnNum]))
       {
@@ -96,7 +121,7 @@ dex.matrix.max = function(data, columnNum)
   }
   else
   {
-    for (var i=1; i<data.length; i++)
+    for (i=1; i<data.length; i++)
     {
       if (maxValue < data[i][columnNum])
       {
@@ -106,16 +131,17 @@ dex.matrix.max = function(data, columnNum)
   }
   
   return maxValue;
-}
+};
 
 dex.matrix.min = function(data, columnNum)
 {
   var minValue = data[0][columnNum];
-
+  var i;
+  
   if (dex.matrix.isColumnNumeric(data, columnNum))
   {
 	  minValue = parseFloat(data[0][columnNum]);
-	  for (var i=1; i<data.length; i++)
+	  for (i=1; i<data.length; i++)
     {
       if (minValue > parseFloat(data[i][columnNum]))
       {
@@ -125,7 +151,7 @@ dex.matrix.min = function(data, columnNum)
   }
   else
   {
-    for (var i=1; i<data.length; i++)
+    for (i=1; i<data.length; i++)
     {
       if (minValue > data[i][columnNum])
       {
@@ -135,4 +161,4 @@ dex.matrix.min = function(data, columnNum)
   }
   
   return minValue;
-}
+};

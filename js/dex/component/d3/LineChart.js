@@ -39,6 +39,7 @@ LineChart.prototype.update = function()
  	var chart = this.chart;
   var config = this.config;
   var csv    = config.csv;
+  var i;
 
   //console.dir(config);
   // Use a linear scale for x, map the value range to the pixel range.
@@ -70,7 +71,7 @@ LineChart.prototype.update = function()
 
   var lines = [];
 
-  for(var i=0; i<config.yi.length; i++)
+  for(i=0; i<config.yi.length; i++)
   {
     // Define a function to draw the line.
     var line = d3.svg.line()
@@ -105,7 +106,7 @@ LineChart.prototype.update = function()
     .text(dex.array.slice(csv.header, config.yi).join(" "));
 
   // Draw each of the lines.
-  for (var i=0; i<lines.length; i++)
+  for (i=0; i<lines.length; i++)
   {
     chartContainer.append("path")
       .datum(csv.data)
@@ -144,7 +145,7 @@ LineChart.prototype.update = function()
 
 LineChart.prototype.mouseOverHandler = function(chartEvent, targetChart)
 {
-	var chart;
+	var chart, i;
 
   if (arguments.length === 2)
   {
@@ -167,7 +168,7 @@ LineChart.prototype.mouseOverHandler = function(chartEvent, targetChart)
   chartContainer.selectAll("#circleLabel").remove();
 
   // Draw a small red circle over the mouseover point.
-  for (var i=0; i<config.yi.length; i++)
+  for (i=0; i<config.yi.length; i++)
   {
   	//console.log("I: " + y);
     var circle = chartContainer.append("circle")

@@ -66,7 +66,8 @@ ParallelCoordinates.prototype.update = function()
   var foreground;
   // Will hold our column names.
   var dimensions;
-
+  var key;
+  
   var chartContainer = config.parent.append("g")
     .attr("id", config["id"])
     .attr("class", config["class"])
@@ -138,7 +139,7 @@ ParallelCoordinates.prototype.update = function()
       .attr("title", function(d, i)
       {
         var info = "<table border=\"1\">";
-        for (var key in jsonData[i])
+        for (key in jsonData[i])
         {
           info += "<tr><td><b><i>" + key + "</i></b></td><td>" + jsonData[i][key] + "</td></tr>"
         }
@@ -241,13 +242,14 @@ ParallelCoordinates.prototype.update = function()
   {
     //dex.console.log("chart: ", chart);
     var activeData = [];
-
+    var i;
+    
     // WARNING:
     //
     // Can't find an elegant way to get back at the data so I am getting
     // at the data in an inelegant manner instead.  Mike Bostock ever
     // changes the __data__ convention and this will break.
-    for (var i=0; i<foreground[0].length; i++)
+    for (i=0; i<foreground[0].length; i++)
     {
     	if (!(foreground[0][i]["style"]["display"] == "none"))
     	{
