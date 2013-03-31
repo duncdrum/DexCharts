@@ -57,6 +57,27 @@ dex.array.slice = function(array, rowRange, optLen)
 	return slice;
 };
 
+dex.array.unique = function(array)
+{
+  var uniqueMap =
+  {
+  };
+  var unique = [];
+  var i, l;
+  
+  for (i = 0, l = array.length; i < l; i+=1)
+  {
+    if (uniqueMap.hasOwnProperty(array[i]))
+    {
+      continue;
+    }
+    unique.push(array[i]);
+    uniqueMap[array[i]] = 1;
+  }
+  return unique;
+};
+
+
 dex.array.extent = function(array, indices)
 {
 	var values = getArrayValues(array, indices);

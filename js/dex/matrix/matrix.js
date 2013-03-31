@@ -24,22 +24,64 @@ dex.matrix.slice = function(matrix, columns, rows)
 	return slice;
 };
 
+dex.matrix.uniques = function(matrix)
+{
+	var ci;
+	var uniques = [];
+  var tmatrix = dex.matrix.transpose(matrix);
+  var ncol = tmatrix.length;
+
+	for (ci=0; ci<ncol;ci+=1)
+	{
+		uniques.push(dex.array.unique(tmatrix[ci]));
+	}
+	return uniques;
+};
+
+dex.matrix.transpose = function(matrix)
+{
+	var ci;
+	var ncols = matrix[0].length;
+	var transposedMatrix = [];
+
+  for (ci=0; ci<ncols; ci++)
+	{
+		transposedMatrix.push(matrix.map(function(row) { return row[ci]; }));
+	}
+
+	return transposedMatrix;
+};
+
 dex.matrix.columnSlice = function(matrix, columns)
 {
 	var slice = [];
 	var ri;
+  var transposeMatrix;
 	
 	if (arguments.length != 2)
 	{
 		return matrix;
 	}
 
-  for (ri=0; ri < rows.length; ri++)
+  transposeMatrix = dex.matrix.transpose(matrix);
+  //dex.console.log("transposing", matrix, "transpose", transposedMatrix);
+  
+  // Specific columns targetted:
+  if (Array.isArray(columns))
   {
-    slice.push(dex.array.slice(matrix[rows[ri]], columns));
+    for (ri=0; ri < columns.length; ri+=1)
+    {
+      slice.push(transposeMatrix[columns[ri]]);
+    }
+  }
+  // Single column.
+  else
+  {
+    slice.push(transposeMatrix[columns]);
   }
 
-	return slice;
+  // Back to row/column format.
+	return dex.matrix.transpose(slice);
 };
 
 dex.matrix.flatten = function(matrix)

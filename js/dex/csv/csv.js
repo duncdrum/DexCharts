@@ -13,6 +13,76 @@ dex.csv.csv = function(header, data)
   return csv;
 };
 
+/**
+ *
+ * Given a CSV, create a connection matrix suitable for feeding into a chord
+ * diagram.  Ex, given CSV:
+ * 
+ */
+dex.csv.getConnectionMatrix = function(csv)
+{
+	var matrix = [];
+	var ri, ci;
+	var row;
+  var cid;
+  var header = [];
+  var nameToIndex = {};
+  var connectionMatrix;
+  var uniques;
+  var nameIndices = [];
+  var src, dest;
+
+  // Create a list of unique values to relate to one another.
+  uniques = dex.matrix.uniques(csv.data);
+  // Flatten them into our header.
+  header = dex.matrix.flatten(uniques);
+  
+  // Create a map of names to header index for each column.
+  nameToIndex = new Array(uniques.length);
+  for ( ri = 0, cid = 0; ri < uniques.length; ri++)
+  {
+    nameToIndex[ri] =
+    {
+    };
+    for ( ci = 0; ci < uniques[ri].length; ci++)
+    {
+      nameToIndex[ri][header[cid]] = cid;
+      cid += 1;
+    }
+  }
+
+  // Create a N x N matrix of zero values.
+  matrix = new Array(header.length);
+  for ( ri = 0; ri < header.length; ri++)
+  {
+    row = new Array(header.length);
+    for ( ci = 0; ci < header.length; ci++)
+    {
+      row[ci] = 0;
+    }
+    matrix[ri] = row;
+  }
+  //dex.console.log("nameToIndex", nameToIndex, "matrix", matrix);
+
+  for ( ri = 0; ri < csv.data.length; ri++)
+  {
+    for ( ci = 1; ci < csv.header.length; ci++)
+    {
+      src = nameToIndex[ci-1][csv.data[ri][ci - 1]];
+      dest = nameToIndex[ci][csv.data[ri][ci]];
+
+      //dex.console.log(csv.data[ri][ci-1] + "<->" + csv.data[ri][ci], src + "<->" + dest);
+      matrix[src][dest] = 1;
+      matrix[dest][src] = 1;
+    }
+  }
+
+
+	connectionMatrix = { "header" : header, "connections" : matrix };
+  dex.console.log("Connection Matrix", connectionMatrix);
+	return connectionMatrix;
+};
+
 dex.csv.createMap = function(csv, keyIndex)
 {
   var ri, ci, rowMap, map =
@@ -217,6 +287,15 @@ dex.csv.createRowMap = function(csv, keyIndex)
   return map;
 };
 
+dex.csv.columnSlice = function(csv, columns)
+{
+	dex.console.log(csv);
+	csv.header = dex.array.slice(columns);
+	csv.data   = dex.matrix.columnSlice(csv.data, columns);
+	
+	return csv;
+};
+
 dex.csv.getNumericColumnNames = function(csv)
 {
   var possibleNumeric =
@@ -321,4 +400,17 @@ dex.csv.toMapArray = function(csv)
   }
 
   return mapArray;
+};
+
+dex.csv.visitCells = function(csv, func)
+{
+	var ci, ri;
+
+	for (ri=0; ri<csv.data.length; ri++)
+	{
+		for (ci=0; ci<csv.header.length; ci++)
+		{
+			func(ci, ri, csv.data[ri][ci]);
+		}
+	}
 };

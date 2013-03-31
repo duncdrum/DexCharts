@@ -39,6 +39,20 @@ dex.array.slice = function(array, rowRange, optLen) {
     return slice;
 };
 
+dex.array.unique = function(array) {
+    var uniqueMap = {};
+    var unique = [];
+    var i, l;
+    for (i = 0, l = array.length; i < l; i += 1) {
+        if (uniqueMap.hasOwnProperty(array[i])) {
+            continue;
+        }
+        unique.push(array[i]);
+        uniqueMap[array[i]] = 1;
+    }
+    return unique;
+};
+
 dex.array.extent = function(array, indices) {
     var values = getArrayValues(array, indices);
     var max = Math.max.apply(null, values);
@@ -118,6 +132,51 @@ dex.csv.csv = function(header, data) {
         data: data
     };
     return csv;
+};
+
+dex.csv.getConnectionMatrix = function(csv) {
+    var matrix = [];
+    var ri, ci;
+    var row;
+    var cid;
+    var header = [];
+    var nameToIndex = {};
+    var connectionMatrix;
+    var uniques;
+    var nameIndices = [];
+    var src, dest;
+    uniques = dex.matrix.uniques(csv.data);
+    header = dex.matrix.flatten(uniques);
+    nameToIndex = new Array(uniques.length);
+    for (ri = 0, cid = 0; ri < uniques.length; ri++) {
+        nameToIndex[ri] = {};
+        for (ci = 0; ci < uniques[ri].length; ci++) {
+            nameToIndex[ri][header[cid]] = cid;
+            cid += 1;
+        }
+    }
+    matrix = new Array(header.length);
+    for (ri = 0; ri < header.length; ri++) {
+        row = new Array(header.length);
+        for (ci = 0; ci < header.length; ci++) {
+            row[ci] = 0;
+        }
+        matrix[ri] = row;
+    }
+    for (ri = 0; ri < csv.data.length; ri++) {
+        for (ci = 1; ci < csv.header.length; ci++) {
+            src = nameToIndex[ci - 1][csv.data[ri][ci - 1]];
+            dest = nameToIndex[ci][csv.data[ri][ci]];
+            matrix[src][dest] = 1;
+            matrix[dest][src] = 1;
+        }
+    }
+    connectionMatrix = {
+        header: header,
+        connections: matrix
+    };
+    dex.console.log("Connection Matrix", connectionMatrix);
+    return connectionMatrix;
 };
 
 dex.csv.createMap = function(csv, keyIndex) {
@@ -204,6 +263,13 @@ dex.csv.createRowMap = function(csv, keyIndex) {
     return map;
 };
 
+dex.csv.columnSlice = function(csv, columns) {
+    dex.console.log(csv);
+    csv.header = dex.array.slice(columns);
+    csv.data = dex.matrix.columnSlice(csv.data, columns);
+    return csv;
+};
+
 dex.csv.getNumericColumnNames = function(csv) {
     var possibleNumeric = {};
     var i, j, ri, ci;
@@ -269,6 +335,15 @@ dex.csv.toMapArray = function(csv) {
         mapArray.push(row);
     }
     return mapArray;
+};
+
+dex.csv.visitCells = function(csv, func) {
+    var ci, ri;
+    for (ri = 0; ri < csv.data.length; ri++) {
+        for (ci = 0; ci < csv.header.length; ci++) {
+            func(ci, ri, csv.data[ri][ci]);
+        }
+    }
 };
 
 dex.datagen = {};
@@ -353,16 +428,45 @@ dex.matrix.slice = function(matrix, columns, rows) {
     return slice;
 };
 
+dex.matrix.uniques = function(matrix) {
+    var ci;
+    var uniques = [];
+    var tmatrix = dex.matrix.transpose(matrix);
+    var ncol = tmatrix.length;
+    for (ci = 0; ci < ncol; ci += 1) {
+        uniques.push(dex.array.unique(tmatrix[ci]));
+    }
+    return uniques;
+};
+
+dex.matrix.transpose = function(matrix) {
+    var ci;
+    var ncols = matrix[0].length;
+    var transposedMatrix = [];
+    for (ci = 0; ci < ncols; ci++) {
+        transposedMatrix.push(matrix.map(function(row) {
+            return row[ci];
+        }));
+    }
+    return transposedMatrix;
+};
+
 dex.matrix.columnSlice = function(matrix, columns) {
     var slice = [];
     var ri;
+    var transposeMatrix;
     if (arguments.length != 2) {
         return matrix;
     }
-    for (ri = 0; ri < rows.length; ri++) {
-        slice.push(dex.array.slice(matrix[rows[ri]], columns));
+    transposeMatrix = dex.matrix.transpose(matrix);
+    if (Array.isArray(columns)) {
+        for (ri = 0; ri < columns.length; ri += 1) {
+            slice.push(transposeMatrix[columns[ri]]);
+        }
+    } else {
+        slice.push(transposeMatrix[columns]);
     }
-    return slice;
+    return dex.matrix.transpose(slice);
 };
 
 dex.matrix.flatten = function(matrix) {
@@ -496,7 +600,7 @@ dex.object.setHierarchical = function(hierarchy, name, value, delimiter) {
     if (arguments.length == 4) {
         return dex.object.setHierarchical(hierarchy, name.split(delimiter), value);
     } else {
-        if (name.length == 1) {
+        if (name.length === 1) {
             hierarchy[name[0]] = value;
         } else {
             if (!(name[0] in hierarchy)) {
@@ -506,6 +610,18 @@ dex.object.setHierarchical = function(hierarchy, name, value, delimiter) {
         }
     }
     return hierarchy;
+};
+
+dex.object.visit = function(obj, func) {
+    var prop;
+    func(obj);
+    for (prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+            if (typeof obj[prop] === "object") {
+                dex.object.visit(obj[prop], func);
+            }
+        }
+    }
 };
 
 dex.object.connect = function(map, values) {

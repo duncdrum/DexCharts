@@ -118,29 +118,48 @@ dex.object.setHierarchical = function(hierarchy, name, value, delimiter)
   	return dex.object.setHierarchical(hierarchy,
       name.split(delimiter), value);
   }
+
   // Array of paths context.
   else
   {
-  	// This is the last variable name, just set the value.
-  	if (name.length == 1)
-  	{
-  		hierarchy[name[0]] = value;
-  	}
-  	// We still have to traverse.
-  	else
-  	{
-  		// Undefined container object, just create an empty.
-  		if (!(name[0] in hierarchy))
-  		{
-  			hierarchy[name[0]] = {};
-  		}
+    // This is the last variable name, just set the value.
+    if (name.length === 1)
+    {
+      hierarchy[name[0]] = value;
+    }
+    // We still have to traverse.
+    else
+    {
+      // Undefined container object, just create an empty.
+      if (!(name[0] in hierarchy))
+      {
+        hierarchy[name[0]] =
+        {
+        };
+      }
 
-  		// Recursively traverse down the hierarchy.
- 			dex.object.setHierarchical(hierarchy[name[0]],
- 				name.splice(1), value);
-  	}
+      // Recursively traverse down the hierarchy.
+      dex.object.setHierarchical(hierarchy[name[0]], name.splice(1), value);
+    }
   }
+
   return hierarchy;
+};
+
+dex.object.visit = function(obj, func)
+{
+	var prop;
+	func(obj);
+	for (prop in obj)
+	{
+		if (obj.hasOwnProperty(prop))
+		{
+			if (typeof obj[prop] === 'object')
+			{
+				dex.object.visit(obj[prop], func);
+			}
+		}
+	}
 };
 
 dex.object.connect = function(map, values)
