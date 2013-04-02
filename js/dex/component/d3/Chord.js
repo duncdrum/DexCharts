@@ -74,6 +74,8 @@ Chord.prototype.update = function()
   }
 
   var chartContainer = config.parent.append("g")
+    .attr("class", config["id"])
+    .attr("id", config["id"])
     .attr("transform",
       "translate(" + config.xoffset + "," + config.yoffset + ")");
 
@@ -100,7 +102,9 @@ Chord.prototype.update = function()
     .on("mouseover", fade(config.mouseoverFade))
     .on("mouseout", fade(config.mouseoutFade));
 
-  var ticks = svg.append("g")
+  // REM: Used to be svg.
+  var ticks = config.parent.append("g")
+    .attr("id", "ChordTicks")
     .selectAll("g")
     .data(chord.groups)
     .enter().append("g")
@@ -109,13 +113,15 @@ Chord.prototype.update = function()
     .enter().append("g")
     .attr("transform", function(d)
     {
-      //console.dir(this.parentNode);
+      //console.dir(d);
       // Probably a bad idea, but getting parent angle data from parent.
       var startAngle = this.parentNode.__data__.startAngle;
       var endAngle = this.parentNode.__data__.endAngle;
       var midAngle = startAngle + (endAngle-startAngle)/2.0;
       return "translate(" + config.xoffset + "," + config.yoffset + ")rotate(" + (midAngle * 180 / Math.PI - 90) + ")"
           + "translate(" + config.outerRadius + ",0)";
+      //return "translate(" + config.xoffset + "," + config.yoffset + ")rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
+      //    + "translate(" + config.outerRadius + ",0)";
     });
 
   ticks.append("line")
@@ -167,7 +173,7 @@ Chord.prototype.update = function()
   {
     return function(g, i)
     {
-      svg.selectAll("g.chord path")
+      chartContainer.selectAll("g.chord path")
         .filter(function(d)
         {
           return d.source.index != i && d.target.index != i;
