@@ -118,18 +118,18 @@ dex.csv.toJson = function(csv, rowIndex, columnIndex)
     jsonRow[csv.header[columnIndex]] = csv.data[rowIndex][columnIndex];
     return jsonRow;
   }
-  else if (arguments.length == 2)
+  else if (arguments.length === 2)
   {
     var jsonRow =
     {
     };
-    for ( ci = 0; ci < csv.header.length; ci++)
+    for ( ci = 0; ci < csv.header.length; ci+=1)
     {
       jsonRow[csv.header[ci]] = csv.data[rowIndex][ci];
     }
     return jsonRow;
   }
-  else if (arguments.length == 1)
+  else if (arguments.length === 1)
   {
     for ( ri = 0; ri < csv.data.length; ri++)
     {
@@ -139,6 +139,7 @@ dex.csv.toJson = function(csv, rowIndex, columnIndex)
       for ( ci = 0; ci < csv.header.length; ci++)
       {
         jsonRow[csv.header[ci]] = csv.data[ri][ci];
+        //dex.console.log(csv.header[ci] + "=" + csv.data[ri][ci], jsonRow);
       }
       jsonData.push(jsonRow);
     }
@@ -382,24 +383,79 @@ dex.csv.isColumnNumeric = function(csv, columnNum)
   return true;
 };
 
-dex.csv.toMapArray = function(csv)
+// Used to be toMapArray
+dex.csv.group = function(csv, columns)
 {
-  var mapArray = [];
-  var i, j;
-
-  for ( i = 0; i < csv.data.length; i++)
+	var ri, ci;
+	var groups = {};
+	var returnGroups = [];
+  var values;
+  var key;
+  var otherColumns;
+  var otherHeaders;
+  var groupName;
+  
+  if (arguments < 2)
   {
-    var row =
-    {
-    };
-    for ( j = 0; j < csv.header.length; j++)
-    {
-      row[csv.header[j]] = csv.data[i][j]
-    }
-    mapArray.push(row);
+  	return csv;
   }
 
-  return mapArray;
+  function compare(a,b)
+  {
+  	var si, h;
+  	
+  	for (si=0; si<columns.length; si++)
+  	{
+  		h = csv.header[columns[si]]
+  		if (a[h] < b[h])
+  		{
+  			return -1;
+  		}
+  		else if (a[h] > b[h])
+  		{
+  			return 1
+  		}
+  	}
+  	
+  	return 0;
+  }
+
+  //otherColumns = dex.array.difference(dex.range(0, csv.header.length), columns);
+  //otherHeaders = dex.array.slice(csv.header, otherColumns);
+
+	for (ri=0; ri<csv.data.length;ri+=1)
+	{
+		values = dex.array.slice(csv.data[ri], columns);
+		key = values.join(':::');
+
+		if (groups[key])
+		{
+			group = groups[key];
+		}
+		else
+		{
+			//group = { 'csv' : dex.csv.csv(otherHeaders, []) };
+			group = { 'csv' : dex.csv.csv(csv.header, []) };
+			for (ci=0; ci<values.length; ci++)
+			{
+				group[csv.header[columns[ci]]] = values[ci];
+			}
+			groups[key] = group;
+		}
+		//group.csv.data.push(dex.array.slice(csv.data[ri], otherColumns));
+		group.csv.data.push(csv.data[ri]);
+    //groups[key] = group;
+	}
+
+  for (groupName in groups)
+  {
+  	if (groups.hasOwnProperty(groupName))
+  	{
+  		returnGroups.push(groups[groupName]);
+  	}
+  }
+  
+  return returnGroups.sort(compare);
 };
 
 dex.csv.visitCells = function(csv, func)

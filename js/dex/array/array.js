@@ -88,3 +88,45 @@ dex.array.extent = function(array, indices)
 	console.dir([min, max]);
 	return [ min, max ];
 };
+
+dex.array.difference = function(a1, a2)
+{
+	var i, j;
+  var a = [], diff = [];
+  for (i = 0; i < a1.length; i++)
+  {
+  	a[a1[i]] = true;
+  }
+  for (i = 0; i < a2.length; i++)
+  {
+    if (a[a2[i]])
+    {
+      delete a[a2[i]];
+    }
+    else
+    {
+    	a[a2[i]] = true;
+    }
+  }
+  for (j in a)
+  {
+    diff.push(j);
+  }
+  return diff;
+
+};
+
+dex.array.selectiveJoin = function(array, rows, delimiter)
+{
+	var delim = ':::';
+	var key = "";
+	if (arguments.length >= 3)
+  {
+  	delim = delimiter;
+  }
+  else if (arguments.length === 2)
+  {
+    return dex.array.slice(array, rows).join(delimiter);
+  }
+  throw "Invalid arguments.";
+};

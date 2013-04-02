@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.tile {
+  shape-rendering: crispEdges;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="../dex.js"></script>
+<script src="../js/dex/component/d3/HeatMap.js"></script>
+<script>
+// Create an SVG for our chart.
+var svg = d3.select("body").append("svg")
+  .attr("width", 1000)
+  .attr("height", 800)
+  .append("g");
+
+var csv = { header : ["A", "B", "C"], data : dex.datagen.randomMatrix({rows:100,columns:3, min : 1, max: 100}) };
+
+// Configure a chart.
+var heatmap = new HeatMap(
+  {
+    'parent'      : svg,
+    'height'      : 500,
+    'width'       : 500,
+    'csv'         : csv,
+    'xi'          : 1,
+    'yi'          : 2,
+    'hi'          : 1,
+    'xaxis' :
+    {
+      'ticks'      : d3.time.days,
+      'tickFormat' : d3.time.format("%b %d"),
+    }
+  }
+);
+heatmap.render();
+
+</script>

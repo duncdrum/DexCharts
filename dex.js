@@ -63,6 +63,36 @@ dex.array.extent = function(array, indices) {
     return [ min, max ];
 };
 
+dex.array.difference = function(a1, a2) {
+    var i, j;
+    var a = [], diff = [];
+    for (i = 0; i < a1.length; i++) {
+        a[a1[i]] = true;
+    }
+    for (i = 0; i < a2.length; i++) {
+        if (a[a2[i]]) {
+            delete a[a2[i]];
+        } else {
+            a[a2[i]] = true;
+        }
+    }
+    for (j in a) {
+        diff.push(j);
+    }
+    return diff;
+};
+
+dex.array.selectiveJoin = function(array, rows, delimiter) {
+    var delim = ":::";
+    var key = "";
+    if (arguments.length >= 3) {
+        delim = delimiter;
+    } else if (arguments.length === 2) {
+        return dex.array.slice(array, rows).join(delimiter);
+    }
+    throw "Invalid arguments.";
+};
+
 dex.color = {};
 
 dex.color.toHex = function(color) {
@@ -200,13 +230,13 @@ dex.csv.toJson = function(csv, rowIndex, columnIndex) {
         jsonRow = {};
         jsonRow[csv.header[columnIndex]] = csv.data[rowIndex][columnIndex];
         return jsonRow;
-    } else if (arguments.length == 2) {
+    } else if (arguments.length === 2) {
         var jsonRow = {};
-        for (ci = 0; ci < csv.header.length; ci++) {
+        for (ci = 0; ci < csv.header.length; ci += 1) {
             jsonRow[csv.header[ci]] = csv.data[rowIndex][ci];
         }
         return jsonRow;
-    } else if (arguments.length == 1) {
+    } else if (arguments.length === 1) {
         for (ri = 0; ri < csv.data.length; ri++) {
             var jsonRow = {};
             for (ci = 0; ci < csv.header.length; ci++) {
@@ -324,17 +354,52 @@ dex.csv.isColumnNumeric = function(csv, columnNum) {
     return true;
 };
 
-dex.csv.toMapArray = function(csv) {
-    var mapArray = [];
-    var i, j;
-    for (i = 0; i < csv.data.length; i++) {
-        var row = {};
-        for (j = 0; j < csv.header.length; j++) {
-            row[csv.header[j]] = csv.data[i][j];
-        }
-        mapArray.push(row);
+dex.csv.group = function(csv, columns) {
+    var ri, ci;
+    var groups = {};
+    var returnGroups = [];
+    var values;
+    var key;
+    var otherColumns;
+    var otherHeaders;
+    var groupName;
+    if (arguments < 2) {
+        return csv;
     }
-    return mapArray;
+    function compare(a, b) {
+        var si, h;
+        for (si = 0; si < columns.length; si++) {
+            h = csv.header[columns[si]];
+            if (a[h] < b[h]) {
+                return -1;
+            } else if (a[h] > b[h]) {
+                return 1;
+            }
+        }
+        return 0;
+    }
+    for (ri = 0; ri < csv.data.length; ri += 1) {
+        values = dex.array.slice(csv.data[ri], columns);
+        key = values.join(":::");
+        if (groups[key]) {
+            group = groups[key];
+        } else {
+            group = {
+                csv: dex.csv.csv(csv.header, [])
+            };
+            for (ci = 0; ci < values.length; ci++) {
+                group[csv.header[columns[ci]]] = values[ci];
+            }
+            groups[key] = group;
+        }
+        group.csv.data.push(csv.data[ri]);
+    }
+    for (groupName in groups) {
+        if (groups.hasOwnProperty(groupName)) {
+            returnGroups.push(groups[groupName]);
+        }
+    }
+    return returnGroups.sort(compare);
 };
 
 dex.csv.visitCells = function(csv, func) {
