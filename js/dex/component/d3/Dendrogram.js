@@ -87,6 +87,8 @@ Dendrogram.prototype.update = function()
     .projection(function(d) { return [d.y, d.x]; });
 
   var chartContainer = config.parent.append("g")
+    .attr("id", config["id"])
+    .attr("class", config["class"])
     .attr("transform", "translate(" + config.xoffset + "," + config.yoffset + ")");
 
   json =
@@ -157,7 +159,7 @@ Dendrogram.prototype.update = function()
         .attr("font-weight", config.label.font.weight)
         .attr("font-style", config.label.font.style)
         .style("font-size", config.label.font.size)
-        .text(config.label.text)
+        .text(function(d) { return (d.name) ? d.name : d.category;})
         .style("fill-opacity", 1e-6);;
 
     // Transition nodes to their new position.
