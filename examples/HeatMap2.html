@@ -35,6 +35,8 @@ var svg = d3.select("body").append("svg")
 
 var csv = { header : ["A", "B", "C"], data : dex.datagen.randomMatrix({rows:100,columns:3, min : 1, max: 100}) };
 
+dex.console.log(csv);
+
 // Configure a chart.
 var heatmap = new HeatMap(
   {
@@ -48,7 +50,7 @@ var heatmap = new HeatMap(
     'xaxis' :
     {
       'ticks'      : d3.time.days,
-      'tickFormat' : d3.time.format("%b %d"),
+      'tickFormat' : d3.format(",.2f"),
     }
   }
 );

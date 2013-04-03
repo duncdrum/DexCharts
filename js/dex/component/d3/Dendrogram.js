@@ -20,6 +20,7 @@ function Dendrogram(userConfig)
     // width and height of our bar chart.
     'width'            : 600,
     'height'           : 400,
+    'connectionLength' : 180,
     'xoffset'          : 20,
     'yoffset'          : 0,
     'rootName'         : "ROOT",
@@ -132,7 +133,7 @@ Dendrogram.prototype.update = function()
     var nodes = tree.nodes(root).reverse();
 
     // Normalize for fixed-depth.
-    nodes.forEach(function(d) { d.y = d.depth * 180; });
+    nodes.forEach(function(d) { d.y = d.depth * config.connectionLength; });
 
     // Update the nodes…
     var node = chartContainer.selectAll("g.node")
@@ -177,7 +178,7 @@ Dendrogram.prototype.update = function()
     // Transition exiting nodes to the parent's new position.
     var nodeExit = node.exit().transition()
       .duration(duration)
-      .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+      .attr("transform", function(d) { return "translate(" + (source.y) + "," + (source.x) + ")"; })
       .remove();
 
     nodeExit.select("circle")

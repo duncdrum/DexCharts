@@ -102,8 +102,8 @@ function HeatMap(userConfig)
     {
     	'stroke' :
     	{
-    		'color' : 'black',
-    		'width' : 1,
+    		'color'   : 'black',
+    		'width'   : 1,
     		'opacity' : .5
     	}
     }
@@ -150,8 +150,6 @@ HeatMap.prototype.update = function()
   // Coerce the CSV data to the appropriate types.
   data.forEach(function(d)
   {
-  	//var parts = d[config.xi].match(/(\d+)/g);
-    //d[config.xi] = new Date(parts[2], parts[0]-1, parts[1]);
     d[config.x] = +d[config.xi]
     d[config.yi] = +d[config.yi];
     d[config.hi] = +d[config.hi];
@@ -180,7 +178,18 @@ HeatMap.prototype.update = function()
       .style("fill", function(d) { return heat(d[config.hi]); })
       .style("stroke", config.rect.stroke.color)
       .style("stroke-opacity", config.rect.stroke.opacity)
-      .style("stroke-width", config.rect.stroke.width);
+      .style("stroke-width", config.rect.stroke.width)
+      .on("mouseover", function(d)
+      {
+      	if (config.event && config.event.mouseover)
+      	{
+      		config.event.mouseover(d);
+      	}
+      	else
+      	{
+          dex.console.log("on.mouseover", d);
+      	}
+      });
 
   // Add a legend for the color values.
   var legend = svg.selectAll(".legend")

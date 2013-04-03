@@ -165,6 +165,14 @@ var csv =
 	["7/26/2012","3200","104"]]
 	};
 
+// Convert string dates to numeric ones. This is the responsibility
+// of the client.  I'll try to make it easier in the future.
+csv.data.map(function(row)
+{
+  var parts = row[0].match(/(\d+)/g);
+  row[0] = new Date(parts[2], parts[0]-1, parts[1]);
+});
+
 // Configure a chart.
 var heatmap = new HeatMap(
   {
@@ -179,6 +187,10 @@ var heatmap = new HeatMap(
     {
       'ticks'      : d3.time.days,
       'tickFormat' : d3.time.format("%b %d"),
+    },
+    'event' :
+    {
+      'mouseover' : function(d) { dex.console.log(d, "Custom event..."); }
     }
   }
 );

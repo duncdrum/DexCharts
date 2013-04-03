@@ -10,7 +10,7 @@ function ParallelCoordinates(userConfig)
     'parent'             : null,
     'height'             : 400,
     'width'              : 600,
-    'opacity'            : 100,
+    'opacity'            : 1,
     'strokeWidth'        : 4,
     'axisFontSize'       : 16,
     'fontSize'           : 12,
@@ -129,7 +129,7 @@ ParallelCoordinates.prototype.update = function()
 
     foreground = chartContainer.append("g")
       .attr("fill", "none")
-      .attr("stroke-opacity", config.opacity/100.0)
+      .attr("stroke-opacity", config.opacity)
       .selectAll("path")
       .data(jsonData)
       .enter().append("path")
@@ -149,13 +149,13 @@ ParallelCoordinates.prototype.update = function()
       {
         d3.select(this)
           .style("stroke-width", config.strokeWidth + (config.strokeWidth/3))
-          .style("stroke-opacity", config.opacity/100.0);
+          .style("stroke-opacity", config.opacity);
       })
       .on("mouseout", function()
       {
         d3.select(this)
           .style("stroke-width", config.strokeWidth)
-          .style("stroke-opacity", config.opacity/100);
+          .style("stroke-opacity", config.opacity);
       });
 
     // Add a group element for each dimension.
