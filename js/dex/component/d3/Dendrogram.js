@@ -20,42 +20,32 @@ function Dendrogram(userConfig)
     // width and height of our bar chart.
     'width'            : 600,
     'height'           : 400,
-    'connectionLength' : 180,
+    'connection'       :
+    {
+      'length' : 180,
+      'style'  :
+      {
+        'stroke' : dex.config.stroke()
+      }
+    },
     'xoffset'          : 20,
     'yoffset'          : 0,
     'rootName'         : "ROOT",
     "rootCategory"     : "ROOT",
     'color'            : d3.scale.category20(),
-    'empty'            :
+    'node'             :
     {
-    'color' : "green",
-    'size'  : 4
-    },
-    'notEmpty' :
-    {
-    'color' : 'red',
-    'size'  : 8
-    },
-  	'label'       :
-   	{
-   		'x'         : 0,
-   		'y'         : -50,
-   		'rotate'    : -90,
-   		'dy'        : ".71em",
-   		'font'      :
-   		{
-   			'size'    : 18,
-   			'family'  : 'sans-serif',
-   			'style'   : 'normal',
-   			'variant' : 'normal',
-   			'weight'  : 'normal'
-   		},
-   		'text'      : 'Y Axis',
-   		'anchor'    : 'end',
-   		'color'     : 'black'
-   	}
-    //'emptyColor'       : "#fff",
-    //'hasChildrenColor' : "lightsteelblue"
+     'expanded'  :
+      {
+        'label'  : dex.config.label(),
+        'circle' : dex.config.circle()
+      },
+     'collapsed' :
+      {
+        'label'  : dex.config.label(),
+        'circle' : dex.config.circle()
+      }
+    }
   });
 
   this.chart = this;
@@ -70,8 +60,9 @@ Dendrogram.prototype.update = function()
 {
   var chart = this.chart;
   var config = this.config;
-  var csv = config.csv; 
-  var json;
+  var csv = config.csv;
+  var json; 
+
   
   if (config.debug)
   {
@@ -133,7 +124,7 @@ Dendrogram.prototype.update = function()
     var nodes = tree.nodes(root).reverse();
 
     // Normalize for fixed-depth.
-    nodes.forEach(function(d) { d.y = d.depth * config.connectionLength; });
+    nodes.forEach(function(d) { d.y = d.depth * config.connection.length; });
 
     // Update the nodes…
     var node = chartContainer.selectAll("g.node")
@@ -145,34 +136,50 @@ Dendrogram.prototype.update = function()
       .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
       .on("click", function(d) { toggle(d); update(d); });
 
+    // Come back here...
     nodeEnter.append("svg:circle")
-      .attr("r", 1e-6)
-      .style("fill", function(d) { return d._children ? config.notEmpty.color : config.empty.color; });
+      .each(function(d)
+      {
+        //dex.console.log("CALLING", this, d, i);
+        var nodeConfig = (d._children) ?
+          config.node.collapsed.circle : config.node.expanded.circle;
+        d3.select(this).call(dex.config.configureCircle, nodeConfig);
+      })
+      .attr("r", 1e-6);
 
-    nodeEnter
-      .append("text")
-        .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
-        .attr("y", config.label.y)
-        .attr("dy", config.label.dy)
-        .attr("fill", config.label.color)
-        .style("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
-        .attr("font-family", config.label.font.family)
-        .attr("font-weight", config.label.font.weight)
-        .attr("font-style", config.label.font.style)
-        .style("font-size", config.label.font.size)
-        .text(function(d) { return (d.name) ? d.name : d.category;})
-        .style("fill-opacity", 1e-6);;
+  // Add text nodes configured like we want them.
+  nodeEnter.append("text")
+    .each(function(d)
+    {
+      var nodeConfig = (d._children) ?
+        config.node.collapsed.label : config.node.expanded.label;
+      d3.select(this).call(dex.config.configureLabel, nodeConfig);
+    })
+    .text(function(d) { return (d.name) ? d.name : d.category;})
+    .style("fill-opacity", 1e-6);
 
     // Transition nodes to their new position.
     var nodeUpdate = node.transition()
       .duration(duration)
       .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
-    nodeUpdate.select("circle")
-      .attr("r", function(d) { return d._children ? config.notEmpty.size : config.empty.size;})
-      .style("fill", function(d) { return d._children ? config.notEmpty.color : config.empty.color; });
+    nodeUpdate.selectAll("circle")
+      .each(
+        function(d)
+        {
+          var nodeConfig = (d._children) ?
+            config.node.collapsed.circle : config.node.expanded.circle;
+          d3.select(this).call(dex.config.configureCircle, nodeConfig);
+        });
 
     nodeUpdate.select("text")
+      .each(
+        function(d)
+        {
+          var nodeConfig = (d._children) ?
+            config.node.collapsed.label : config.node.expanded.label;
+          d3.select(this).call(dex.config.configureLabel, nodeConfig);
+        })
       .style("fill-opacity", 1);
 
     // Transition exiting nodes to the parent's new position.
@@ -217,7 +224,8 @@ Dendrogram.prototype.update = function()
       .remove();
 
     // Stash the old positions for transition.
-    nodes.forEach(function(d) {
+    nodes.forEach(function(d)
+    {
       d.x0 = d.x;
       d.y0 = d.y;
     });

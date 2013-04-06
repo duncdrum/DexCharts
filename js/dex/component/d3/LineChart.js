@@ -5,21 +5,26 @@ function LineChart(userConfig)
 {
   DexComponent.call(this, userConfig,
   {
-    'parent'     : null,
-    'csv'        :
+    'parent' : null,
+    'id' : "LineChart",
+    "class" : "LineChart",
+    'csv' :
     {
-      'header' : [ "X", "Y" ],
-      'data'   : [[0,0],[1,1],[2,4],[3,9],[4,16]]
+      'header' : ["X", "Y"],
+      'data' : [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
     },
-    'width'       : 600,
-    'height'      : 400,
-    'xi'          : 0,
-    'yi'          : [1],
-    'xoffset'     : 0,
-    'yoffset'     : 0,
+    'xaxis' : dex.config.xaxis(),
+    'yaxis' : dex.config.yaxis(),
+    'width' : 600,
+    'height' : 400,
+    'xi' : 0,
+    'yi' : [1],
+    'xoffset' : 20,
+    'yoffset' : 0,
     'pointColors' : d3.scale.category20(),
-    'lineColors'  : d3.scale.category20()
-  });
+    'lineColors' : d3.scale.category20()
+  }); 
+
 
   // Ugly, but my JavaScript is weak.  When in handler functions
   // this seems to be the only way to get linked back to the
@@ -43,12 +48,12 @@ LineChart.prototype.update = function()
 
   //console.dir(config);
   // Use a linear scale for x, map the value range to the pixel range.
-  var x = d3.scale.linear()
+  var x = config.xaxis.scale
     .domain(d3.extent(csv.data, function(d) { return +d[config.xi]; }))
     .range([0, config.width]);
 
   // Use a linear scale for y, map the value range to the pixel range.
-  var y = d3.scale.linear()
+  var y = config.yaxis.scale
     .domain(d3.extent(
       dex.matrix.flatten(dex.matrix.slice(csv.data, config.yi))))
     .range([config.height, 0]);
@@ -60,14 +65,14 @@ LineChart.prototype.update = function()
   this.y = y;
 
   // Create the x axis at the bottom.
-  var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom");
+  //var xAxis = d3.svg.axis()
+  //  .scale(x)
+  //  .orient(config.xaxis.orient);
 
   // Create the y axis to the left.
-  var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left");
+  //var yAxis = d3.svg.axis()
+  //  .scale(y)
+  //  .orient(config.yaxis.orient);
 
   var lines = [];
 
@@ -85,25 +90,47 @@ LineChart.prototype.update = function()
   // the offsets within the child nodes.
   //config.parent.select("#lineChartContainer").remove();
   var chartContainer = config.parent.append("g")
-    .attr("id", "lineChartContainer")
+    .attr("id", config["id"])
+    .attr("class", config["class"])
     .attr("transform", "translate(" + config.xoffset + "," + config.yoffset + ")");
 
-  // Draw the x axis.
-  chartContainer.append("g")
+  // Generate the x/y axis
+  var xaxis = dex.config.configureAxis(config.xaxis)
+      	.scale(x);
+  var yaxis = dex.config.configureAxis(config.yaxis)
+      	.scale(y);
+
+  // Add an x-axis with label.
+  var xaxisG = chartContainer.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + config.height + ")")
-    .call(xAxis);
+    .call(xaxis);
 
-  // Draw the y axis.
-  chartContainer.append("g")
-    .attr("class", "y axis")
-    .call(yAxis)
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text(dex.array.slice(csv.header, config.yi).join(" "));
+  // Add a y-axis.
+  var yaxisG = chartContainer.append("g")
+      .attr("class", "y axis")
+      .call(yaxis);
+
+  // Add the custom tick labels.
+  chartContainer.selectAll(".y.axis text")
+    .call(dex.config.configureLabel, config.yaxis.tick.label);
+  chartContainer.selectAll(".x.axis text")
+    .call(dex.config.configureLabel, config.xaxis.tick.label);
+
+  // Add the Y Axis Label
+  yaxisG.append("text")
+    .attr("class", "label")
+    .call(dex.config.configureLabel, config.yaxis.label)
+    .text(config.yaxis.label.text);
+    //.text(dex.array.slice(csv.header, config.yi).join(" "));
+
+  xaxisG.append("text")
+    .attr("class", "label")
+    .call(dex.config.configureLabel, config.xaxis.label)
+    .text(config.xaxis.label.text);
+    //.text(dex.array.slice(csv.header, config.xaxis.label.text).join(" "));
+    
+  dex.console.log(d3.select(".y.axis"));
 
   // Draw each of the lines.
   for (i=0; i<lines.length; i++)
@@ -156,9 +183,10 @@ LineChart.prototype.mouseOverHandler = function(chartEvent, targetChart)
   	chart = this.chart;
   }
 
-  var config = chart.config;
   var x = chart.x;
   var y = chart.y;
+
+  var config = chart.config;
 
   var chartContainer = chart.chartContainer;
   //console.log("Chart Container: " + typeof chart);

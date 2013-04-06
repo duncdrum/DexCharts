@@ -2,6 +2,7 @@ all : dex
 
 MODULES=\
 	js/dex/main.js \
+	js/dex/config/config.js \
 	js/dex/array/array.js \
 	js/dex/color/color.js \
 	js/dex/console/console.js \

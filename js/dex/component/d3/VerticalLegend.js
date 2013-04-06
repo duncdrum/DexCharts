@@ -9,16 +9,30 @@ function VerticalLegend(userConfig)
     'id'              : "VerticalLegend",
     'class'           : "VerticalLegend",
     'parent'          : null,
+    'height'          : 400,
+    'width'           : 200,
     'xoffset'         : 50,
     'yoffset'         : 30,
     'cellWidth'       : 30,
     'cellHeight'      : 20,
     'tickLength'      : 5,
     'caption'         : "Legend",
-    'color'           : d3.scale.category20c(),
     'captionFontSize' : 14,
     'captionXOffset'  : -30,
     'captionYOffset'  : -20,
+    'yaxis'           : dex.config.yaxis(),
+    'cell'            :
+    {
+      'rect'  : dex.config.rectangle(),
+      'label' : dex.config.label()
+    },
+    'title'          :
+      dex.config.label(
+        {
+          'text' : 'Legend',
+          'dy'   : -10,
+          'x'    : 42
+        })
   });
 
   // Ugly, but my JavaScript is weak.  When in handler functions
@@ -34,24 +48,12 @@ VerticalLegend.prototype.render = function()
 
 VerticalLegend.prototype.update = function()
 {
-	// If we need to call super:
-	//DexComponent.prototype.update.call(this);
  	var chart = this.chart;
   var config = this.config;
-  
-  // Create our x scale
+
   var y = d3.scale.ordinal()
     .domain(config.labels)
-    .range(d3.range(config.labels.length).map(function(i) { return i * config.cellHeight; }));
-
-  // Create the x axis.
-  var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left")
-    .tickSize(config.tickLength)
-    .tickPadding(10)
-    .tickValues(config.labels)
-    .tickFormat(function(d) { return d; });
+    .rangeBands([0, config.height]);
 
   // Append a graphics node to the supplied svg node.
   var chartContainer = config.parent.append("g")
@@ -60,23 +62,38 @@ VerticalLegend.prototype.update = function()
     .attr("transform",
       "translate(" + config.xoffset + "," + config.yoffset + ")");
 
-  // Draw a colored rectangle for each ordinal range.
-  chartContainer.selectAll("rect")
+  var rects = chartContainer.selectAll("rect")
     .data(config.labels)
     .enter().append("rect")
-    .attr("height", config.cellHeight)
-    .attr("y", function(d, i) { return y(i); })
-    .attr("width", config.cellWidth)
-    .style("fill", function(d, i)
+    .call(dex.config.configureRectangle, config.cell.rect)
+    //.attr("height", 12)
+    .attr("y", function(d) { return y(d); })
+    //.attr("width", 20)
+    .style("fill", function(d)
     {
-      return config.color(i);
+      return config.cell.rect.color(d);
+    })
+    .on("mouseover", function(d)
+    {
+       chart.notify({"type":"mouseover","d":d});
+    })
+    .on("mouseout", function(d)
+    {
+       chart.notify({"type":"mouseout","d":d});
+    })
+    .on("mousedown", function(d)
+    {
+       chart.notify({"type":"mousedown","d":d});
     });
 
-  // Add the caption.
-  chartContainer.call(yAxis).append("text")
-    .attr("class", "caption")
-    .attr("y", config.captionYOffset)
-    .attr("x", config.captionXOffset)
-    .text(config.caption)
-    .style("font-size", config.captionFontSize);
+  chartContainer.selectAll("label")
+    .data(config.labels)
+    .enter().append("text")
+    .call(dex.config.configureLabel, config.cell.label)
+    .attr("y", function(d) { return y(d); })
+    .text(function(d) { return d;});
+    
+  chartContainer.append("text")
+    .call(dex.config.configureLabel, config.title)
+    .text(config.title.text);
 };

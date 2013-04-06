@@ -5,7 +5,7 @@ function BarChart(userConfig)
 {
   DexComponent.call(this, userConfig,
   {
-  	// The parent container of this chart.
+    // The parent container of this chart.
     'parent'           : null,
     // Set these when you need to CSS style components independently.
     'id'               : 'BarChart',
@@ -13,9 +13,9 @@ function BarChart(userConfig)
     // Our data...
     'csv'              :
     {
-    	// Give folks without data something to look at anyhow.
-    	'header'         : [ "X", "Y" ],
-    	'data'           : [[0,0],[1,1],[2,4],[3,9],[4,16]]
+      // Give folks without data something to look at anyhow.
+      'header'         : [ "X", "Y" ],
+      'data'           : [[0,0],[1,1],[2,4],[3,9],[4,16]]
     },
     // width and height of our bar chart.
     'width'            : 600,
@@ -28,62 +28,10 @@ function BarChart(userConfig)
     'color'            : d3.scale.category20(),
     xmin               : null,
     ymin               : null,
-    'xaxis' :
-    {
-    	'format'      : function() { return d3.format(",.2f"); },
-    	'orient'      : "bottom",
-    	'label' :
-    	{
-    		'x'         : 300,
-    		'y'         : 30,
-    		'rotate'    : -90,
-    		'dy'        : ".71em",
-    		'font'      :
-    		{
-    			'size'    : 18,
-    			'family'  : 'sans-serif',
-    			'style'   : 'normal',
-    			'variant' : 'normal',
-    			'weight'  : 'normal'
-    		},
-    		'text'      : 'X Axis',
-    		'anchor'    : 'end',
-    		'color'     : 'black'
-    	}
-    },
-    'yaxis' :
-    {
-    	'format'      : function() { return d3.format(",d"); },
-    	'orient'      : "left",
-    	'label'       :
-    	{
-    		'x'         : 0,
-    		'y'         : -50,
-    		'rotate'    : -90,
-    		'dy'        : ".71em",
-    		'font'      :
-    		{
-    			'size'    : 18,
-    			'family'  : 'sans-serif',
-    			'style'   : 'normal',
-    			'variant' : 'normal',
-    			'weight'  : 'normal'
-    		},
-    		'text'      : 'Y Axis',
-    		'anchor'    : 'end',
-    		'color'     : 'black'
-    	}
-    }
+    'xaxis'  : dex.config.xaxis(),
+    'yaxis' : dex.config.yaxis()
   });
 
-  // Font Families: serif, sans-serif, cursive, fantasy, monospace
-  // Font Style   : normal, italic, oblique
-  // Font Variant : normal, small-caps
-  // Font Weight  : normal, bold, 100, 200 ... 900
-
-  // Ugly, but my JavaScript is weak.  When in handler functions
-  // this seems to be the only way to get linked back to the
-  // this.x variables.
   this.chart = this;
 }
 
@@ -94,9 +42,7 @@ BarChart.prototype.render = function()
 
 BarChart.prototype.update = function()
 {
-	// If we need to call super:
-	//DexComponent.prototype.update.call(this);
- 	var chart = this.chart;
+   var chart = this.chart;
   var config = this.config;
 
   if (config.debug)
@@ -104,8 +50,6 @@ BarChart.prototype.update = function()
     console.log("===== Barchart Configuration =====");
     console.dir(config);
   }
-  
-  var yaxisFormat = d3.format(config.yaxisFormat);
 
   // X domain across groups.
   var x = d3.scale.ordinal()
@@ -121,16 +65,11 @@ BarChart.prototype.update = function()
   var y = d3.scale.linear()
     .range([config.height, 0]);
 
-  var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient(config.xaxis.orient)
-    .tickFormat(config.xaxis.format());
-
-  var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient(config.yaxis.orient)
-    .tickFormat(config.yaxis.format());
-
+  var xaxis = dex.config.configureAxis(config.xaxis)
+    .scale(x);
+  var yaxis = dex.config.configureAxis(config.yaxis)
+    .scale(y);
+    
   var chartContainer = config.parent.append("g")
     .attr("id", config["id"])
     .attr("class", config["class"])
@@ -141,10 +80,10 @@ BarChart.prototype.update = function()
   // Translate all of the y data columns to numerics.
   data.forEach(function(d)
   {
-  	config.yi.forEach(function(c)
-  	{
-  		d[c] = +d[c];
-  	});
+    config.yi.forEach(function(c)
+    {
+      d[c] = +d[c];
+    });
   });
 
   var yextent = dex.matrix.extent(data, config.yi);
@@ -167,72 +106,43 @@ BarChart.prototype.update = function()
   chartContainer.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + config.height + ")")
-      .call(xAxis)
+      .call(xaxis)
     .append("text")
-      .attr("x", config.xaxis.label.x)
-      .attr("y", config.xaxis.label.y)
-      .attr("dy", config.xaxis.label.dy)
-      .attr("fill", config.xaxis.label.color)
-      .style("text-anchor", config.xaxis.label.anchor)
-      .attr("font-family", config.xaxis.label.font.family)
-      .attr("font-weight", config.xaxis.label.font.weight)
-      .attr("font-style", config.xaxis.label.font.style)
-      .style("font-size", config.xaxis.label.font.size)
+      .call(dex.config.configureLabel, config.xaxis.label)
       .text(config.xaxis.label.text);
 
   // Y Axis
   chartContainer.append("g")
       .attr("class", "y axis")
-      .call(yAxis)
+      .call(yaxis)
     .append("text")
-      .attr("transform", "rotate(" + config.yaxis.label.rotate + ")")
-      .attr("y", config.yaxis.label.y)
-      .attr("x", config.yaxis.label.x)
-      .attr("dy", config.yaxis.label.dy)
-      .attr("fill", config.yaxis.label.color)
-      .style("text-anchor", config.yaxis.label.anchor)
-      .attr("font-family", config.yaxis.label.font.family)
-      .attr("font-weight", config.yaxis.label.font.weight)
-      .attr("font-style", config.yaxis.label.font.style)
-      .style("font-size", config.yaxis.label.font.size)
+      .call(dex.config.configureLabel, config.yaxis.label)
       .text(config.yaxis.label.text);
 
   var barData = dex.matrix.combine(
-      	dex.matrix.slice(data, [config.xi]),
-      	dex.matrix.slice(data, config.yi)
+        dex.matrix.slice(data, [config.xi]),
+        dex.matrix.slice(data, config.yi)
      );
-
-  console.log("BarChart().BarData()")
-  console.dir(data);
-  console.dir(dex.matrix.slice(data, [config.xi]));
-  console.dir(dex.matrix.slice(data, config.yi));
-  console.dir(barData);
-
-  //console.dir(dex.matrix.slice(data, config.yi));
-  //console.dir(x.rangeBand());
 
   chartContainer.selectAll(".bar")
       .data(barData)
     .enter().append("rect")
       .attr("class", "bar")
       .attr("x", function(d) { //console.dir(d);
-      	 return x(d[0]) + x1(d[3]) })
+         return x(d[0]) + x1(d[3]); })
       .style("fill", function(d) { console.log(d[3]); return config.color(d[3]);})
       .attr("width", x.rangeBand()/config.yi.length)
       .attr("y", function(d) { console.log("Y:" + d); return y(d[1]); })
       .attr("height", function(d) { return config.height - y(d[1]); });
-      
+
   // Add Text Labels
-  /*
   chartContainer.selectAll(".label")
     .data(barData)
     .enter().append("text")
-    .attr("x", function(d) { return x(d[0]) + x1(d[3]) })
-    .attr("y", function(d) { return y(d[1]); })
-    .attr("text-anchor", "end")
-    //.attr("transform", "rotate(90)")
-    .attr("dy", ".71em")
-    .style("font-size", 12)
-    .text(function(d) { console.log("TEXTD: " + d); return config.labels[d[3]]; });
-  */
+    .call(dex.config.configureLabel, config.xaxis.tick.label)
+    .attr("x", function(d)
+    { return x(d[0]) + x1(d[3]) + config.xaxis.tick.label.x; })
+    .attr("y", config.height + config.xaxis.tick.padding)
+    //.attr("y", function(d) { return y(d[1]); })
+    .text(function(d) { dex.console.log("TEXTD: ", d); return config.csv.header[d[3]]; });
 };

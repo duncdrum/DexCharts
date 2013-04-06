@@ -79,7 +79,7 @@ dex.csv.getConnectionMatrix = function(csv)
 
 
 	connectionMatrix = { "header" : header, "connections" : matrix };
-  dex.console.log("Connection Matrix", connectionMatrix);
+  //dex.console.log("Connection Matrix", connectionMatrix);
 	return connectionMatrix;
 };
 

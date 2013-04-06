@@ -37,37 +37,29 @@ var csv =
 };
 
 // Configure a chart.
-var chart1 = new BarChart(
-  {
-    'parent'     : svg,
-    'height'     : 200,
-    'width'      : 600,
-    'csv'        : csv,
-    'yi'         : [1],
-    'ymin'       : 0,
-    'xaxis' :
-    {
-    	'format' : function() { return d3.format(",.2f"); },
-    	'label'  :
-    	{
-    	  'text'      : 'Gratuitous X Axis Label',
-    	  'color'     : 'black'
-    	}
-    },
-  }
-);
-chart1.render();
+var bar = new BarChart(
+{
+  'parent' : svg,
+  'height' : 200,
+  'width'  : 600,
+  'csv'    : csv
+});
 
-new BarChart(chart1)
+bar.attr('xaxis.tick.label.x', 98);
+dex.console.log("CONFIG", bar.attr());
+bar.render();
+
+new BarChart(bar)
   .attr("yaxisLabel", "Some Stat")
   .attr("yoffset", 250)
   .attr("yi", [2])
   .render();
 
-new BarChart(chart1)
+new BarChart(bar)
   .attr("yaxisLabel", "")
   .attr("yoffset", 500)
   .attr("yi", [1,2])
+  .attr("xaxis.tick.label.x", 50)
   .render();
 
 // Contemplating a more complex series model for data input

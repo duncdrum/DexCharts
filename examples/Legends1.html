@@ -42,16 +42,27 @@ var header =
 
 var svg = d3.select("body").append("svg")
   .attr("width", 960)
-  .attr("height", 500);
+  .attr("height", 700);
 
 var params = {}
 
 var vlegend1 = new VerticalLegend(
   {
-  	parent : svg,
-  	labels : header,
-  	caption: "Vertical Legend"
+  	'parent'  : svg,
+  	'labels'  : header,
+  	'height'  : 600,
+  	'caption' : "Vertical Legend",
+  	'xoffset' : 20,
   });
+
+vlegend1.attr('yaxis.tick.format',
+  function(d) { console.log(d); return d; });
+vlegend1.attr("cell.label.font.size", 12);
+vlegend1.attr('cell.rect.height', 20);
+vlegend1.attr('cell.rect.width', 30);
+vlegend1.attr('cell.label.x', 20);
+vlegend1.attr('cell.label.dy', 15);
+vlegend1.attr('cell.label.font.weight', 'bold');
 vlegend1.render();
 
 var hlegend1 = new HorizontalLegend(
@@ -60,8 +71,7 @@ var hlegend1 = new HorizontalLegend(
     labels  : ["A", "B", "C"],
     xoffset : 100,
     yoffset : 50,
-    caption : "Horizontal Legend",
-    color   : d3.scale.category10()
+    caption : "Horizontal Legend"
   });
 hlegend1.render();
 

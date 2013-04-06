@@ -7,28 +7,29 @@ dex.object = {};
 //
 ////
 
-dex.object.clone = function(obj)
+
+dex.object.clone = function(destination, source)
 {
-	var key;
-	
-	// Simple objects just return themselves.
-  if (obj === null || typeof obj !== 'object')
+  var property;
+  
+  for (property in source)
   {
-    return obj;
+    if (source[property] && source[property].constructor && source[property].constructor === Object)
+    {
+      destination[property] = destination[property] ||
+      {
+      };
+      arguments.callee(destination[property], source[property]);
+    }
+    else
+    {
+      destination[property] = source[property];
+    }
   }
-
-  // Instantiate where we'll make the copy
-  var clone = obj.constructor();
-
-  // Iterate over properties.
-  for (key in obj)
-  {
-  	// Call this recursively to support deep cloning.
-    clone[key] = dex.object.clone(obj[key]);
-  }
-
-  return clone;
+  return destination;
 }; 
+
+
 
   /**
    *
@@ -99,53 +100,6 @@ dex.object.contains = function(container, obj)
   return false;
 };
 
-dex.object.setHierarchical = function(hierarchy, name, value, delimiter)
-{
-	if (hierarchy == null)
-	{
-		hierarchy = {};
-	}
-
-	if (typeof hierarchy != 'object')
-	{
-		return hierarchy;
-	}
-
-  // Create an array of names by splitting delimiter, then call
-  // this function in the 3 argument (Array of paths) context.
-  if (arguments.length == 4)
-  {
-  	return dex.object.setHierarchical(hierarchy,
-      name.split(delimiter), value);
-  }
-
-  // Array of paths context.
-  else
-  {
-    // This is the last variable name, just set the value.
-    if (name.length === 1)
-    {
-      hierarchy[name[0]] = value;
-    }
-    // We still have to traverse.
-    else
-    {
-      // Undefined container object, just create an empty.
-      if (!(name[0] in hierarchy))
-      {
-        hierarchy[name[0]] =
-        {
-        };
-      }
-
-      // Recursively traverse down the hierarchy.
-      dex.object.setHierarchical(hierarchy[name[0]], name.splice(1), value);
-    }
-  }
-
-  return hierarchy;
-};
-
 dex.object.visit = function(obj, func)
 {
 	var prop;
@@ -181,4 +135,49 @@ dex.object.connect = function(map, values)
 dex.object.isNumeric = function(obj)
 {
   return !isNaN(parseFloat(obj)) && isFinite(obj);
+};
+
+dex.object.setHierarchical = function(hierarchy, name, value, delimiter)
+{
+  if (hierarchy == null)
+  {
+    hierarchy = {};
+  }
+
+  if (typeof hierarchy != 'object')
+  {
+    return hierarchy;
+  }
+
+  // Create an array of names by splitting delimiter, then call
+  // this function in the 3 argument (Array of paths) context.
+  if (arguments.length == 4)
+  {
+    return dex.object.setHierarchical(hierarchy,
+      name.split(delimiter), value);
+  }
+
+  // Array of paths context.
+  else
+  {
+    // This is the last variable name, just set the value.
+    if (name.length === 1)
+    {
+      hierarchy[name[0]] = value;
+    }
+    // We still have to traverse.
+    else
+    {
+      // Undefined container object, just create an empty.
+      if (!(name[0] in hierarchy))
+      {
+        hierarchy[name[0]] = {};
+      }
+
+      // Recursively traverse down the hierarchy.
+      dex.object.setHierarchical(hierarchy[name[0]], name.splice(1), value);
+    }
+  }
+
+  return hierarchy;
 };

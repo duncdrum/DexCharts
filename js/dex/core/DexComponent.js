@@ -15,14 +15,19 @@ function DexComponent(userConfig, defaultConfig)
   }
   else
   {
-    this.config = dex.object.overlay(userConfig, defaultConfig);
+    this.config = dex.object.overlay(dex.config.expand(userConfig),
+      defaultConfig);
     //console.dir(this.config);
   }
 }
 
 DexComponent.prototype.attr = function(name, value)
 {
-  if (arguments.length == 1)
+	if (arguments.length == 0)
+	{
+		return this.config;
+	}
+  else if (arguments.length == 1)
   {
     return this.config[name];
   }

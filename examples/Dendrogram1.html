@@ -31,14 +31,9 @@ var svg = d3.select("body").append("svg")
 
 var csv =
 {
-  'header' : d3.range(3).map(function(d) { return "C"+d;}),
-  'data'   : dex.datagen.randomMatrix({"rows":3, "columns": 3, "min": 0, "max":100}),
-};
-
-csv =
-{
   'header' : [ "C1", "C2", "C3" ],
-  'data'   : [["A", "B", "C"], ["A", "B", "D"]]
+  'data'   : [["A", "B", "C"], ["A", "B", "D"]],
+  'date'   : new Date()
 };
 
 // Configure a chart.
@@ -48,21 +43,18 @@ var dendrogram = new Dendrogram(
     'height'       : 300,
     'width'        : 600,
     'xoffset'      : 100,
-    'rootName'     : '',
-    'rootCategory' : 'Category1',
-    'empty' :
-    {
-    	'size' : 20,
-    	'color' : "grey"
-    },
-    'notEmpty' :
-    {
-    	'size'  : 50,
-    	'color' : 'steelblue'
-    },
-    'csv'          : csv
+    'csv'          : csv,
+    'node.expanded.circle.style.stroke.width' : 0,
+    'node.collapsed.circle.style.stroke.width' : 0,
+    'node.expanded.circle.style.stroke.color' : "red",
+    'node.collapsed.circle.style.stroke.color' : "blue",
+    'node.collapsed.circle.style.opacity' : .5,
+    'node.expanded.circle.style.opacity' : .5,
+    'node.collapsed.circle.style.color' : "green",
+    'node.collapsed.circle.radius' : 20
   }
 );
+
 dendrogram.render();
 
 </script>

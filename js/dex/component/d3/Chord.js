@@ -32,24 +32,7 @@ function Chord(userConfig)
     'tickLength' : 5,
     'strokeWidth' : 1,
     'chordOpacity' : 50,
-  	'label'       :
-   	{
-   		'x'         : 0,
-   		'y'         : -50,
-   		'rotate'    : -90,
-   		'dy'        : ".71em",
-   		'font'      :
-   		{
-   			'size'    : 18,
-   			'family'  : 'sans-serif',
-   			'style'   : 'normal',
-   			'variant' : 'normal',
-   			'weight'  : 'normal'
-   		},
-   		'text'      : 'Y Axis',
-   		'anchor'    : 'end',
-   		'color'     : 'black'
-   	}
+  	'label'       : dex.config.label()
   });
 
   this.chart = this;

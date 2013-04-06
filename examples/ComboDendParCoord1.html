@@ -81,7 +81,7 @@ path.link {
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
   .attr("width", 1200)
-  .attr("height",1000)
+  .attr("height",800)
   .append("g")
   .attr("transform", "translate(60,20)");
 
@@ -143,29 +143,65 @@ var csv2 =
   'data'   : dex.matrix.slice(csv.data, [2,3,1])
 };
 
+var pcChart = new ParallelCoordinates(
+  {
+    'parent'  : svg,
+    'id'      : "ParChart",
+    'width'   : 500,
+    'height'  : 500,
+    'xoffset' : 0,
+    'yoffset' : 10,
+    'csv'     : csv2
+  }
+);
+
 var dendrogram = new Dendrogram(
+  {
+    'parent'       : svg,
+    'height'       : 500,
+    'width'        : 600,
+    'xoffset'      : 500,
+    'yoffset'      : 0,
+    'rootName'     : '',
+    'rootCategory' : 'Category1',
+    'empty' :
+    {
+    	'size' : 4,
+    	'color' : "steelblue"
+    },
+    'notEmpty' :
+    {
+    	'size'  : 8,
+    	'color' : 'blue'
+    },
+    'label'       :
+   	{
+   		'x'         : 0,
+   		'y'         : -4,
+   		'rotate'    : -90,
+   		'dy'        : ".71em",
+   		'font'      :
+   		{
+   			'size'    : 10,
+   			'family'  : 'sans-serif',
+   			'style'   : 'normal',
+   			'variant' : 'normal',
+   			'weight'  : 'normal'
+   		},
+   		'text'      : 'Y Axis',
+   		'anchor'    : 'end',
+   		'color'     : 'black'
+   	},
+    'csv'          : csv2
+  }
+);
+
+pcChart.addListener("select", dendrogram, function(chartEvent)
 {
-  'parent'            : svg,
-  'height'            : 1000,
-  'width'             : 600,
-  'xoffset'           : 100,
-  'yoffset'           : 0,
-  'csv'               : csv2,
-  'node.collapsed.circle.radius' : 8,
-  'node.collapsed.circle.style.color' : "lightgreen",
-  'node.collapsed.label.font.size'    : 18,
-  'node.collapsed.label.x' : -22,
-  'node.collapsed.label.y' : -8,
-  'node.collapsed.label.font.weight' : 'bold',
-  'node.expanded.label.x' : -10,
-  'node.expanded.label.y' : -5,
-  'node.expanded.circle.style.color' : "steelblue",
-  'node.expanded.circle.radius' : 4,
-  'node.expanded.label.font.size' : 14,
-  'node.expanded.label.font.color' : "red",
-  'node.expanded.label.transform' : 'rotate(45)',
-  'node.collapsed.label.transform' : 'rotate(45)'
+  d3.select("#Dendrogram").remove();
+  dendrogram.attr('csv', chartEvent.selected).update();
 });
 
+pcChart.render();
 dendrogram.render();
 </script>

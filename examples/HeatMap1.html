@@ -21,11 +21,20 @@ body {
   shape-rendering: crispEdges;
 }
 
+.VerticalLegend path {
+  display: none;
+}
+
+.VerticalLegend line {
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.js"></script>
 <script src="../dex.js"></script>
 <script src="../js/dex/component/d3/HeatMap.js"></script>
+<script src="../js/dex/component/d3/VerticalLegend.js"></script>
 <script>
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
@@ -183,17 +192,110 @@ var heatmap = new HeatMap(
     'xi'          : 0,
     'yi'          : 1,
     'hi'          : 2,
-    'xaxis' :
-    {
-      'ticks'      : d3.time.days,
-      'tickFormat' : d3.time.format("%b %d"),
-    },
+    'xoffset'     : 100,
     'event' :
     {
-      'mouseover' : function(d) { dex.console.log(d, "Custom event..."); }
+      'mouseover' : function(d) {}//{ dex.console.log(d, "Custom event..."); }
     }
   }
 );
+
+var legendTicks = 20;
+var extent = d3.extent(dex.matrix.slice(csv.data, [2]));
+var domain = d3.range(extent[0][0], extent[1][0],
+  (extent[1][0] - extent[0][0]) / legendTicks)
+  .map(function(d) { return Math.floor(d);}).reverse();
+
+var legend = new VerticalLegend(
+{
+  'parent'  : svg,
+  'xoffset' : 660,
+  'labels'  : domain,
+  'height'  : 480
+});
+
+var heatScale = d3.scale.linear().domain(extent).range(["white", "red"]);
+
+legend.attr("cell.rect.color", heatScale);
+legend.attr("cell.rect.height", 20);
+legend.attr("cell.label.dy", 16);
+legend.attr("cell.label.x", -8);
+
+//heatmap.attr('heat.scale',
+//  d3.scale.quantize().range(["white", "green", "yellow", "orange", "red"]));
+heatmap.attr('heat.scale', heatScale);
+
+heatmap.attr('xaxis.scale', d3.time.scale());
+heatmap.attr('xaxis.tick.format', d3.time.format("%m/%d"));
+heatmap.attr('xaxis.tick.subdivide', 0);
+heatmap.attr('xaxis.label.text', 'Time');
+heatmap.attr('xaxis.label.x', 250);
+heatmap.attr('xaxis.label.y', 40);
+heatmap.attr('yaxis.label.text', 'Bucket Value');
+heatmap.attr('yaxis.label.x', -200);
+heatmap.attr('yaxis.label.y', -70);
+heatmap.attr('rect.stroke.color', "grey");
+heatmap.attr('rect.stroke.width', 1);
+//heatmap.attr('rect.stroke.style', 'stroke-dasharray: 2 2 2');
+//heatmap.attr('xaxis.label.font.size', 18);
+
+legend.addListener("mouseover", heatmap, function(chartEvent)
+{
+  //dex.console.log("Chart Event:", chartEvent);
+  var i = domain.indexOf(chartEvent.d);
+  var low, high;
+
+  if (i>= domain.length || i<0)
+  {
+    low = 0;
+    high = domain[0];
+    return;
+  }
+  else if (i==0)
+  {
+    low = domain[i+1];
+    high = domain[i];
+  }
+  else if (i==(domain.length-1))
+  {
+    low = 0;
+    high = domain[i];
+  }
+  else
+  {
+    low = domain[i+1];
+    high = domain[i];
+  }
+
+  var ri;
+  var val;
+  var config = heatmap.attr();
+  var rect = d3.selectAll(".tile");
+
+  for (ri=0; ri<rect[0].length; ri++)
+  {
+    val = rect[0][ri]['__data__'][config.hi];
+    //dex.console.log("  VAL=" + val);
+    if (val >= low && val <= high)
+    {
+      d3.select(rect[0][ri])
+        .attr("stroke", "blue")
+        .attr("stroke-width", 5);
+    }
+  }
+});
+
+legend.addListener("mouseout", heatmap, function(chartEvent)
+{
+  dex.console.log("MOUSEOUT");
+  d3.selectAll(".tile")
+    .attr("stroke", "grey")
+    .attr("stroke-width", 1);
+});
+
+dex.console.log(heatmap.attr());
+
 heatmap.render();
+legend.render();
 
 </script>

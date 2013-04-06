@@ -12,6 +12,204 @@ dex.range = function(start, len) {
     return range;
 };
 
+dex.config = {};
+
+dex.config.expand = function(config) {
+    var name;
+    var ci;
+    var expanded;
+    if (!config) {
+        return config;
+    }
+    expanded = dex.object.clone(config);
+    for (name in config) {
+        if (config.hasOwnProperty(name)) {
+            if (name) {
+                ci = name.indexOf(".");
+            } else {
+                ci = -1;
+            }
+            if (ci > -1) {
+                dex.object.setHierarchical(expanded, name, dex.object.clone(expanded[name]), ".");
+                delete expanded[name];
+            }
+        }
+    }
+    return expanded;
+};
+
+dex.config.font = function(custom) {
+    var config = {
+        size: 18,
+        family: "sans-serif",
+        style: "normal",
+        variant: "normal",
+        weight: "normal"
+    };
+    if (custom) {
+        config = dex.object.overlay(custom, config);
+    }
+    return config;
+};
+
+dex.config.label = function(custom) {
+    var config = {
+        x: 0,
+        y: 0,
+        transform: "",
+        dy: ".71em",
+        font: this.font(),
+        text: "",
+        anchor: "end",
+        color: "black"
+    };
+    if (custom) {
+        config = dex.object.overlay(custom, config);
+    }
+    return config;
+};
+
+dex.config.tick = function(custom) {
+    var config = {
+        count: 5,
+        subdivide: 3,
+        size: {
+            major: 5,
+            minor: 3,
+            end: 5
+        },
+        padding: 5,
+        format: d3.format(",d"),
+        label: this.label()
+    };
+    if (custom) {
+        config = dex.object.overlay(custom, config);
+    }
+    return config;
+};
+
+dex.config.xaxis = function(custom) {
+    var config = {
+        scale: d3.scale.linear(),
+        orient: "bottom",
+        tick: this.tick(),
+        label: this.label()
+    };
+    if (custom) {
+        config = dex.object.overlay(custom, config);
+    }
+    return config;
+};
+
+dex.config.yaxis = function(custom) {
+    var config = {
+        scale: d3.scale.linear(),
+        orient: "left",
+        tick: this.tick(),
+        label: this.label({
+            transform: "rotate(-90)"
+        })
+    };
+    if (custom) {
+        config = dex.object.overlay(custom, config);
+    }
+    return config;
+};
+
+dex.config.stroke = function(custom) {
+    var config = {
+        width: 1,
+        color: "black",
+        opacity: 1,
+        style: ""
+    };
+    if (custom) {
+        config = dex.object.overlay(custom, config);
+    }
+    return config;
+};
+
+dex.config.rectangle = function(custom) {
+    var config = {
+        width: 50,
+        height: 50,
+        x: 0,
+        y: 0,
+        stroke: dex.config.stroke(),
+        opacity: 1,
+        color: d3.scale.category20()
+    };
+    if (custom) {
+        config = dex.object.overlay(custom, config);
+    }
+    return config;
+};
+
+dex.config.configureRectangle = function(node, config, d) {
+    dex.console.log("THIS", this, "D", d);
+    return node.attr("width", config.width).attr("height", config.height).attr("x", config.x).attr("y", config.y).attr("opacity", config.opacity).style("fill", config.color).call(dex.config.configureStroke, config.stroke);
+};
+
+dex.config.point = function(custom) {
+    var config = {
+        x: 0,
+        y: 0
+    };
+    if (custom) {
+        config = dex.object.overlay(custom, config);
+    }
+    return config;
+};
+
+dex.config.configurePoint = function(node, config) {
+    return node.attr("x", config.center.cx).attr("y", config.center.cy);
+};
+
+dex.config.circle = function(custom) {
+    var config = {
+        center: dex.config.point(),
+        radius: 10,
+        style: {
+            stroke: dex.config.stroke(),
+            color: d3.scale.category20(),
+            opacity: 1
+        }
+    };
+    if (custom) {
+        config = dex.object.overlay(custom, config);
+    }
+    return config;
+};
+
+dex.config.configureShapeStyle = function(node, config) {
+    return node.call(dex.config.configureStroke, config.stroke).attr("opacity", config.opacity).style("fill", config.color);
+};
+
+dex.config.configureCircle = function(node, config) {
+    return node.call(dex.config.configureShapeStyle, config.style).attr("r", config.radius).attr("cx", config.center.x).attr("cy", config.center.y);
+};
+
+dex.config.configureStroke = function(node, config) {
+    dex.console.log("STROKE ME STROKE ME...", config);
+    return node.style("stroke-width", config.width).style("stroke", config.color).style("stroke-opacity", config.opacity).style("stroke-dasharray", config.dasharray);
+};
+
+dex.config.configureFont = function(node, config) {
+    return node.attr("font-family", config.family).attr("font-weight", config.weight).attr("font-style", config.style).style("font-size", config.size);
+};
+
+dex.config.configureLabel = function(node, config, text) {
+    var rnode = node.attr("x", config.x).attr("y", config.y).attr("transform", config.transform).attr("dy", config.dy).call(dex.config.configureFont, config.font).style("text-anchor", config.anchor).attr("fill", config.color).style("fill-opacity", config.opacity);
+    if (text) {
+        rnode.attr(text);
+    }
+    return rnode;
+};
+
+dex.config.configureAxis = function(config) {
+    return d3.svg.axis().ticks(config.tick.count).tickSubdivide(config.tick.subdivide).tickSize(config.tick.size.major, config.tick.size.minor, config.tick.size.end).tickPadding(config.tick.padding).tickFormat(config.tick.format).orient(config.orient);
+};
+
 dex.array = {};
 
 dex.array.slice = function(array, rowRange, optLen) {
@@ -205,7 +403,6 @@ dex.csv.getConnectionMatrix = function(csv) {
         header: header,
         connections: matrix
     };
-    dex.console.log("Connection Matrix", connectionMatrix);
     return connectionMatrix;
 };
 
@@ -618,16 +815,17 @@ dex.matrix.min = function(data, columnNum) {
 
 dex.object = {};
 
-dex.object.clone = function(obj) {
-    var key;
-    if (obj === null || typeof obj !== "object") {
-        return obj;
+dex.object.clone = function(destination, source) {
+    var property;
+    for (property in source) {
+        if (source[property] && source[property].constructor && source[property].constructor === Object) {
+            destination[property] = destination[property] || {};
+            arguments.callee(destination[property], source[property]);
+        } else {
+            destination[property] = source[property];
+        }
     }
-    var clone = obj.constructor();
-    for (key in obj) {
-        clone[key] = dex.object.clone(obj[key]);
-    }
-    return clone;
+    return destination;
 };
 
 dex.object.overlay = function(top, bottom) {
@@ -653,28 +851,6 @@ dex.object.contains = function(container, obj) {
         }
     }
     return false;
-};
-
-dex.object.setHierarchical = function(hierarchy, name, value, delimiter) {
-    if (hierarchy == null) {
-        hierarchy = {};
-    }
-    if (typeof hierarchy != "object") {
-        return hierarchy;
-    }
-    if (arguments.length == 4) {
-        return dex.object.setHierarchical(hierarchy, name.split(delimiter), value);
-    } else {
-        if (name.length === 1) {
-            hierarchy[name[0]] = value;
-        } else {
-            if (!(name[0] in hierarchy)) {
-                hierarchy[name[0]] = {};
-            }
-            dex.object.setHierarchical(hierarchy[name[0]], name.splice(1), value);
-        }
-    }
-    return hierarchy;
 };
 
 dex.object.visit = function(obj, func) {
@@ -704,18 +880,42 @@ dex.object.isNumeric = function(obj) {
     return !isNaN(parseFloat(obj)) && isFinite(obj);
 };
 
+dex.object.setHierarchical = function(hierarchy, name, value, delimiter) {
+    if (hierarchy == null) {
+        hierarchy = {};
+    }
+    if (typeof hierarchy != "object") {
+        return hierarchy;
+    }
+    if (arguments.length == 4) {
+        return dex.object.setHierarchical(hierarchy, name.split(delimiter), value);
+    } else {
+        if (name.length === 1) {
+            hierarchy[name[0]] = value;
+        } else {
+            if (!(name[0] in hierarchy)) {
+                hierarchy[name[0]] = {};
+            }
+            dex.object.setHierarchical(hierarchy[name[0]], name.splice(1), value);
+        }
+    }
+    return hierarchy;
+};
+
 function DexComponent(userConfig, defaultConfig) {
     this.registry = {};
     this.debug = false;
     if (userConfig instanceof DexComponent) {
         this.config = dex.object.overlay(userConfig.config, defaultConfig);
     } else {
-        this.config = dex.object.overlay(userConfig, defaultConfig);
+        this.config = dex.object.overlay(dex.config.expand(userConfig), defaultConfig);
     }
 }
 
 DexComponent.prototype.attr = function(name, value) {
-    if (arguments.length == 1) {
+    if (arguments.length == 0) {
+        return this.config;
+    } else if (arguments.length == 1) {
         return this.config[name];
     } else if (arguments.length == 2) {
         dex.object.setHierarchical(this.config, name, value, ".");
