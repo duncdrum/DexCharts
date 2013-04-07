@@ -147,7 +147,9 @@ var pcChart = new ParallelCoordinates(
 var scatterplot = new ScatterPlot3D(
 {
   'parent' : scatterParent,
-  'csv'    : csv
+  'csv'    : csv,
+  'height' : 400,
+  'width'  : 400
 });
 
 pcChart.addListener("select", scatterplot, function(chartEvent)
