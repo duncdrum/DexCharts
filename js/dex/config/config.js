@@ -70,11 +70,17 @@ dex.config.font = function(custom)
     'variant' : 'normal',
     'weight' : 'normal'
   };
-  if (custom)
-  {
-  	config = dex.object.overlay(custom, config);
-  }
-  return config;
+
+  return (custom) ? dex.object.overlay(custom, config) : config;
+};
+
+dex.config.configureFont = function(node, config)
+{
+  return node
+    .attr("font-family", config.family)
+    .attr("font-weight", config.weight)
+    .attr("font-style", config.style)
+    .style("font-size", config.size);
 };
 
 dex.config.label = function(custom)
@@ -157,16 +163,25 @@ dex.config.stroke = function(custom)
 {
   var config = 
 	{
-    'width'   : 1,
-    'color'   : "black",
-    'opacity' : 1,
-    'style'   : ''
+    'width'     : 1,
+    'color'     : "black",
+    'opacity'   : 1,
+    'dasharray' : ''
   };
   if (custom)
   {
   	config = dex.object.overlay(custom, config);
   }
   return config;
+};
+
+dex.config.configureStroke = function(node, config)
+{
+  return node
+    .style('stroke-width', config.width)
+    .style('stroke', config.color)
+    .style('stroke-opacity', config.opacity)
+    .style('stroke-dasharray', config.dasharray);
 };
 
 dex.config.rectangle = function(custom)
@@ -258,25 +273,6 @@ dex.config.configureCircle = function(node, config)
     .attr('r', config.radius)
     .attr('cx', config.center.x)
     .attr('cy', config.center.y);
-};
-
-dex.config.configureStroke = function(node, config)
-{
-  dex.console.log("STROKE ME STROKE ME...", config);
-	return node
-	  .style('stroke-width', config.width)
-	  .style('stroke', config.color)
-	  .style('stroke-opacity', config.opacity)
-	  .style('stroke-dasharray', config.dasharray);
-};
-
-dex.config.configureFont = function(node, config)
-{
-	return node
-    .attr("font-family", config.family)
-    .attr("font-weight", config.weight)
-    .attr("font-style", config.style)
-    .style("font-size", config.size);
 };
 
 dex.config.configureLabel = function(node, config, text)

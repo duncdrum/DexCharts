@@ -30,8 +30,11 @@ function Dendrogram(userConfig)
     },
     'xoffset'          : 20,
     'yoffset'          : 0,
-    'rootName'         : "ROOT",
-    "rootCategory"     : "ROOT",
+    'root'             :
+    {
+      'name'     : "ROOT",
+      'category' : "ROOT"
+    },
     'color'            : d3.scale.category20(),
     'node'             :
     {
@@ -45,6 +48,12 @@ function Dendrogram(userConfig)
         'label'  : dex.config.label(),
         'circle' : dex.config.circle()
       }
+    },
+    'link' :
+    {
+      'stroke'      : dex.config.stroke(),
+      'fill'        : "none",
+      'fillOpacity' : 1.0
     }
   });
 
@@ -85,8 +94,8 @@ Dendrogram.prototype.update = function()
 
   json =
   {
-    "name" : config.rootName,
-    "category" : config.rootCategory,
+    "name" : config.root.name,
+    "category" : config.root.category,
     "children" : dex.csv.toHierarchicalJson(csv)
   }; 
 
@@ -201,7 +210,11 @@ Dendrogram.prototype.update = function()
     // Enter any new links at the parent's previous position.
     link.enter().insert("svg:path", "g")
       .attr("class", "link")
-      .attr("d", function(d) {
+      .call(dex.config.configureStroke, config.link.stroke)
+      .style("fill", config.link.fill)
+      .style("fill-opacity", config.link.fillOpacity)
+      .attr("d", function(d)
+      {
         var o = {x: source.x0, y: source.y0};
         return diagonal({source: o, target: o});
       })

@@ -1,22 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-.node circle {
-  cursor: pointer;
-  fill: #fff;
-  stroke: black;
-  stroke-width: 3px;
-}
 
-.node text {
-  font-size: 11px;
-}
-
-path.link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 1.5px;
-}
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.js"></script>
@@ -31,30 +16,21 @@ var svg = d3.select("body").append("svg")
 
 var csv =
 {
-  'header' : [ "C1", "C2", "C3" ],
-  'data'   : [["A", "B", "C"], ["A", "B", "D"]],
-  'date'   : new Date()
+  'header' : [ "GENDER", "VEHICLE", "NAME" ],
+  'data'   : [
+               ["MALE", "Truck", "Billy Joe"],
+               ["FEMALE", "Car", "Sue"],
+               ["FEMALE", "Truck", "Bobby Sue"],
+               ["MALE", "Car", "Robert"]
+             ]
 };
 
 // Configure a chart.
 var dendrogram = new Dendrogram(
-  {
-    'parent'       : svg,
-    'height'       : 300,
-    'width'        : 600,
-    'xoffset'      : 100,
-    'csv'          : csv,
-    'node.expanded.circle.style.stroke.width' : 0,
-    'node.collapsed.circle.style.stroke.width' : 0,
-    'node.expanded.circle.style.stroke.color' : "red",
-    'node.collapsed.circle.style.stroke.color' : "blue",
-    'node.collapsed.circle.style.opacity' : .5,
-    'node.expanded.circle.style.opacity' : .5,
-    'node.collapsed.circle.style.color' : "green",
-    'node.collapsed.circle.radius' : 20
-  }
-);
+{
+  'parent'       : svg,
+  'csv'          : csv
+});
 
 dendrogram.render();
-
 </script>
