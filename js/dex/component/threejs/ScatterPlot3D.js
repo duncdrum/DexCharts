@@ -1,9 +1,6 @@
-ScatterPlot3D.prototype = new DexComponent();
-ScatterPlot3D.constructor = ScatterPlot3D;
-
 function ScatterPlot3D(userConfig)
 {
-  DexComponent.call(this, userConfig,
+  var chart = new DexComponent(userConfig,
   {
   	// The parent container of this chart.
     'parent'           : null,
@@ -24,17 +21,17 @@ function ScatterPlot3D(userConfig)
   });
 
   this.chart = this;
-}
 
-ScatterPlot3D.prototype.render = function()
-{
-  this.update();
-};
+  chart.render = function()
+  {
+    this.update();
+  };
 
-ScatterPlot3D.prototype.update = function()
-{
-  var config = this.config;
-  var csv = config.csv;
+  chart.update = function()
+  {
+    var chart = this;
+    var config = chart.config;
+    var csv = config.csv;
 
   var bounds =
   {
@@ -369,4 +366,8 @@ onmessage = function(ev)
   paused = (ev.data == 'pause');
 };
 //-->
+
 };
+
+  return chart;
+}

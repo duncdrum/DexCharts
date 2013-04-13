@@ -290,10 +290,9 @@ dex.csv.createRowMap = function(csv, keyIndex)
 
 dex.csv.columnSlice = function(csv, columns)
 {
-	dex.console.log(csv);
 	csv.header = dex.array.slice(columns);
 	csv.data   = dex.matrix.columnSlice(csv.data, columns);
-	
+
 	return csv;
 };
 

@@ -7,26 +7,57 @@ dex.object = {};
 //
 ////
 
-
-dex.object.clone = function(destination, source)
+dex.object.clone = function(obj)
 {
-  var property;
-  
-  for (property in source)
+  var i, attr, len;
+
+  // Handle the 3 simple types, and null or undefined
+  if (null == obj || "object" != typeof obj)
+    return obj;
+
+  // Handle Date
+  if ( obj instanceof Date)
   {
-    if (source[property] && source[property].constructor && source[property].constructor === Object)
-    {
-      destination[property] = destination[property] ||
-      {
-      };
-      arguments.callee(destination[property], source[property]);
-    }
-    else
-    {
-      destination[property] = source[property];
-    }
+    var copy = new Date();
+    copy.setTime(obj.getTime());
+    return copy;
   }
-  return destination;
+
+  // Handle Array
+  if (obj instanceof Array)
+  {
+    var copy = [];
+    for (i = 0, len = obj.length; i < len; i++)
+    {
+      copy[i] = dex.object.clone(obj[i]);
+    }
+    return copy;
+  }
+
+  // DOM Nodes are nothing but trouble.
+  if (dex.object.isElement(obj) ||
+      dex.object.isNode(obj))
+  {
+    return obj;
+  }
+
+  // Handle Object
+  if (obj instanceof Object)
+  {
+    var copy = {};
+    //jQuery.extend(copy, obj);
+    for (attr in obj)
+    {
+      if (obj.hasOwnProperty(attr))
+      {
+        copy[attr] = dex.object.clone(obj[attr]);
+        //copy[attr] = obj[attr];
+      }
+    }
+    return copy;
+  }
+
+  throw new Error("Unable to copy obj! Its type isn't supported.");
 }; 
 
 
@@ -76,6 +107,23 @@ dex.object.overlay = function(top, bottom)
 
   //console.dir(config);
   return overlay;
+};
+
+//Returns true if it is a DOM node
+dex.object.isNode = function(o)
+{
+  return (
+    typeof Node === "object" ? o instanceof Node : 
+    o && typeof o === "object" && typeof o.nodeType === "number" && typeof o.nodeName==="string"
+  );
+};
+
+//Returns true if it is a DOM element    
+dex.object.isElement = function(o){
+  return (
+    typeof HTMLElement === "object" ? o instanceof HTMLElement : //DOM2
+    o && typeof o === "object" && o.nodeType === 1 && typeof o.nodeName==="string"
+);
 };
 
 /**

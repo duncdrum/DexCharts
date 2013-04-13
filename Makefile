@@ -13,8 +13,7 @@ MODULES=\
 	js/dex/object/object.js
 
 CORE=\
-	js/dex/core/DexComponent.js \
-	js/dex/core/Series.js
+	js/dex/core/DexComponent.js
 
 dex :
 	uglifyjs $(MODULES) $(CORE) -b -o dex.js

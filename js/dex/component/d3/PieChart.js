@@ -1,9 +1,6 @@
-PieChart.prototype = new DexComponent();
-PieChart.constructor = PieChart;
-
 function PieChart(userConfig)
 {
-  DexComponent.call(this, userConfig,
+  var chart = new DexComponent(userConfig,
   {
     'parent'             : null,
     'id'                 : "PieChart",
@@ -34,23 +31,15 @@ function PieChart(userConfig)
     }
   });
 
-  // Ugly, but my JavaScript is weak.  When in handler functions
-  // this seems to be the only way to get linked back to the
-  // this.x variables.
-  this.chart = this;
-}
+  chart.render = function()
+  {
+    this.update();
+  };
 
-PieChart.prototype.render = function()
-{
-  this.update();
-};
-
-PieChart.prototype.update = function()
-{
-	// If we need to call super:
-	//DexComponent.prototype.update.call(this);
- 	var chart  = this.chart;
-  var config = this.config;
+  chart.update = function()
+  {
+    var chart = this;
+    var config = chart.config;
   var csv    = config.csv;
   
 //  var radius = Math.min(config.width, config.height) / 2;
@@ -106,3 +95,6 @@ PieChart.prototype.update = function()
     .style("text-anchor", config.caption.textAnchor)
     .text(config.caption.text);
 };
+
+return chart;
+}

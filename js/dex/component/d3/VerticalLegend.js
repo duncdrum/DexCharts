@@ -1,9 +1,6 @@
-VerticalLegend.prototype = new DexComponent();
-VerticalLegend.constructor = VerticalLegend;
-
 function VerticalLegend(userConfig)
 {
-  DexComponent.call(this, userConfig,
+  var chart = new DexComponent(userConfig,
   {
     'labels'          : [ "A", "B", "C" ],
     'id'              : "VerticalLegend",
@@ -35,25 +32,19 @@ function VerticalLegend(userConfig)
         })
   });
 
-  // Ugly, but my JavaScript is weak.  When in handler functions
-  // this seems to be the only way to get linked back to the
-  // this.x variables.
-  this.chart = this;
-}
+  chart.render = function()
+  {
+    this.update();
+  };
 
-VerticalLegend.prototype.render = function()
-{
-  this.update();
-};
+  chart.update = function()
+  {
+    var chart = this;
+    var config = this.config;
 
-VerticalLegend.prototype.update = function()
-{
- 	var chart = this.chart;
-  var config = this.config;
-
-  var y = d3.scale.ordinal()
-    .domain(config.labels)
-    .rangeBands([0, config.height]);
+    var y = d3.scale.ordinal()
+      .domain(config.labels)
+      .rangeBands([0, config.height]);
 
   // Append a graphics node to the supplied svg node.
   var chartContainer = config.parent.append("g")
@@ -96,4 +87,7 @@ VerticalLegend.prototype.update = function()
   chartContainer.append("text")
     .call(dex.config.configureLabel, config.title)
     .text(config.title.text);
-};
+  };
+  
+  return chart;
+}

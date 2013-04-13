@@ -1,9 +1,6 @@
-HorizontalLegend.prototype = new DexComponent();
-HorizontalLegend.constructor = HorizontalLegend;
-
 function HorizontalLegend(userConfig)
 { 	
-  DexComponent.call(this, userConfig,
+  var chart = new DexComponent(userConfig,
   {
     'parent'          : null,
     'labels'          : [ "A", "B", "C" ],
@@ -21,23 +18,15 @@ function HorizontalLegend(userConfig)
     'captionYOffset'  : -6
   });
 
-  // Ugly, but my JavaScript is weak.  When in handler functions
-  // this seems to be the only way to get linked back to the
-  // this.x variables.
-  this.chart = this;
-}
+  chart.render = function()
+  {
+    this.update();
+  };
 
-HorizontalLegend.prototype.render = function()
-{
-  this.update();
-};
-
-HorizontalLegend.prototype.update = function()
-{
-	// If we need to call super:
-	//DexComponent.prototype.update.call(this);
- 	var chart = this.chart;
-  var config = this.config;
+  chart.update = function()
+  {
+    var chart = this;
+    var config = chart.config;
   
   // Create our x scale
   var x = d3.scale.ordinal()
@@ -79,3 +68,6 @@ HorizontalLegend.prototype.update = function()
     .text(config.caption)
     .style("font-size", config.captionFontSize);
 };
+
+return chart;
+}

@@ -5,6 +5,7 @@
 <script src="../dex.js"></script>
 <script src="../js/dex/component/threejs/ScatterPlot3D.js"></script>
 <script src="../js/dex/component/d3/ParallelCoordinates.js"></script>
+<script src="../js/dex/component/d3/ui/CheckBox.js"></script>
 <script src="http://dexvis.com/three/latest/build/three.min.js"></script>
 
 <style type="text/css">
@@ -17,6 +18,11 @@ body {
 {
   display:block;
   float:right;
+}
+
+#scatter3d
+{
+  vertical-align: top;
 }
 
 #ParChart {
@@ -69,6 +75,7 @@ body {
 {
   text-shadow: 0 1px 0 #fff;
 }
+
 </style>
 
 <!-- raf.js -->
@@ -78,7 +85,11 @@ body {
 
 <body>
   <h3>DexCharts : D3JS and ThreeJS/WebGL Interaction</h3>
-<table><tr><td id='parCoord'></td><td id='scatter3d'></td></tr></table>
+<table>
+  <tr><td id='checkbox' colspan="2"></td></tr>
+  <tr><td id='parCoord'></td><td id='scatter3d'></td></tr>
+</table>
+
 <script type="x-shader/x-vertex" id="vertexshader">
 uniform float amplitude;
 attribute float size;
@@ -112,33 +123,45 @@ void main()
 </script>
 <script>
 
+var uiSvg = d3.select("#checkbox");
+
 var svg = d3.select("#parCoord")
   .append("svg")
   .attr("width", 800)
-  .attr("height",400)
+  .attr("height",600)
   .append("g")
-  .attr("transform", "translate(60,20)");
+  .attr("transform", "translate(40,20)");
 
 var scatterParent = document.getElementById('scatter3d');
 
+var data = dex.range(-720, 1440).map(function(x)
+{
+  return [ x, x, Math.sin(x) * 360, Math.cos(x) * 360 ];
+});
+
 var csv =
 {
-  'header' : ["X", "Y", "Z", "A", "B", "C"],
-  'data'   : dex.datagen.randomMatrix(
-  {
-    'rows'    : 500,
-    'columns' : 6,
-    'min'     : -50,
-    'max'     : 50
-  })
+  'header' : dex.range(0, data[0].length).map(function(i) { return "C" + i; }),
+  'data'   : data
 };
+
+var cb = new CheckBox(
+{
+  'parent'         : uiSvg,
+  'selection'      : csv.header,
+  'state.selected' : csv.header,
+  'label.anchor' : 'start',
+  'width' : 500,
+  'height' : 50,
+  columns : 20
+});
 
 var pcChart = new ParallelCoordinates(
 {
   'parent'  : svg,
   'id'      : "ParChart",
   'width'   : 800,
-  'height'  : 400,
+  'height'  : 500,
   'xoffset' : -100,
   'yoffset' : 10,
   'csv'     : csv
@@ -148,8 +171,8 @@ var scatterplot = new ScatterPlot3D(
 {
   'parent' : scatterParent,
   'csv'    : csv,
-  'height' : 400,
-  'width'  : 400
+  'height' : 500,
+  'width'  : 500
 });
 
 pcChart.addListener("select", scatterplot, function(chartEvent)
@@ -158,6 +181,7 @@ pcChart.addListener("select", scatterplot, function(chartEvent)
   scatterplot.attr('csv', chartEvent.selected).update();
 });
 
+cb.render();
 pcChart.render();
 scatterplot.render();
 

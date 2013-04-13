@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.css" />
+<style>
+  #ConfigurationBox {
+    width: 150px;
+    height: 150px;
+    padding: 0.5em;
+  }
+  #ConfigurationBox h3 {
+    text-align: center;
+    margin: 0;
+  }
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="../dex.js"></script>
+<script src="../js/dex/component/jquery-ui/ConfigurationBox.js"></script>
+<script src="../js/dex/component/jquery-ui/Slider.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+<script>
+
+var configBox = new ConfigurationBox();
+
+configBox.add(
+  new Slider({'label' : 'Angle:', 'id' : 'Slider1'}),
+  new Slider({'label' : 'Mass:', 'id' : 'Slider2'})
+);
+
+configBox.render();
+
+</script>
+

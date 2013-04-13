@@ -1,9 +1,6 @@
-ClusteredForce.prototype = new DexComponent();
-ClusteredForce.constructor = ClusteredForce;
-
 function ClusteredForce(userConfig)
 {
-  DexComponent.call(this, userConfig,
+  var chart = new DexComponent(userConfig,
   {
     'parent'             : null,
     'id'                 : "ClusteredForce",
@@ -29,20 +26,16 @@ function ClusteredForce(userConfig)
     'scaleColumns'       : true
   });
 
-  this.chart = this;
-}
+  chart.render = function()
+  {
+    this.update();
+  };
 
-ClusteredForce.prototype.render = function()
-{
-  this.update();
-};
-
-ClusteredForce.prototype.update = function()
-{
-	// If we need to call super:
-	//DexComponent.prototype.update.call(this);
- 	var chart  = this.chart;
-  var config = this.config;
+  chart.update = function()
+  {
+    var chart = this;
+    var config = chart.config;
+    
   var csv    = config.csv;
   var ri, ci, hi;
 
@@ -221,3 +214,6 @@ function collide(alpha) {
   };
 }
 };
+
+  return chart;
+}

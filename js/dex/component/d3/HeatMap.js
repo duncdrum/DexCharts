@@ -1,9 +1,6 @@
-HeatMap.prototype = new DexComponent();
-HeatMap.constructor = HeatMap;
-
 function HeatMap(userConfig)
 {
-  DexComponent.call(this, userConfig,
+  var chart = new DexComponent(userConfig,
   {
   	// The parent container of this chart.
     'parent'           : null,
@@ -36,20 +33,16 @@ function HeatMap(userConfig)
     'rect'  : dex.config.rectangle()
   });
 
-  this.chart = this;
-}
+  chart.render = function()
+  {
+    this.update();
+  };
 
-HeatMap.prototype.render = function()
-{
-  this.update();
-};
+  chart.update = function()
+  {
+    var chart = this;
+    var config = chart.config;
 
-HeatMap.prototype.update = function()
-{
-	// If we need to call super:
-	//DexComponent.prototype.update.call(this);
- 	var chart  = this.chart;
-  var config = this.config;
   var csv    = config.csv;
   
   if (config.debug)
@@ -106,14 +99,14 @@ HeatMap.prototype.update = function()
       .style("fill", function(d) { return heat(d[config.hi]); })
       .on("mouseover", function(d)
       {
-      	if (config.event && config.event.mouseover)
-      	{
-      		config.event.mouseover(d);
-      	}
-      	else
-      	{
+        if (config.event && config.event.mouseover)
+        {
+          config.event.mouseover(d);
+        }
+        else
+        {
           dex.console.log("on.mouseover", d);
-      	}
+        }
       });
 
   var xaxis = dex.config.configureAxis(config.xaxis)
@@ -141,3 +134,5 @@ HeatMap.prototype.update = function()
       .text(config.yaxis.label.text);
 };
 
+  return chart;
+}

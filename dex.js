@@ -228,9 +228,47 @@ dex.array.slice = function(array, rowRange, optLen) {
         }
     }
     for (i = 0; i < range.length; i++) {
-        slice.push(array[range[i]]);
+        slice.push(dex.object.clone(array[range[i]]));
     }
     return slice;
+};
+
+dex.array.indexOfById = function(array, id) {
+    var i;
+    for (i = 0; i < array.length; i += 1) {
+        if (source[i].id === id) {
+            return i;
+        }
+    }
+    return -1;
+};
+
+dex.array.indexBands = function(data, numValues) {
+    dex.console.log("BANDS");
+    var interval, residual, tickIndices, last, i;
+    if (numValues <= 0) {
+        tickIndices = [];
+    } else if (numValues == 1) {
+        tickIndices = [ Math.floor(numValues / 2) ];
+    } else if (numValues == 2) {
+        tickIndices = [ 0, data.length - 1 ];
+    } else {
+        interval = Math.max(1, Math.floor(data.length / (numValues - 1)));
+        residual = Math.floor(data.length % (numValues - 1));
+        tickIndices = [ 0 ];
+        last = data.length - interval;
+        dex.console.log("TEST", data, numValues, interval, residual, last);
+        for (i = interval; i <= last; i += interval) {
+            if (residual > 0) {
+                i += 1;
+                residual -= 1;
+            }
+            tickIndices.push(i);
+        }
+        tickIndices.push(data.length - 1);
+    }
+    dex.console.log("BANDS");
+    return tickIndices;
 };
 
 dex.array.unique = function(array) {
@@ -487,7 +525,6 @@ dex.csv.createRowMap = function(csv, keyIndex) {
 };
 
 dex.csv.columnSlice = function(csv, columns) {
-    dex.console.log(csv);
     csv.header = dex.array.slice(columns);
     csv.data = dex.matrix.columnSlice(csv.data, columns);
     return csv;
@@ -699,8 +736,12 @@ dex.matrix.uniques = function(matrix) {
 
 dex.matrix.transpose = function(matrix) {
     var ci;
-    var ncols = matrix[0].length;
+    var ncols;
     var transposedMatrix = [];
+    if (!matrix || matrix.length <= 0 || !matrix[0] || matrix[0].length <= 0) {
+        return [];
+    }
+    ncols = matrix[0].length;
     for (ci = 0; ci < ncols; ci++) {
         transposedMatrix.push(matrix.map(function(row) {
             return row[ci];
@@ -811,17 +852,34 @@ dex.matrix.min = function(data, columnNum) {
 
 dex.object = {};
 
-dex.object.clone = function(destination, source) {
-    var property;
-    for (property in source) {
-        if (source[property] && source[property].constructor && source[property].constructor === Object) {
-            destination[property] = destination[property] || {};
-            arguments.callee(destination[property], source[property]);
-        } else {
-            destination[property] = source[property];
-        }
+dex.object.clone = function(obj) {
+    var i, attr, len;
+    if (null == obj || "object" != typeof obj) return obj;
+    if (obj instanceof Date) {
+        var copy = new Date();
+        copy.setTime(obj.getTime());
+        return copy;
     }
-    return destination;
+    if (obj instanceof Array) {
+        var copy = [];
+        for (i = 0, len = obj.length; i < len; i++) {
+            copy[i] = dex.object.clone(obj[i]);
+        }
+        return copy;
+    }
+    if (dex.object.isElement(obj) || dex.object.isNode(obj)) {
+        return obj;
+    }
+    if (obj instanceof Object) {
+        var copy = {};
+        for (attr in obj) {
+            if (obj.hasOwnProperty(attr)) {
+                copy[attr] = dex.object.clone(obj[attr]);
+            }
+        }
+        return copy;
+    }
+    throw new Error("Unable to copy obj! Its type isn't supported.");
 };
 
 dex.object.overlay = function(top, bottom) {
@@ -837,6 +895,14 @@ dex.object.overlay = function(top, bottom) {
         }
     }
     return overlay;
+};
+
+dex.object.isNode = function(o) {
+    return typeof Node === "object" ? o instanceof Node : o && typeof o === "object" && typeof o.nodeType === "number" && typeof o.nodeName === "string";
+};
+
+dex.object.isElement = function(o) {
+    return typeof HTMLElement === "object" ? o instanceof HTMLElement : o && typeof o === "object" && o.nodeType === 1 && typeof o.nodeName === "string";
 };
 
 dex.object.contains = function(container, obj) {
@@ -899,125 +965,58 @@ dex.object.setHierarchical = function(hierarchy, name, value, delimiter) {
 };
 
 function DexComponent(userConfig, defaultConfig) {
+    userConfig = userConfig || {};
+    defaultConfig = defaultConfig || {};
     this.registry = {};
     this.debug = false;
-    if (userConfig instanceof DexComponent) {
+    if (userConfig.hasOwnProperty("config")) {
         this.config = dex.object.overlay(userConfig.config, defaultConfig);
     } else {
-        this.config = dex.object.overlay(dex.config.expand(userConfig), defaultConfig);
+        this.config = dex.object.overlay(userConfig, defaultConfig);
     }
-}
-
-DexComponent.prototype.attr = function(name, value) {
-    if (arguments.length == 0) {
-        return this.config;
-    } else if (arguments.length == 1) {
-        return this.config[name];
-    } else if (arguments.length == 2) {
-        dex.object.setHierarchical(this.config, name, value, ".");
-    }
-    return this;
-};
-
-DexComponent.prototype.dump = function(message) {
-    console.log("========================");
-    if (arguments.length == 1) {
-        console.log(message);
-        console.log("========================");
-    }
-    console.log("=== CONFIG ===");
-    console.dir(this.config);
-    console.log("=== REGISTRY ===");
-    console.dir(this.registry);
-};
-
-DexComponent.prototype.addListener = function(eventType, target, method) {
-    var targets;
-    if (this.debug) {
-        console.log("Registering Target: " + eventType + "=" + target);
-    }
-    if (!this.registry.hasOwnProperty(eventType)) {
-        this.registry[eventType] = [];
-    }
-    this.registry[eventType].push({
-        target: target,
-        method: method
-    });
-};
-
-DexComponent.prototype.notify = function(event) {
-    var targets, i;
-    if (this.debug) {
-        console.log("notify: " + event.type);
-    }
-    if (!this.registry.hasOwnProperty(event.type)) {
+    this.attr = function(name, value) {
+        if (arguments.length == 0) {
+            return this.config;
+        } else if (arguments.length == 1) {
+            return this.config[name];
+        } else if (arguments.length == 2) {
+            dex.object.setHierarchical(this.config, name, value, ".");
+        }
         return this;
-    }
-    event.source = this;
-    targets = this.registry[event.type];
-    for (i = 0; i < targets.length; i++) {
-        targets[i]["method"](event, targets[i]["target"]);
-    }
+    };
+    this.addListener = function(eventType, target, method) {
+        var targets;
+        if (this.debug) {
+            console.log("Registering Target: " + eventType + "=" + target);
+        }
+        if (!this.registry.hasOwnProperty(eventType)) {
+            this.registry[eventType] = [];
+        }
+        this.registry[eventType].push({
+            target: target,
+            method: method
+        });
+    };
+    this.notify = function(event) {
+        var targets, i;
+        if (this.debug) {
+            console.log("notify: " + event.type);
+        }
+        if (!this.registry.hasOwnProperty(event.type)) {
+            return this;
+        }
+        event.source = this;
+        targets = this.registry[event.type];
+        for (i = 0; i < targets.length; i++) {
+            targets[i]["method"](event, targets[i]["target"]);
+        }
+    };
+    this.render = function() {
+        console.log("Unimplemented routine: render()");
+    };
+    this.update = function() {
+        console.log("Unimplemented routine: update()");
+    };
     return this;
-};
-
-DexComponent.prototype.render = function() {
-    console.log("Rendering component...");
-};
-
-DexComponent.prototype.update = function() {
-    console.log("Updating component...");
-};
-
-Series.prototype = new DexComponent();
-
-Series.constructor = Series;
-
-function Series(csv, userConfig) {
-    DexComponent.call(this, userConfig, {
-        name: "series",
-        id: "Series",
-        "class": "Series",
-        csv: csv
-    });
-    this.series = this;
 }
 
-Series.prototype.name = function() {
-    var series = this.series;
-    var config = this.config;
-    return config.name;
-};
-
-Series.prototype.csv = function() {
-    var config = this.config;
-    return config.csv;
-};
-
-Series.prototype.dimensions = function() {
-    var csv = this.config.csv;
-    console.log("CSV");
-    console.dir(csv);
-    return {
-        rows: csv.data.length,
-        columns: csv.header.length
-    };
-};
-
-Series.prototype.value = function(rowIndex, columnIndex) {
-    var csv = this.config.csv;
-    if (arguments.length == 2) {
-        return csv.data[rowIndex][columnIndex];
-    }
-    return csv.data[rowIndex];
-};
-
-Series.prototype.jsonValue = function(rowIndex, columnIndex) {
-    var csv = this.config.csv;
-    if (arguments.length == 2) {
-        return dex.csv.toJson(csv, rowIndex, columnIndex);
-    } else if (arguments.length == 1) {
-        return dex.csv.toJson(csv, rowIndex);
-    }
-    return dex.csv.toJson(csv);
-};

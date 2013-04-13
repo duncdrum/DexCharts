@@ -1,9 +1,6 @@
-ParallelCoordinates.prototype = new DexComponent();
-ParallelCoordinates.constructor = ParallelCoordinates;
-
 function ParallelCoordinates(userConfig)
 {
-  DexComponent.call(this, userConfig,
+  var chart = new DexComponent(userConfig,
   {
     'id'                 : "ParallelCoordinates",
     'class'              : "ParallelCoordinates",
@@ -34,18 +31,15 @@ function ParallelCoordinates(userConfig)
     }
   });
 
-  this.chart = this;
-}
+  chart.render = function()
+  {
+    this.update();
+  };
 
-ParallelCoordinates.prototype.render = function()
-{
-  this.update();
-};
-
-ParallelCoordinates.prototype.update = function()
-{
- 	var chart  = this.chart;
-  var config = this.config;
+  chart.update = function()
+  {
+    var chart = this;
+    var config = chart.config;
   var csv    = config.csv;
 
   var numericColumns =
@@ -262,4 +256,6 @@ ParallelCoordinates.prototype.update = function()
   }
 };
 
+return chart;
+}
 

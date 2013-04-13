@@ -1,9 +1,6 @@
-Chord.prototype = new DexComponent();
-Chord.constructor = Chord;
-
 function Chord(userConfig)
 {
-  DexComponent.call(this, userConfig,
+  var chart = new DexComponent(userConfig,
   {
   	// The parent container of this chart.
     'parent'           : null,
@@ -35,18 +32,15 @@ function Chord(userConfig)
   	'label'       : dex.config.label()
   });
 
-  this.chart = this;
-}
+  chart.render = function()
+  {
+    this.update();
+  };
 
-Chord.prototype.render = function()
-{
-  this.update();
-};
-
-Chord.prototype.update = function()
-{
-  var chart = this.chart;
-  var config = this.config;
+  chart.update = function()
+  {
+      var chart = this;
+  var config = chart.config;
   var csv = config.csv; 
   var json;
   
@@ -166,3 +160,8 @@ Chord.prototype.update = function()
     };
   }
 };
+
+  return chart;
+}
+
+

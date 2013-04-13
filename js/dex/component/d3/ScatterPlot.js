@@ -1,9 +1,6 @@
-ScatterPlot.prototype = new DexComponent();
-ScatterPlot.constructor = ScatterPlot;
-
 function ScatterPlot(userConfig)
 {
-  DexComponent.call(this, userConfig,
+  var chart = new DexComponent(userConfig,
   {
     'parent'           : null,
     'width'            : 600,
@@ -23,20 +20,17 @@ function ScatterPlot(userConfig)
     'xoffset'          : 0,
     'yoffset'          : 0
   });
-}
 
-ScatterPlot.prototype.render = function()
-{
-	//this.dump("ScatterPlot.render()");
-  this.update();
-}; 
 
-ScatterPlot.prototype.update = function()
-{
-	//this.dump("ScatterPlot.update()");
-	//DexComponent.prototype.update.apply(this);
-  var config = this.config;
-  var chart  = this;
+  chart.render = function()
+  {
+    this.update();
+  };
+
+  chart.update = function()
+  {
+    var chart = this;
+    var config = chart.config;
   var csv    = config.csv;
 
   //console.log("CONFIG: " + this.config);
@@ -183,3 +177,6 @@ ScatterPlot.prototype.update = function()
       .attr("r", config.unselectedRadius);
   }
 };
+
+return chart;
+}

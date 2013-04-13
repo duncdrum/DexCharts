@@ -1,9 +1,6 @@
-BarChart.prototype = new DexComponent();
-BarChart.constructor = BarChart;
-
 function BarChart(userConfig)
 {
-  DexComponent.call(this, userConfig,
+  var chart = new DexComponent(userConfig,
   {
     // The parent container of this chart.
     'parent'           : null,
@@ -32,24 +29,33 @@ function BarChart(userConfig)
     'yaxis' : dex.config.yaxis()
   });
 
-  this.chart = this;
-}
-
-BarChart.prototype.render = function()
-{
-  this.update();
-};
-
-BarChart.prototype.update = function()
-{
-   var chart = this.chart;
-  var config = this.config;
-
-  if (config.debug)
+  chart.render = function()
   {
-    console.log("===== Barchart Configuration =====");
-    console.dir(config);
-  }
+    this.update();
+  };
+
+  chart.update = function()
+  {
+    var chart = this;
+    var config = chart.config;
+
+/*
+    if (config.debug)
+    {
+      console.log("===== Barchart Configuration =====");
+      console.dir(config);
+    }
+*/
+
+  // X domain across groups.
+  var range = d3.range(config.csv.data.length);
+  dex.console.log("CSV", config.csv.data);
+  dex.console.log("DATA", config.csv.data.map(function(d) { dex.console.log("D", d); return d[config.xi];}));
+  var ext = d3.extent(config.csv.data.map(function(d) { return d[config.xi];}));
+
+  var tickValues = dex.array.indexBands(
+    config.csv.data, config.xaxis.tick.count)
+    .map(function(i) { return config.csv.data[i][config.xi]; });
 
   // X domain across groups.
   var x = d3.scale.ordinal()
@@ -69,7 +75,7 @@ BarChart.prototype.update = function()
     .scale(x);
   var yaxis = dex.config.configureAxis(config.yaxis)
     .scale(y);
-    
+
   var chartContainer = config.parent.append("g")
     .attr("id", config["id"])
     .attr("class", config["class"])
@@ -104,16 +110,25 @@ BarChart.prototype.update = function()
 
   // X Axis
   chartContainer.append("g")
-      .attr("class", "x axis")
+      .attr("class", "xaxis")
       .attr("transform", "translate(0," + config.height + ")")
-      .call(xaxis)
-    .append("text")
-      .call(dex.config.configureLabel, config.xaxis.label)
-      .text(config.xaxis.label.text);
+      .call(xaxis);
 
+/*
+  chartContainer.selectAll(".xaxis").selectAll("text")
+    .each(function(d)
+    {
+      d3.select(this).call(dex.config.configureLabel,
+        config.xaxis.tick.label);
+    });
+*/
+
+  chartContainer.select(".xaxis").append("text")
+    .call(dex.config.configureLabel, config.xaxis.label);
+      
   // Y Axis
   chartContainer.append("g")
-      .attr("class", "y axis")
+      .attr("class", "yaxis")
       .call(yaxis)
     .append("text")
       .call(dex.config.configureLabel, config.yaxis.label)
@@ -130,19 +145,30 @@ BarChart.prototype.update = function()
       .attr("class", "bar")
       .attr("x", function(d) { //console.dir(d);
          return x(d[0]) + x1(d[3]); })
-      .style("fill", function(d) { console.log(d[3]); return config.color(d[3]);})
+      .style("fill", function(d) { return config.color(d[3]);})
       .attr("width", x.rangeBand()/config.yi.length)
-      .attr("y", function(d) { console.log("Y:" + d); return y(d[1]); })
+      .attr("y", function(d) { return y(d[1]); })
       .attr("height", function(d) { return config.height - y(d[1]); });
 
+  //chartContainer.select(".x").selectAll("text").remove();
+
   // Add Text Labels
+  /*
   chartContainer.selectAll(".label")
     .data(barData)
     .enter().append("text")
-    .call(dex.config.configureLabel, config.xaxis.tick.label)
-    .attr("x", function(d)
-    { return x(d[0]) + x1(d[3]) + config.xaxis.tick.label.x; })
-    .attr("y", config.height + config.xaxis.tick.padding)
-    //.attr("y", function(d) { return y(d[1]); })
-    .text(function(d) { dex.console.log("TEXTD: ", d); return config.csv.header[d[3]]; });
+    .each(function(d)
+    {
+      dex.console.log("MYDIR", d);
+      d3.select(this).call(dex.config.configureLabel, config.xaxis.tick.label)
+      .attr("x", function(d)
+        { return x(d[0]) + x1(d[3]) + config.xaxis.tick.label.x; })
+      .attr("y", config.height + config.xaxis.tick.padding)
+      //.attr("y", function(d) { return y(d[1]); })
+      .text(function(d) { return "f"; });
+    });
+    */
 };
+
+  return chart;
+}

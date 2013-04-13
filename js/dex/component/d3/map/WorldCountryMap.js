@@ -1,9 +1,6 @@
-WorldCountryMap.prototype = new DexComponent();
-WorldCountryMap.constructor = WorldCountryMap;
-
 function WorldCountryMap(userConfig)
 {
-  DexComponent.call(this, userConfig,
+  var chart = DexComponent(userConfig,
   {
     'parent'        : null,
     'id'            : 'USStateMap',
@@ -1239,23 +1236,15 @@ function WorldCountryMap(userConfig)
 
  });
 
-  // Ugly, but my JavaScript is weak.  When in handler functions
-  // this seems to be the only way to get linked back to the
-  // this.x variables.
-  this.chart = this;
-}
+  chart.render = function()
+  {
+    this.update();
+  };
 
-WorldCountryMap.prototype.render = function()
-{
-  this.update();
-};
-
-WorldCountryMap.prototype.update = function()
-{
-	// If we need to call super:
-	//DexComponent.prototype.update.call(this);
- 	var chart = this.chart;
-  var config = this.config;
+  chart.update = function()
+  {
+    var chart = this;
+    var config = chart.config;
   var selected = {};
   var projection = d3.geo.kavrayskiy7();
   var path = d3.geo.path()
@@ -1299,3 +1288,6 @@ WorldCountryMap.prototype.update = function()
       	}
       });
 };
+
+return chart;
+}

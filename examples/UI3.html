@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.css" />
+<style>
+  #ConfigurationBox {
+    display:inline;
+    float:left;
+    width: 150px;
+    height: 150px;
+    padding: 0.5em;
+  }
+  #ConfigurationBox h3 {
+    text-align: center;
+    margin: 0;
+  }
+
+#Selectable .ui-selecting { background: #BBBBBB; }
+#Selectable .ui-selected { background: steelblue; color: white; }
+#Selectable ol {
+padding: 0px;
+list-style-type: none;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="../dex.js"></script>
+<script src="../js/dex/component/jquery-ui/ConfigurationBox.js"></script>
+<script src="../js/dex/component/jquery-ui/Tabs.js"></script>
+<script src="../js/dex/component/d3/Dendrogram.js"></script>
+<script src="../js/dex/component/jquery-ui/Slider.js"></script>
+<script src="../js/dex/component/jquery-ui/Selectable.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+<script>
+
+var svg = d3.select("body").append("svg")
+  .attr("width", 1000)
+  .attr("height", 800)
+  .append("g");
+
+var csv =
+{
+  'header' : [ "GENDER", "VEHICLE", "NAME" ],
+  'data'   : [
+               ["MALE", "Truck", "Billy Joe"],
+               ["FEMALE", "Car", "Sue"],
+               ["FEMALE", "Truck", "Bobby Sue"],
+               ["MALE", "Car", "Robert"]
+             ]
+};
+
+var configBox = new ConfigurationBox();
+var enodeSizeSlider = new Slider(
+{
+  'label' : 'Expanded Node Size:',
+  'id' : 'enodeNodeSizeSizeSlider',
+  'options' :
+  {
+    'min'   : 0,
+    'max'   : 100,
+    'value' : 10
+  }
+});
+
+var cnodeSizeSlider = new Slider(
+{
+  'label' : 'Collapsed Node Size:',
+  'id' : 'collapsedNodeSizeSlider',
+  'options' :
+  {
+    'min'   : 0,
+    'max'   : 100,
+    'value' : 10
+  }
+});
+
+var strokeWidthSlider = new Slider({ 'label' : 'Stroke Width:', 'id' : 's2'});
+
+var columnSelector = new Selectable(
+{
+  'label'     : "Columns",
+  'selection' : csv.header
+});
+
+configBox.add(enodeSizeSlider, cnodeSizeSlider, strokeWidthSlider, columnSelector);
+
+configBox.render();
+
+var selected = [];
+
+var dendrogram = new Dendrogram(
+{
+  'parent'       : svg,
+  'csv'          : { 'header' : [], 'data' : []},
+  'xoffset'      : 130,
+
+  'node.expanded.circle.radius'       : 10,
+  'node.expanded.circle.style.color'  : 'steelblue',
+  'node.collapsed.circle.radius'      : 20,
+  'node.collapsed.circle.style.color' : 'lightgreen',
+
+  'node.expanded.label.x'            : -14,
+  'node.expanded.label.y'            : -4,
+  'node.expanded.label.font.size'    : 14,
+
+  'node.collapsed.label.x'           : -25,
+  'node.collapsed.label.y'           : -6,
+  'node.collapsed.label.font.size'   : 16,
+  'node.collapsed.label.font.weight' : 'bold',
+  
+  'link.stroke.color' : "red",
+  'link.stroke.width' : 2,
+  'link.stroke.opacity' : 1,
+  'link.stroke.dasharray' : "5 5",
+  
+  'root.name' : "Vehicle Owners",
+
+  'node.collapsed.label.transform' : 'rotate(45)',
+  'node.expanded.label.transform' : 'rotate(45)'
+});
+
+cnodeSizeSlider.addListener("slider-change", dendrogram, function(chartEvent)
+{
+  d3.select('#Dendrogram').remove();
+  dendrogram.attr('node.collapsed.circle.radius', chartEvent.value).update();
+});
+
+enodeSizeSlider.addListener("slider-change", dendrogram, function(chartEvent)
+{
+  d3.select('#Dendrogram').remove();
+  dendrogram.attr('node.expanded.circle.radius', chartEvent.value).update();
+});
+
+strokeWidthSlider.addListener("slider-change", dendrogram, function(chartEvent)
+{
+  d3.select('#Dendrogram').remove();
+  dendrogram.attr('link.stroke.width', chartEvent.value).update();
+});
+
+var clone = (function(){ 
+  return function (obj) { Clone.prototype=obj; return new Clone() };
+  function Clone(){}
+}());
+
+columnSelector.addListener("selected", dendrogram, function(chartEvent)
+{
+  var myCsv = clone(csv);
+
+  var i = selected.indexOf(chartEvent.id);
+  if (i>-1)
+  {
+    selected.splice(i, 1);
+  }
+  
+  selected.push(chartEvent.id);
+  dex.console.log("SELECTED", selected, "CSV", csv, "MYCSV", myCsv);
+  //dex.console.log("CHARTEVENT", chartEvent);
+  d3.select('#Dendrogram').remove();
+  dendrogram.attr('csv', dex.csv.columnSlice(myCsv, selected)).update();
+});
+
+columnSelector.addListener("unselected", dendrogram, function(chartEvent)
+{
+  var myCsv = clone(csv);
+  var i = selected.indexOf(chartEvent.id);
+  dex.console.log("BEFORE UN-SELECTED", selected, chartEvent.id, i);
+
+  if (i>-1)
+  {
+    selected.splice(i, 1);
+  }
+  dex.console.log("AFTER UN-SELECTED", selected);
+  dex.console.log("CHARTEVENT", chartEvent);
+  d3.select('#Dendrogram').remove();
+  dendrogram.attr('csv', dex.csv.columnSlice(myCsv, selected)).update();
+});
+
+dendrogram.render();
+
+</script>
+

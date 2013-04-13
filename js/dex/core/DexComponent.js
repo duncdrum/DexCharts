@@ -1,86 +1,67 @@
 function DexComponent(userConfig, defaultConfig)
 {
+  userConfig = userConfig || {};
+  defaultConfig = defaultConfig || {};
+  
   // This holds our event registry.
-  this.registry =
-  {
-  };
+  this.registry = {};
   this.debug = false;
 
-  //console.log("Instantiating dex component...");
-
-  // Instantiate from another component
-  if ( userConfig instanceof DexComponent)
+  if (userConfig.hasOwnProperty('config'))
   {
     this.config = dex.object.overlay(userConfig.config, defaultConfig);
   }
   else
   {
-    this.config = dex.object.overlay(dex.config.expand(userConfig),
-      defaultConfig);
-    //console.dir(this.config);
-  }
-}
-
-DexComponent.prototype.attr = function(name, value)
-{
-	if (arguments.length == 0)
-	{
-		return this.config;
-	}
-  else if (arguments.length == 1)
-  {
-    return this.config[name];
-  }
-  else if (arguments.length == 2)
-  {
-    //console.log("Setting Hieararchical: " + name + "=" + value);
-    //console.dir(this.config);
-
-    // This will handle the setting of a single attribute
-    dex.object.setHierarchical(this.config, name, value, '.');
-
-    //console.dir(this.config);
-  }
-  return this;
-};
-
-DexComponent.prototype.dump = function(message)
-{
-  console.log("========================");
-  if (arguments.length == 1)
-  {
-    console.log(message);
-    console.log("========================");
-  }
-  console.log("=== CONFIG ===");
-  console.dir(this.config);
-  console.log("=== REGISTRY ===");
-  console.dir(this.registry);
-};
-
-DexComponent.prototype.addListener = function(eventType, target, method)
-{
-  var targets;
-
-  if (this.debug)
-  {
-    console.log("Registering Target: " + eventType + "=" + target);
-  }
-  if (!this.registry.hasOwnProperty(eventType))
-  {
-    this.registry[eventType] = [];
+    this.config = dex.object.overlay(userConfig, defaultConfig);
   }
 
-  this.registry[eventType].push(
-  {
-    target : target,
-    method : method
-  });
-  //console.log("this.registry");
-  //console.dir(eventthis.registry);
-};
+  //dex.console.log("HIERARCHY", this.config, userConfig, defaultConfig);
 
-DexComponent.prototype.notify = function(event)
+  this.attr = function(name, value)
+  {
+    if (arguments.length == 0)
+    {
+      return this.config;
+    }
+    else if (arguments.length == 1)
+    {
+      return this.config[name];
+    }
+    else if (arguments.length == 2)
+    {
+      //console.log("Setting Hieararchical: " + name + "=" + value);
+      //console.dir(this.config);
+
+      // This will handle the setting of a single attribute
+      dex.object.setHierarchical(this.config, name, value, '.');
+    }
+    return this;
+  };
+
+  this.addListener = function(eventType, target, method)
+  {
+    var targets;
+
+    if (this.debug)
+    {
+      console.log("Registering Target: " + eventType + "=" + target);
+    }
+    if (!this.registry.hasOwnProperty(eventType))
+    {
+      this.registry[eventType] = [];
+    }
+
+    this.registry[eventType].push(
+    {
+      target : target,
+      method : method
+    });
+    //console.log("this.registry");
+    //console.dir(eventthis.registry);
+  };
+
+this.notify = function(event)
 {
   var targets, i;
 
@@ -103,15 +84,17 @@ DexComponent.prototype.notify = function(event)
     //console.dir("Calling Target: " + targets[i]["target"]);
     targets[i]["method"](event, targets[i]["target"]);
   }
+};
+
+  this.render = function()
+  {
+    console.log("Unimplemented routine: render()");
+  };
+
+  this.update = function()
+  {
+    console.log("Unimplemented routine: update()");
+  };
+
   return this;
 };
-
-DexComponent.prototype.render = function()
-{
-  console.log("Rendering component...");
-};
-
-DexComponent.prototype.update = function()
-{
-  console.log("Updating component...");
-}; 

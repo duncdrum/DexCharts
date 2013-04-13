@@ -1,9 +1,6 @@
-LineChart.prototype = new DexComponent();
-LineChart.constructor = LineChart;
-
 function LineChart(userConfig)
 {
-  DexComponent.call(this, userConfig,
+  var chart = new DexComponent(userConfig,
   {
     'parent' : null,
     'id' : "LineChart",
@@ -25,24 +22,15 @@ function LineChart(userConfig)
     'lineColors' : d3.scale.category20()
   }); 
 
+  chart.render = function()
+  {
+    this.update();
+  };
 
-  // Ugly, but my JavaScript is weak.  When in handler functions
-  // this seems to be the only way to get linked back to the
-  // this.x variables.
-  this.chart = this;
-}
-
-LineChart.prototype.render = function()
-{
-  this.update();
-};
-
-LineChart.prototype.update = function()
-{
-	// If we need to call super:
-	//DexComponent.prototype.update.call(this);
- 	var chart = this.chart;
-  var config = this.config;
+  chart.update = function()
+  {
+    var chart = this;
+    var config = chart.config;
   var csv    = config.csv;
   var i;
 
@@ -61,8 +49,8 @@ LineChart.prototype.update = function()
   // I hate this kind of stuff, but it's necessary to share
   // with mouseOver function.  There's probably a better way to do
   // it but I don't feel like blowing a couple hours figuring it out.
-  this.x = x;
-  this.y = y;
+  chart.x = x;
+  chart.y = y;
 
   // Create the x axis at the bottom.
   //var xAxis = d3.svg.axis()
@@ -129,8 +117,6 @@ LineChart.prototype.update = function()
     .call(dex.config.configureLabel, config.xaxis.label)
     .text(config.xaxis.label.text);
     //.text(dex.array.slice(csv.header, config.xaxis.label.text).join(" "));
-    
-  dex.console.log(d3.select(".y.axis"));
 
   // Draw each of the lines.
   for (i=0; i<lines.length; i++)
@@ -170,18 +156,11 @@ LineChart.prototype.update = function()
   this.chartContainer = chartContainer;
 };
 
-LineChart.prototype.mouseOverHandler = function(chartEvent, targetChart)
+// REM: Fix this event handler.
+chart.mouseOverHandler = function(chartEvent, targetChart)
 {
-	var chart, i;
-
-  if (arguments.length === 2)
-  {
-  	chart = targetChart;
-  }
-  else
-  {
-  	chart = this.chart;
-  }
+	var chart = this, i;
+  targetChart = targetChart || chart;
 
   var x = chart.x;
   var y = chart.y;
@@ -217,3 +196,5 @@ LineChart.prototype.mouseOverHandler = function(chartEvent, targetChart)
   }
 };
 
+return chart;
+}

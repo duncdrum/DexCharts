@@ -41,9 +41,17 @@ dex.matrix.uniques = function(matrix)
 dex.matrix.transpose = function(matrix)
 {
 	var ci;
-	var ncols = matrix[0].length;
+	var ncols;
 	var transposedMatrix = [];
 
+  if (!matrix || matrix.length <= 0 ||
+    !matrix[0] || matrix[0].length <= 0)
+  {
+    return [];
+  }
+
+  ncols = matrix[0].length;
+ 
   for (ci=0; ci<ncols; ci++)
 	{
 		transposedMatrix.push(matrix.map(function(row) { return row[ci]; }));
@@ -57,7 +65,7 @@ dex.matrix.columnSlice = function(matrix, columns)
 	var slice = [];
 	var ri;
   var transposeMatrix;
-	
+
 	if (arguments.length != 2)
 	{
 		return matrix;
