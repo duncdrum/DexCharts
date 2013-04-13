@@ -63,14 +63,14 @@ dex.array.indexOfById = function(array, id)
 
   for (i = 0; i < array.length; i+=1)
   {
-    if (source[i].id === id)
+    if (array[i].id === id)
     {
       return i;
     }
   }
   
   return -1;
-}
+};
 
 
 dex.array.indexBands = function(data, numValues)

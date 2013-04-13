@@ -236,7 +236,7 @@ dex.array.slice = function(array, rowRange, optLen) {
 dex.array.indexOfById = function(array, id) {
     var i;
     for (i = 0; i < array.length; i += 1) {
-        if (source[i].id === id) {
+        if (array[i].id === id) {
             return i;
         }
     }
