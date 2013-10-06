@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.node rect {
+  cursor: move;
+  fill-opacity: .9;
+  shape-rendering: crispEdges;
+}
+ 
+.node text {
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff;
+}
+ 
+.hideme.link {
+  fill: none;
+  stroke: #000000;
+  stroke-opacity: .2;
+}
+ 
+.link:hover {
+  stroke-opacity: .5;
+}
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="../dex.js"></script>
+<script src="../js/dex/component/d3/Sankey.js"></script>
+<script>
+
+var width = 1000;
+var height = 800;
+
+// Create an SVG for our chart.
+var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
+  .attr("width", width)
+  .attr("height", height);
+
+var csv = { 'header' : ["MONTH","SALES","OVERHEAD","REVENUE","PROFIT"],
+ 'data' : [["JAN","173","731","468","567"],
+["FEB","584","379","726","519"],
+["MAR","899","72","125","308"],
+["APR","611","220","48","125"],
+["MAY","130","109","793","909"],
+["JUN","318","386","324","34"],
+["JUL","500","775","108","349"],
+["AUG","895","802","173","254"],
+["SEP","946","338","740","827"],
+["OCT","30","188","658","180"],
+["NOV","644","753","767","47"],
+["DEC","132","471","364","787"]] };
+
+
+var color = d3.scale.category20();
+
+// Configure a chart.
+var sankey = new Sankey(
+{
+  'parent'  : "#ChartArea",
+  'color'   : d3.scale.category20c(),
+  'xoffset' : 0,
+  'csv'     : csv,
+  'width'   : width,
+  'height'  : height,
+  'link.stroke.color' : function(d)
+    {
+       return color(d.category);
+    },
+  'link.stroke.opacity' : .5,
+  //'link.stroke.dasharray' : "20 5",
+  'relationships' :
+  [
+    { 'source' : 0,
+      'target' : function(i)
+      {
+         return csv.header[1];
+      },
+      'category' : function(i)
+      {
+        return csv.data[i][0];
+      },
+      'value' : function(i)
+      {
+        return csv.data[i][1];
+      }
+    },
+    { 'source' : function(i) { return csv.header[1];},
+      'target' : function(i)
+      {
+         return csv.header[2];
+      },
+      'category' : function(i)
+      {
+        return csv.data[i][0];
+      },
+      'value' : function(i)
+      {
+        return csv.data[i][2];
+      }
+    },
+    { 'source' : function(i) { return csv.header[2];},
+      'target' : function(i)
+      {
+         return csv.header[3];
+      },
+      'category' : function(i)
+      {
+        return csv.data[i][0];
+      },
+      'value' : function(i)
+      {
+        return csv.data[i][3];
+      }
+    },
+    { 'source' : function(i) { return csv.header[3];},
+      'target' : function(i)
+      {
+         return csv.header[4];
+      },
+      'category' : function(i)
+      {
+        return csv.data[i][0];
+      },
+      'value' : function(i)
+      {
+        return csv.data[i][4];
+      }
+    },
+  ],
+  'node.width' : 50,
+  'node.padding' : 5,
+});
+
+dex.console.log("CONFIG", sankey.attr());
+sankey.render();
+
+</script>

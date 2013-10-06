@@ -78,7 +78,14 @@ body {
 
 <body>
   <h3>DexCharts : D3JS and ThreeJS/WebGL Interaction</h3>
-<table><tr><td id='parCoord'></td><td id='scatter3d'></td></tr></table>
+<table border="1">
+  <tr>
+    <td id='parCoord' valign="center">
+      <svg id="ChartArea" height="400" class="chart" width="800"></svg>
+    </td>
+    <td id='scatter3d' valign="center"></td>
+  </tr>
+</table>
 <script type="x-shader/x-vertex" id="vertexshader">
 uniform float amplitude;
 attribute float size;
@@ -112,12 +119,12 @@ void main()
 </script>
 <script>
 
-var svg = d3.select("#parCoord")
-  .append("svg")
-  .attr("width", 800)
-  .attr("height",400)
-  .append("g")
-  .attr("transform", "translate(60,20)");
+//var svg = d3.select("#parCoord")
+//  .append("svg")
+//  .attr("width", 800)
+//  .attr("height",400)
+//  .append("g")
+//  .attr("transform", "translate(60,20)");
 
 var scatterParent = document.getElementById('scatter3d');
 
@@ -135,12 +142,12 @@ var csv =
 
 var pcChart = new ParallelCoordinates(
 {
-  'parent'  : svg,
+  'parent'  : "#ChartArea",
   'id'      : "ParChart",
   'width'   : 800,
-  'height'  : 400,
-  'xoffset' : -100,
-  'yoffset' : 10,
+  'height'  : 390,
+  'xoffset' : 0,
+  'yoffset' : 5,
   'csv'     : csv
 });
 

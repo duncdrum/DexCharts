@@ -46,6 +46,7 @@ data.splice(0, 1);
 
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 2000)
   .attr("height", 2000)
   .append("g")
@@ -54,7 +55,7 @@ var svg = d3.select("body").append("svg")
 // Create the chart:
 var chart = new LineChart(
 {
-  'parent'      : svg,
+  'parent'      : "#ChartArea",
   'id'          : "LineChart",
   'lineColors'  : d3.scale.category10(),
   'pointColors' : d3.scale.category10(),

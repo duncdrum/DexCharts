@@ -14,9 +14,9 @@
 <script>
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
+  .attr('id', "ChordDiagram")
   .attr("width", 1000)
-  .attr("height", 1000)
-  .append("g");
+  .attr("height", 1000);
 
 var csv =
 {
@@ -87,7 +87,7 @@ csv2 = dex.csv.columnSlice(csv2, [1,2]);
 // Configure a chart.
 var chord = new Chord(
   {
-    'parent'       : svg,
+    'parent'       : '#ChordDiagram',
     'height'       : 800,
     'width'        : 800,
     'xoffset'      : 500,

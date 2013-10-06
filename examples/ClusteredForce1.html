@@ -16,6 +16,7 @@ body {
 <script>
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 1000)
   .attr("height",800)
   .append("g")
@@ -24,7 +25,7 @@ var svg = d3.select("body").append("svg")
 // Configure a chart.
 var cforce = new ClusteredForce(
   {
-    'parent'      : svg,
+    'parent'      : "#ChartArea",
     'xoffset'     : 10,
     'yoffset'     : 0,
     'width'       : 800,

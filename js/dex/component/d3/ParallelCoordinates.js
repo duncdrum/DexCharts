@@ -40,33 +40,33 @@ function ParallelCoordinates(userConfig)
   {
     var chart = this;
     var config = chart.config;
-  var csv    = config.csv;
-
-  var numericColumns =
-    dex.csv.getNumericColumnNames(csv);
-
-  var jsonData = dex.csv.toJson(csv);
-
-  var x = d3.scale.ordinal()
-      .rangePoints([0, config.width], 1);
-
-  var y = {};
-
-  var line = d3.svg.line();
-  var axis = d3.svg.axis().orient("left");
-  // Holds unselected paths.
-  var background;
-  // Holds selected paths.
-  var foreground;
-  // Will hold our column names.
-  var dimensions;
-  var key;
+    var csv    = config.csv;
   
-  var chartContainer = config.parent.append("g")
-    .attr("id", config["id"])
-    .attr("class", config["class"])
-    .attr("transform",
-      "translate(" + config.xoffset + "," + config.yoffset + ")");
+    var numericColumns =
+      dex.csv.getNumericColumnNames(csv);
+  
+    var jsonData = dex.csv.toJson(csv);
+  
+    var x = d3.scale.ordinal()
+        .rangePoints([0, config.width], 1);
+  
+    var y = {};
+  
+    var line = d3.svg.line();
+    var axis = d3.svg.axis().orient("left");
+    // Holds unselected paths.
+    var background;
+    // Holds selected paths.
+    var foreground;
+    // Will hold our column names.
+    var dimensions;
+    var key;
+    
+    var chartContainer = d3.select(config.parent).append("g")
+      .attr("id", config["id"])
+      .attr("class", config["class"])
+      .attr("transform",
+        "translate(" + config.xoffset + "," + config.yoffset + ")");
 
     // Extract the list of dimensions and create a scale for each.
     //x.domain(dimensions = d3.keys(cars[0]).filter(function(d)
@@ -195,67 +195,67 @@ function ParallelCoordinates(userConfig)
       .attr("x", -8)
       .attr("width", 16);
 
-  // Returns the path for a given data point.
-  function path(d)
-  {
-    return line(dimensions.map(function(p) { return [x(p), y[p](d[p])]; }));
-  }
-
-  // Handles a brush event, toggling the display of foreground lines.
-  function brush()
-  {
-  	// Get a list of our active brushes.
-    var actives = dimensions.filter(function(p) { return !y[p].brush.empty(); }),
-    
-    // Get an array of min/max values for each brush constraint.
-    extents = actives.map(function(p) { return y[p].brush.extent(); });
-
-    foreground.style("display", function(d)
+    // Returns the path for a given data point.
+    function path(d)
     {
-      return actives.every(
-        // P is column name, i is an index
-        function(p, i)
-        {
-          // Categorical
-          //console.log("P: " + p + ", I: " + i);
-          if (!dex.object.contains(numericColumns, p))
-          {
-            return extents[i][0] <= y[p](d[p]) && y[p](d[p]) <= extents[i][1];
-          }
-          // Numeric
-          else
-          {
-            return extents[i][0] <= d[p] && d[p] <= extents[i][1];
-          }
-        }) ? null : "none";
-    });
-  }
-  
-  // Handles a brush event, toggling the display of foreground lines.
-  function brushend()
-  {
-    //dex.console.log("chart: ", chart);
-    var activeData = [];
-    var i;
-    
-    // WARNING:
-    //
-    // Can't find an elegant way to get back at the data so I am getting
-    // at the data in an inelegant manner instead.  Mike Bostock ever
-    // changes the __data__ convention and this will break.
-    for (i=0; i<foreground[0].length; i++)
-    {
-    	if (!(foreground[0][i]["style"]["display"] == "none"))
-    	{
-    		activeData.push(foreground[0][i]['__data__']);
-    	}
+      return line(dimensions.map(function(p) { return [x(p), y[p](d[p])]; }));
     }
 
-    //dex.console.log("Selected: ", dex.json.toCsv(activeData, dimensions));
-    chart.notify({ "type" : "select", "selected" : dex.json.toCsv(activeData, dimensions)});
-  }
-};
+    // Handles a brush event, toggling the display of foreground lines.
+    function brush()
+    {
+    	// Get a list of our active brushes.
+      var actives = dimensions.filter(function(p) { return !y[p].brush.empty(); }),
+      
+      // Get an array of min/max values for each brush constraint.
+      extents = actives.map(function(p) { return y[p].brush.extent(); });
+  
+      foreground.style("display", function(d)
+      {
+        return actives.every(
+          // P is column name, i is an index
+          function(p, i)
+          {
+            // Categorical
+            //console.log("P: " + p + ", I: " + i);
+            if (!dex.object.contains(numericColumns, p))
+            {
+              return extents[i][0] <= y[p](d[p]) && y[p](d[p]) <= extents[i][1];
+            }
+            // Numeric
+            else
+            {
+              return extents[i][0] <= d[p] && d[p] <= extents[i][1];
+            }
+          }) ? null : "none";
+      });
+    }
+  
+    // Handles a brush event, toggling the display of foreground lines.
+    function brushend()
+    {
+      //dex.console.log("chart: ", chart);
+      var activeData = [];
+      var i;
+      
+      // WARNING:
+      //
+      // Can't find an elegant way to get back at the data so I am getting
+      // at the data in an inelegant manner instead.  Mike Bostock ever
+      // changes the __data__ convention and this will break.
+      for (i=0; i<foreground[0].length; i++)
+      {
+      	if (!(foreground[0][i]["style"]["display"] == "none"))
+      	{
+      		activeData.push(foreground[0][i]['__data__']);
+      	}
+      }
+  
+      //dex.console.log("Selected: ", dex.json.toCsv(activeData, dimensions));
+      chart.notify({ "type" : "select", "selected" : dex.json.toCsv(activeData, dimensions)});
+    }
+  };
 
-return chart;
+  return chart;
 }
 

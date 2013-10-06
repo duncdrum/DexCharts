@@ -148,6 +148,12 @@ dex.object.contains = function(container, obj)
   return false;
 };
 
+dex.object.isFunction = function(functionToCheck)
+{
+ var getType = {};
+ return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+}
+
 dex.object.visit = function(obj, func)
 {
 	var prop;

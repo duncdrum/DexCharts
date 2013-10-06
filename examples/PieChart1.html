@@ -16,17 +16,16 @@ body {
 <script>
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 1000)
-  .attr("height", 800)
-  .append("g")
-  .attr("transform", "translate(40,20)");
+  .attr("height", 800);
 
 // Configure a chart.
 var pie1 = new PieChart(
   {
-    'parent'     : svg,
+    'parent'     : "#ChartArea",
     'xoffset'    : 200,
-    'yoffset'    : 200,
+    'yoffset'    : 250,
     'innerRadius' : 20,
     'yaxisLabel' : "Frequency",
     'csv' :

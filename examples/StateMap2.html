@@ -26,6 +26,7 @@ path:hover {
 
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 1500)
   .attr("height", 800)
   .append("g")
@@ -34,7 +35,7 @@ var svg = d3.select("body").append("svg")
 // Configure a chart.
 var map = new USStateMap(
   {
-    'parent'  : svg,
+    'parent'  : "#ChartArea",
     'xoffset' : 200
   }
 );
@@ -107,7 +108,7 @@ var stateMap = dex.csv.createRowMap(csv, 0);
 
 var barChart = new BarChart(
   {
-    'parent' : svg,
+    'parent' : "#ChartArea",
     'height' : 200,
     'width'  : 900,
     'id'     : "StateStatisticsBarChart",
@@ -132,15 +133,15 @@ map.addListener("mouseover", barChart, function(chartEvent)
   	if (stateMap[chartEvent.state] != null)
   	{
   	  d3.selectAll("#StateStatisticsBarChart").remove();
-	  var bcData = [ stateMap[chartEvent.state] ];
-	  barChart.attr("csv.data", bcData)
+	    var bcData = [ stateMap[chartEvent.state] ];
+	    barChart.attr("csv.data", bcData)
   	  barChart.update();
   	}
   });
 
 var legend = new VerticalLegend(
   {
-  	parent     : svg,
+  	parent     : "#ChartArea",
   	labels     : labels.slice(1),
   	caption    : "",
   	xoffset    : 120,

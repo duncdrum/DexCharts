@@ -31,6 +31,7 @@ circle
 <script src="../dex.js"></script>
 <script src="../js/dex/component/d3/ScatterPlot.js"></script>
 <script src="../js/dex/component/d3/LineChart.js"></script>
+<svg id="ChartArea" height="600" class="chart" width="900"></svg>
 <script>
 
 // Data setup.
@@ -40,15 +41,9 @@ var data = d3.range(100).map(
 
 var csv = dex.csv.csv(labels, data);
 
-var svg = d3.select('body')
-  .append('svg:svg')
-  .attr('width', 900)
-  .attr('height', 600)
-  .attr('class', 'chart');
-
 var scatterplot = new ScatterPlot(
   {
-    'parent'           : svg,
+    'parent'           : "#ChartArea",
     'width'            : 400,
     'height'           : 400,
     'csv'              : csv,
@@ -63,7 +58,7 @@ scatterplot.render();
 
 var linechart = new LineChart(
   {
-	'parent' : svg,
+	'parent' : "#ChartArea",
 	'width'  : 400,
 	'height' : 400,
 	'csv'    : csv,
@@ -75,7 +70,7 @@ linechart.render();
 
 scatterplot.addListener("brushend", linechart, function(chartEvent)
   {
-    d3.selectAll("#lineChartContainer").remove();
+    d3.selectAll("#LineChart").remove();
     linechart.attr('csv.data', chartEvent.data);
     linechart.update();
   });

@@ -434,10 +434,15 @@ dex.csv.group = function(csv, columns)
 		else
 		{
 			//group = { 'csv' : dex.csv.csv(otherHeaders, []) };
-			group = { 'csv' : dex.csv.csv(csv.header, []) };
+			group =
+			{
+			  'key'    : key,
+			  'values' : [],
+			  'csv'    : dex.csv.csv(csv.header, [])
+			};
 			for (ci=0; ci<values.length; ci++)
 			{
-				group[csv.header[columns[ci]]] = values[ci];
+				group.values.push({ 'name' : csv.header[columns[ci]], 'value' : values[ci]});
 			}
 			groups[key] = group;
 		}

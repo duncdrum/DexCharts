@@ -1,6 +1,6 @@
 function BarChart(userConfig)
 {
-  var chart = new DexComponent(userConfig,
+  var defaults =
   {
     // The parent container of this chart.
     'parent'           : null,
@@ -23,63 +23,34 @@ function BarChart(userConfig)
     'xoffset'          : 20,
     'yoffset'          : 0,
     'color'            : d3.scale.category20(),
-    xmin               : null,
-    ymin               : null,
-    'xaxis'  : dex.config.xaxis(),
-    'yaxis' : dex.config.yaxis()
-  });
-
-  chart.render = function()
-  {
-    this.update();
+    'xmin'             : null,
+    'ymin'             : null,
   };
 
-  chart.update = function()
+  var config = dex.object.overlay(userConfig, defaults);
+
+  //console.log("CDOMAIN: ");
+  //console.dir(config.csv.data.map(function (r) { return r[0]; }));
+
+  // Things defined in terms of the defaults:
+  defaults.xaxis = dex.config.xaxis(
   {
-    var chart = this;
-    var config = chart.config;
+    'scale' : d3.scale.ordinal()
+      .domain(config.csv.data.map(function (r) { return r[0]; }))
+      .rangeRoundBands([0, config.width], .1),
+    'label' : {
+                'text' : "X",
+                'x'    : config.width/2 - config.xoffset,
+                'y'    : 10
+              }
+  });
 
-/*
-    if (config.debug)
-    {
-      console.log("===== Barchart Configuration =====");
-      console.dir(config);
-    }
-*/
+  defaults.yaxis = dex.config.yaxis(
+  {
+    'scale' : d3.scale.linear().range([config.height, 0])
+  });
 
-  // X domain across groups.
-  var range = d3.range(config.csv.data.length);
-  dex.console.log("CSV", config.csv.data);
-  dex.console.log("DATA", config.csv.data.map(function(d) { dex.console.log("D", d); return d[config.xi];}));
-  var ext = d3.extent(config.csv.data.map(function(d) { return d[config.xi];}));
-
-  var tickValues = dex.array.indexBands(
-    config.csv.data, config.xaxis.tick.count)
-    .map(function(i) { return config.csv.data[i][config.xi]; });
-
-  // X domain across groups.
-  var x = d3.scale.ordinal()
-    .domain(d3.range(config.csv.data.length))
-    .rangeBands([0, config.width], .1);
-
-  // X domain within groups.
-  var x1 = d3.scale.ordinal()
-    .domain(d3.range(config.yi.length))
-    .rangeBands([0, x.rangeBand()]);
-
-  // Y domain.
-  var y = d3.scale.linear()
-    .range([config.height, 0]);
-
-  var xaxis = dex.config.configureAxis(config.xaxis)
-    .scale(x);
-  var yaxis = dex.config.configureAxis(config.yaxis)
-    .scale(y);
-
-  var chartContainer = config.parent.append("g")
-    .attr("id", config["id"])
-    .attr("class", config["class"])
-    .attr("transform", "translate(" + config.xoffset + "," + config.yoffset + ")");
+  var chart = new DexComponent(userConfig, defaults);
 
   var data = config.csv.data;
 
@@ -93,82 +64,124 @@ function BarChart(userConfig)
   });
 
   var yextent = dex.matrix.extent(data, config.yi);
-  x.domain(data.map(function(d) { return d[config.xi]; }));
-  //y.domain([0, d3.max(data, function(d) { return d[1]; })]);
 
-  if (config.ymin != null)
+  if (chart.config.ymin != null)
   {
-    yextent[0] = config.ymin;
+    yextent[0] = chart.config.ymin;
   }
-  if (config.ymax != null)
+  if (chart.config.ymax != null)
   {
-    yextent[1] = config.ymax;
+    yextent[1] = chart.config.ymax;
   }
 
-  // Establish the domain of the y axis.
-  y.domain(yextent);
+  console.log("YEXTENT:" + yextent);
+  chart.config.yaxis.scale.domain(yextent);
 
-  // X Axis
-  chartContainer.append("g")
-      .attr("class", "xaxis")
-      .attr("transform", "translate(0," + config.height + ")")
-      .call(xaxis);
+  chart.render = function()
+  {
+    this.update();
+  };
 
-/*
-  chartContainer.selectAll(".xaxis").selectAll("text")
-    .each(function(d)
+  chart.update = function()
+  {
+    var chart = this;
+    var config = chart.config;
+
+    console.dir("XAXIS--");
+    console.dir(config.xaxis);
+    var xaxis = dex.config.configureAxis(config.xaxis);
+    var yaxis = dex.config.configureAxis(config.yaxis);
+
+    var chartContainer = d3.select(config.parent).append("g")
+      .attr("id", config["id"])
+      .attr("class", config["class"])
+      .attr("transform", "translate(" + config.xoffset + "," + config.yoffset + ")");
+  
+    var data = config.csv.data;
+  
+    // Translate all of the y data columns to numerics.
+    data.forEach(function(d)
     {
-      d3.select(this).call(dex.config.configureLabel,
-        config.xaxis.tick.label);
+      config.yi.forEach(function(c)
+      {
+        d[c] = +d[c];
+      });
     });
-*/
+    
+    var yextent = dex.matrix.extent(data, config.yi);
+  
+    if (chart.config.ymin != null)
+    {
+      yextent[0] = chart.config.ymin;
+    }
+    if (chart.config.ymax != null)
+    {
+      yextent[1] = chart.config.ymax;
+    }
+  
+    // Establish the domain of the y axis.
+    console.dir(yextent);
+    yaxis.scale().domain(yextent);
 
-  chartContainer.select(".xaxis").append("text")
-    .call(dex.config.configureLabel, config.xaxis.label);
+    chartContainer.select(".xaxis").append("text")
+      .call(dex.config.configureLabel, config.xaxis.label);
+
+    // X Axis
+    console.log(config.height)
+    chartContainer.append("g")
+        .attr("class", "xaxis")
+        .attr("transform", "translate(0," + config.height + ")")
+        .call(xaxis);
+
+    chartContainer.selectAll(".xaxis").selectAll("text")
+      .each(function(d)
+      {
+        d3.select(this).call(dex.config.configureLabel,
+          config.xaxis.tick.label);
+      });
       
-  // Y Axis
-  chartContainer.append("g")
-      .attr("class", "yaxis")
-      .call(yaxis)
-    .append("text")
-      .call(dex.config.configureLabel, config.yaxis.label)
-      .text(config.yaxis.label.text);
+    chartContainer.select(".xaxis").append("text")
+      .call(dex.config.configureLabel, config.xaxis.label);
+      
+    // Y Axis
+    chartContainer.append("g")
+        .attr("class", "yaxis")
+        .call(yaxis)
+      .append("text")
+        .call(dex.config.configureLabel, config.yaxis.label)
+        .text(config.yaxis.label.text);
 
-  var barData = dex.matrix.combine(
-        dex.matrix.slice(data, [config.xi]),
-        dex.matrix.slice(data, config.yi)
-     );
+    var barData = dex.matrix.combine(
+          dex.matrix.slice(data, [config.xi]),
+          dex.matrix.slice(data, config.yi)
+       );
 
-  chartContainer.selectAll(".bar")
+    console.dir(data);
+    console.log("SCALE(" + data[1][config.xi] + ")=" + config.xaxis.scale(data[1][config.xi]));
+    console.dir(config.xaxis.scale);
+
+    var barWidth = xaxis.scale()(data[1][config.xi]) - xaxis.scale()(data[0][config.xi]);
+    dex.console.log("BAR WIDTH: " + barWidth);
+    
+    chartContainer.selectAll(".bar")
       .data(barData)
-    .enter().append("rect")
+      .enter().append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { //console.dir(d);
-         return x(d[0]) + x1(d[3]); })
+      .attr("x", function(d) {
+          console.log("XBAR---");
+          console.dir(d[0]);
+          console.log(xaxis.scale()(d[0]));
+         return xaxis.scale()(d[0]) })//+ config.xaxis.scale(d[3]); })
       .style("fill", function(d) { return config.color(d[3]);})
-      .attr("width", x.rangeBand()/config.yi.length)
-      .attr("y", function(d) { return y(d[1]); })
-      .attr("height", function(d) { return config.height - y(d[1]); });
-
-  //chartContainer.select(".x").selectAll("text").remove();
-
-  // Add Text Labels
-  /*
-  chartContainer.selectAll(".label")
-    .data(barData)
-    .enter().append("text")
-    .each(function(d)
-    {
-      dex.console.log("MYDIR", d);
-      d3.select(this).call(dex.config.configureLabel, config.xaxis.tick.label)
-      .attr("x", function(d)
-        { return x(d[0]) + x1(d[3]) + config.xaxis.tick.label.x; })
-      .attr("y", config.height + config.xaxis.tick.padding)
-      //.attr("y", function(d) { return y(d[1]); })
-      .text(function(d) { return "f"; });
-    });
-    */
-};
+      .attr("width", barWidth)
+      .attr("y", function(d) { return yaxis.scale()(d[1]); })
+      .attr("height", function(d)
+      {
+        console.log("config.yaxis.scale(" + d[1] + ")=" + config.yaxis.scale(d[1]));
+        console.dir(config.yaxis.scale(d[1]));
+        return config.height - config.yaxis.scale(d[1]);
+      });
+  };
 
   return chart;
 }

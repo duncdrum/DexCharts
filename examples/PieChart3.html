@@ -87,19 +87,18 @@ console.dir(stateData.slice(0,3));
 
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 1000)
-  .attr("height",1800)
-  .append("g")
-  .attr("transform", "translate(40,20)");
+  .attr("height",1800);
 
 for (var ci=0;ci<numCols;ci++)
 {
   // Configure a chart.
   var pie = new PieChart(
   {
-    'parent'       : svg,
-    'xoffset'      : (ci%4) * 220 + 80,
-    'yoffset'      : parseInt((ci/4)) * 250 + 100,
+    'parent'       : "#ChartArea",
+    'xoffset'      : (ci%4) * 220 + 120,
+    'yoffset'      : parseInt((ci/4)) * 250 + 150,
     'innerRadius'  : 50,
     'outerRadius'  : 100,
     'radius'       : 100,

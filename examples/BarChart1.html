@@ -34,30 +34,34 @@ body {
 <script src="../dex.js"></script>
 <script src="../js/dex/component/d3/BarChart.js"></script>
 <script>
-dex.console.log("HOWDY");
+
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 1000)
-  .attr("height", 800)
-  .append("g")
-  .attr("transform", "translate(40,20)");
+  .attr("height", 800);
 
 var csv =
 {
-  'header' : d3.range(3).map(function(d) { return "C"+d;}),
-  'data'   : dex.datagen.randomMatrix({"rows":100, "columns": 5, "min": 0, "max":100}),
+  'header' : [ "NAME", "SALES" ],
+  //'data'   : [["1", 400], ["2", 1000], [ "3", 500 ]]
+  'data'   : [["Bob", 400], ["Sue", 1000], [ "Pat", 500 ], [ "Jimmy", 700 ]]
 };
 
 // Configure a chart.
 var bar = new BarChart(
 {
-  'parent' : svg,
-  'height' : 200,
-  'width'  : 600,
-  'csv'    : csv
+  'parent'  : "#ChartArea",
+  'height'  : 200,
+  'width'   : 600,
+  'xoffset' : 50,
+  'yoffset' : 50,
+  'ymin'    : 0,
+  'xi'      : 0,
+  'yi'      : [1],
+  'csv'     : csv,
+  //'xaxis.scale' : d3.scale.ordinal().range(["Mike", "Bob", "Sue"])
 });
-
-dex.console.log("BAR", bar);
 
 bar.attr('xaxis.tick.label.x', 98);
 dex.console.log("CONFIG", bar.attr());

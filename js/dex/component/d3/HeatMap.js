@@ -51,11 +51,16 @@ function HeatMap(userConfig)
     console.dir(config);
   }
 
-  var chartContainer = config.parent.append("g")
+  var chartContainer = d3.select(config.parent).append("g")
     .attr("id", config["id"])
     .attr("class", config["class"])
     .attr("transform", "translate(" + config.xoffset + "," + config.yoffset + ")");
 
+  console.log("XAXIS");
+  console.dir(config.xaxis.scale);
+  console.log("YAXIS");
+  console.dir(config.yaxis.scale);
+  
   var x    = config.xaxis.scale.range([0, config.width]),
       y    = config.yaxis.scale.range([config.height, 0]);
       heat = config.heat.scale;

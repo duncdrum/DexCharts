@@ -26,12 +26,13 @@ svg {
 <script src="../js/dex/component/d3/HorizontalLegend.js"></script>
 <script>
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 960)
   .attr("height", 500);
 
 var hlegend = new HorizontalLegend(
   {
-    parent  : svg,
+    parent  : "#ChartArea",
     labels  : ["A", "B", "C"],
     xoffset : 100,
     yoffset : 50,

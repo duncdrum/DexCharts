@@ -127,6 +127,7 @@ var uiSvg = d3.select("#checkbox");
 
 var svg = d3.select("#parCoord")
   .append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 800)
   .attr("height",600)
   .append("g")
@@ -147,7 +148,7 @@ var csv =
 
 var cb = new CheckBox(
 {
-  'parent'         : uiSvg,
+  'parent'         : "#ChartArea",
   'selection'      : csv.header,
   'state.selected' : csv.header,
   'label.anchor' : 'start',
@@ -158,7 +159,7 @@ var cb = new CheckBox(
 
 var pcChart = new ParallelCoordinates(
 {
-  'parent'  : svg,
+  'parent'  : "#ChartArea",
   'id'      : "ParChart",
   'width'   : 800,
   'height'  : 500,

@@ -15,20 +15,21 @@ path:hover {
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://d3js.org/topojson.v0.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="../dex.js"></script>
 <script src="../js/dex/component/d3/map/USStateMap.js"></script>
 <script>
 
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 1000)
   .attr("height", 800)
   .append("g")
   .attr("transform", "translate(40,20)");
 
 // Configure a US State Map.
-var map = new USStateMap({'parent' : svg});
+var map = new USStateMap({'parent' : "#ChartArea"});
 
 // Render the map.
 map.render();

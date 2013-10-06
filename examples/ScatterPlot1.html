@@ -30,17 +30,12 @@ circle
 <script src="http://d3js.org/d3.v3.js"></script>
 <script src="../dex.js"></script>
 <script src="../js/dex/component/d3/ScatterPlot.js"></script>
+<svg id="ChartArea" height="600" class="chart" width="800"></svg>
 <script>
-
-var svg = d3.select('body')
-  .append('svg:svg')
-  .attr('width', 800)
-  .attr('height', 600)
-  .attr('class', 'chart');
 
 var plot = new ScatterPlot(
   {
-	  'parent'           : svg,
+	  'parent'           : "#ChartArea",
 	  'width'            : 400,
 	  'height'           : 400,
 	  'csv'              :

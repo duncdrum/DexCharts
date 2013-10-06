@@ -43,7 +43,7 @@ function HorizontalLegend(userConfig)
     .tickFormat(function(d) { return d; });
 
   // Append a graphics node to the supplied svg node.
-  var chartContainer = config.parent.append("g")
+  var chartContainer = d3.select(config.parent).append("g")
     .attr("class", config["class"])
     .attr("id", config["id"])
     .attr("transform", "translate(" + config.xoffset + "," + config.yoffset + ")");

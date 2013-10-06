@@ -11,9 +11,9 @@ dex.config = {};
  */
 dex.config.expand = function(config)
 {
-  var name;
-  var ci;
-  var expanded;
+  var name,
+      ci,
+      expanded;
 
   // We have nothing, return nothing.
   if (!config)
@@ -64,11 +64,11 @@ dex.config.font = function(custom)
 {
   var config = 
   {
-    'size' : 18,
-    'family' : 'sans-serif',
-    'style' : 'normal',
+    'size'    : 18,
+    'family'  : 'sans-serif',
+    'style'   : 'normal',
     'variant' : 'normal',
-    'weight' : 'normal'
+    'weight'  : 'normal'
   };
 
   return (custom) ? dex.object.overlay(custom, config) : config;
@@ -127,18 +127,32 @@ dex.config.tick = function(custom)
   return config;
 };
 
+dex.config.scale = function(custom)
+{
+  var config =
+  {
+    'scale' : d3.scale.linear(),
+    'type'  : 'linear'
+  };
+  if (custom)
+  {
+    config = dex.object.overlay(custom, config);
+  }
+  return config;
+}
+
 dex.config.xaxis = function(custom)
 {
 	var config =
   {
-    'scale' : d3.scale.linear(),
+    'scale'  : d3.scale.linear(),
     'orient' : "bottom",
     'tick'   : this.tick(),
     'label'  : this.label()
   };
   if (custom)
   {
-  	config = dex.object.overlay(custom, config);
+    config = dex.object.overlay(custom, config);
   }
   return config;
 };
@@ -205,7 +219,7 @@ dex.config.rectangle = function(custom)
 
 dex.config.configureRectangle = function(node, config, d)
 {
-  dex.console.log("THIS", this, "D", d);
+  //dex.console.log("THIS", this, "D", d);
 	return node
 	  .attr('width', config.width)
 	  .attr('height', config.height)
@@ -277,6 +291,7 @@ dex.config.configureCircle = function(node, config)
 
 dex.config.configureLabel = function(node, config, text)
 {
+  //console.dir(node);
 	var rnode = node
     .attr("x", config.x)
     .attr("y", config.y)
@@ -290,7 +305,8 @@ dex.config.configureLabel = function(node, config, text)
     
   if (text)
   {
-  	rnode.attr(text);
+  	//rnode.attr(text);
+  	rnode.text(text);
   }
     
   return rnode;
@@ -298,12 +314,18 @@ dex.config.configureLabel = function(node, config, text)
 
 dex.config.configureAxis = function(config)
 {
-	return d3.svg.axis()
+	var axis = d3.svg.axis()
     .ticks(config.tick.count)
     .tickSubdivide(config.tick.subdivide)
     .tickSize(config.tick.size.major, config.tick.size.minor,
       config.tick.size.end)
     .tickPadding(config.tick.padding)
     .tickFormat(config.tick.format)
-    .orient(config.orient);
+    .orient(config.orient)
+    .scale(config.scale);
+
+    //console.log("CONFIGURING AXIS WITH SCALE:");
+    //console.dir(config.scale);
+    //axis.scale = config.scale;
+    return axis;
 };

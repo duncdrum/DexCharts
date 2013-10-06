@@ -24,12 +24,13 @@ svg {
 <body>
 <script>
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 960)
   .attr("height", 500);
 
 var vlegend = new VerticalLegend(
   {
-  	parent : svg,
+  	parent : "#ChartArea",
   	labels : [ "A", "B", "C" ],
   	caption: "Vertical Legend"
   });

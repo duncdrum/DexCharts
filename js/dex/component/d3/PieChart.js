@@ -55,7 +55,7 @@ function PieChart(userConfig)
     .sort(null)
     .value(function(d) { return d[config.yi]; });
 
-  var chartContainer = config.parent.append("g")
+  var chartContainer = d3.select(config.parent).append("g")
     .attr("id", config["id"])
     .attr("class", config["class"])
     .attr("transform",

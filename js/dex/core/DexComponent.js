@@ -13,7 +13,7 @@ function DexComponent(userConfig, defaultConfig)
   }
   else
   {
-    this.config = dex.object.overlay(userConfig, defaultConfig);
+    this.config = dex.object.overlay(dex.config.expand(userConfig), dex.config.expand(defaultConfig));
   }
 
   //dex.console.log("HIERARCHY", this.config, userConfig, defaultConfig);
@@ -26,6 +26,7 @@ function DexComponent(userConfig, defaultConfig)
     }
     else if (arguments.length == 1)
     {
+      // REM: Need to getHierarchical
       return this.config[name];
     }
     else if (arguments.length == 2)

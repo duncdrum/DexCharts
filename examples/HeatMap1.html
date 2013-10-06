@@ -38,6 +38,7 @@ body {
 <script>
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 1000)
   .attr("height", 800)
   .append("g");
@@ -185,7 +186,7 @@ csv.data.map(function(row)
 // Configure a chart.
 var heatmap = new HeatMap(
   {
-    'parent'      : svg,
+    'parent'      : "#ChartArea",
     'height'      : 500,
     'width'       : 500,
     'csv'         : csv,
@@ -208,7 +209,7 @@ var domain = d3.range(extent[0][0], extent[1][0],
 
 var legend = new VerticalLegend(
 {
-  'parent'  : svg,
+  'parent'  : "#ChartArea",
   'xoffset' : 660,
   'labels'  : domain,
   'height'  : 480

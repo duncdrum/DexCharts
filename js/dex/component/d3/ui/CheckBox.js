@@ -51,7 +51,7 @@ function CheckBox(userConfig)
     console.dir(config);
   }
 
-  var chartContainer = config.parent.append("table")
+  var chartContainer = d3.select(config.parent).append("table")
     .attr("id", config["id"])
     .attr("class", config["class"])
     .attr("width", config.width)

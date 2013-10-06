@@ -47,7 +47,7 @@ function VerticalLegend(userConfig)
       .rangeBands([0, config.height]);
 
   // Append a graphics node to the supplied svg node.
-  var chartContainer = config.parent.append("g")
+  var chartContainer = d3.select(config.parent).append("g")
     .attr("id", config["id"])
     .attr("class", config["class"])
     .attr("transform",

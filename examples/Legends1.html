@@ -41,6 +41,7 @@ var header =
 	  "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" ]
 
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 960)
   .attr("height", 700);
 
@@ -48,7 +49,7 @@ var params = {}
 
 var vlegend1 = new VerticalLegend(
   {
-  	'parent'  : svg,
+  	'parent'  : "#ChartArea",
   	'labels'  : header,
   	'height'  : 600,
   	'caption' : "Vertical Legend",
@@ -67,7 +68,7 @@ vlegend1.render();
 
 var hlegend1 = new HorizontalLegend(
   {
-    parent  : svg,
+    parent  : "#ChartArea",
     labels  : ["A", "B", "C"],
     xoffset : 100,
     yoffset : 50,

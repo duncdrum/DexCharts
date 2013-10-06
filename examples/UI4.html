@@ -78,6 +78,7 @@ list-style-type: none;
 <script>
 
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 1000)
   .attr("height", 900)
   .append("g");
@@ -193,7 +194,7 @@ var selected = [];
 
 var dendrogram = new Dendrogram(
 {
-  'parent'       : svg,
+  'parent'       : "#ChartArea",
   'csv'          : { 'header' : [], 'data' : []},
   'xoffset'      : 100,
   'yoffset'      : 30,

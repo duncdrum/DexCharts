@@ -60,7 +60,7 @@
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://d3js.org/topojson.v0.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="../dex.js"></script>
 <script src="../js/dex/component/d3/VerticalLegend.js"></script>
 <script src="../js/dex/component/d3/ParallelCoordinates.js"></script>
@@ -71,10 +71,9 @@
 
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 1500)
-  .attr("height", 1000)
-  .append("g")
-  .attr("transform", "translate(40,20)");
+  .attr("height", 1000);
 
 var labels = [
 "State","Property","Sales","Alcohol",
@@ -148,7 +147,7 @@ var stateMap = dex.csv.createRowMap(csv, 0);
 // Configure a chart.
 var map = new USStateMap(
   {
-    'parent'  : svg,
+    'parent'  : "#ChartArea",
     'id'      : 'StateMap',
     'xoffset' : 150
   }
@@ -156,7 +155,7 @@ var map = new USStateMap(
 
 var pcChart = new ParallelCoordinates(
   {
-    'parent'      : svg,
+    'parent'      : "#ChartArea",
     'id'          : "ParChart",
     'class'       : "ParChart",
     'csv'         :

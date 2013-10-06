@@ -15,9 +15,7 @@ dex.range = function(start, len) {
 dex.config = {};
 
 dex.config.expand = function(config) {
-    var name;
-    var ci;
-    var expanded;
+    var name, ci, expanded;
     if (!config) {
         return config;
     }
@@ -89,6 +87,17 @@ dex.config.tick = function(custom) {
     return config;
 };
 
+dex.config.scale = function(custom) {
+    var config = {
+        scale: d3.scale.linear(),
+        type: "linear"
+    };
+    if (custom) {
+        config = dex.object.overlay(custom, config);
+    }
+    return config;
+};
+
 dex.config.xaxis = function(custom) {
     var config = {
         scale: d3.scale.linear(),
@@ -151,7 +160,6 @@ dex.config.rectangle = function(custom) {
 };
 
 dex.config.configureRectangle = function(node, config, d) {
-    dex.console.log("THIS", this, "D", d);
     return node.attr("width", config.width).attr("height", config.height).attr("x", config.x).attr("y", config.y).attr("opacity", config.opacity).style("fill", config.color).call(dex.config.configureStroke, config.stroke);
 };
 
@@ -197,13 +205,14 @@ dex.config.configureCircle = function(node, config) {
 dex.config.configureLabel = function(node, config, text) {
     var rnode = node.attr("x", config.x).attr("y", config.y).attr("transform", config.transform).attr("dy", config.dy).call(dex.config.configureFont, config.font).style("text-anchor", config.anchor).attr("fill", config.color).style("fill-opacity", config.opacity);
     if (text) {
-        rnode.attr(text);
+        rnode.text(text);
     }
     return rnode;
 };
 
 dex.config.configureAxis = function(config) {
-    return d3.svg.axis().ticks(config.tick.count).tickSubdivide(config.tick.subdivide).tickSize(config.tick.size.major, config.tick.size.minor, config.tick.size.end).tickPadding(config.tick.padding).tickFormat(config.tick.format).orient(config.orient);
+    var axis = d3.svg.axis().ticks(config.tick.count).tickSubdivide(config.tick.subdivide).tickSize(config.tick.size.major, config.tick.size.minor, config.tick.size.end).tickPadding(config.tick.padding).tickFormat(config.tick.format).orient(config.orient).scale(config.scale);
+    return axis;
 };
 
 dex.array = {};
@@ -615,10 +624,15 @@ dex.csv.group = function(csv, columns) {
             group = groups[key];
         } else {
             group = {
+                key: key,
+                values: [],
                 csv: dex.csv.csv(csv.header, [])
             };
             for (ci = 0; ci < values.length; ci++) {
-                group[csv.header[columns[ci]]] = values[ci];
+                group.values.push({
+                    name: csv.header[columns[ci]],
+                    value: values[ci]
+                });
             }
             groups[key] = group;
         }
@@ -915,6 +929,11 @@ dex.object.contains = function(container, obj) {
     return false;
 };
 
+dex.object.isFunction = function(functionToCheck) {
+    var getType = {};
+    return functionToCheck && getType.toString.call(functionToCheck) === "[object Function]";
+};
+
 dex.object.visit = function(obj, func) {
     var prop;
     func(obj);
@@ -972,7 +991,7 @@ function DexComponent(userConfig, defaultConfig) {
     if (userConfig.hasOwnProperty("config")) {
         this.config = dex.object.overlay(userConfig.config, defaultConfig);
     } else {
-        this.config = dex.object.overlay(userConfig, defaultConfig);
+        this.config = dex.object.overlay(dex.config.expand(userConfig), dex.config.expand(defaultConfig));
     }
     this.attr = function(name, value) {
         if (arguments.length == 0) {

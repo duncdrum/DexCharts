@@ -24,6 +24,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 <script>
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 1000)
   .attr("height", 800)
   .append("g");
@@ -59,7 +60,7 @@ configBox.render();
 
 var dendrogram = new Dendrogram(
 {
-  'parent'       : svg,
+  'parent'       : "#ChartArea",
   'csv'          : csv,
   'xoffset'      : 130,
   

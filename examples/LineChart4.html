@@ -61,10 +61,10 @@ for (var yi=0; yi<labels.length; yi++)
 	{
       'parent'      : "#ChartArea",
       'id'          : "LineChart" + (yi + 1),
-      'xoffset'     : ((yi%3) * 300) + 100,
-      'yoffset'     : parseInt(yi/3) * 250 + 50,
-      'height'      : 200,
-      'width'       : 200,
+      'xoffset'     : 100,
+      'yoffset'     : parseInt(yi) * 100 + 50,
+      'height'      : 100,
+      'width'       : 800,
       'csv' :
       {
         'header' : labels,

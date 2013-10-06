@@ -44,7 +44,7 @@ function ScatterPlot(userConfig)
       .domain([0, d3.max(csv.data, function(d) { return d[1]; })])
     	.range([ config.height, 0 ]);
     
-    var chartContainer = config.parent.append('g')
+    var chartContainer = d3.select(config.parent).append('g')
 	    .attr('transform', 'translate(' + config.xoffset + ',' + config.yoffset + ')')
 	    .attr('width', config.width)
 	    .attr('height', config.height)

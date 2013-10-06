@@ -80,6 +80,7 @@ path.link {
 <script>
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 1200)
   .attr("height",800)
   .append("g")
@@ -145,7 +146,7 @@ var csv2 =
 
 var pcChart = new ParallelCoordinates(
   {
-    'parent'  : svg,
+    'parent'  : "#ChartArea",
     'id'      : "ParChart",
     'width'   : 500,
     'height'  : 500,
@@ -157,12 +158,12 @@ var pcChart = new ParallelCoordinates(
 
 var dendrogram = new Dendrogram(
   {
-    'parent'       : svg,
+    'parent'       : "#ChartArea",
     'height'       : 500,
     'width'        : 600,
     'xoffset'      : 500,
     'yoffset'      : 0,
-    'rootName'     : '',
+    'rootName'     : 'PREZ',
     'rootCategory' : 'Category1',
     'empty' :
     {

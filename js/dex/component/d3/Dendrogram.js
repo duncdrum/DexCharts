@@ -1,8 +1,8 @@
 function Dendrogram(userConfig)
 {
-  var chart = new DexComponent(userConfig,
+  var defaults =
   {
-  	// The parent container of this chart.
+    // The parent container of this chart.
     'parent'           : null,
     // Set these when you need to CSS style components independently.
     'id'               : 'Dendrogram',
@@ -10,9 +10,9 @@ function Dendrogram(userConfig)
     // Our data...
     'csv'              :
     {
-    	// Give folks without data something to look at anyhow.
-    	'header'         : [ "X", "Y" ],
-    	'data'           : [[0,0],[1,1],[2,4],[3,9],[4,16]]
+      // Give folks without data something to look at anyhow.
+      'header'         : [ "X", "Y" ],
+      'data'           : [[0,0],[1,1],[2,4],[3,9],[4,16]]
     },
     // width and height of our bar chart.
     'width'            : 600,
@@ -52,7 +52,9 @@ function Dendrogram(userConfig)
       'fill'        : "none",
       'fillOpacity' : 1.0
     }
-  });
+  };
+
+  var chart = new DexComponent(userConfig, defaults);
 
   chart.render = function()
   {
@@ -67,7 +69,6 @@ function Dendrogram(userConfig)
     var csv = config.csv;
     var json; 
 
-  
     if (config.debug)
     {
       console.log("===== Dendrogram Configuration =====");
@@ -82,7 +83,7 @@ function Dendrogram(userConfig)
     var diagonal = d3.svg.diagonal()
       .projection(function(d) { return [d.y, d.x]; });
   
-    var chartContainer = config.parent.append("g")
+    var chartContainer = d3.select(config.parent).append("g")
       .attr("id", config["id"])
       .attr("class", config["class"])
       .attr("transform", "translate(" + config.xoffset + "," + config.yoffset + ")");
@@ -151,108 +152,108 @@ function Dendrogram(userConfig)
         })
         .attr("r", 1e-6);
   
-    // Add text nodes configured like we want them.
-    nodeEnter.append("text")
-      .each(function(d)
-      {
-        var nodeConfig = (d._children) ?
-          config.node.collapsed.label : config.node.expanded.label;
-        d3.select(this).call(dex.config.configureLabel, nodeConfig);
-      })
-      .text(function(d) { return (d.name) ? d.name : d.category;})
-      .style("fill-opacity", 1e-6);
-  
-      // Transition nodes to their new position.
-      var nodeUpdate = node.transition()
-        .duration(duration)
-        .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
-  
-      nodeUpdate.selectAll("circle")
-        .each(
-          function(d)
-          {
-            var nodeConfig = (d._children) ?
-              config.node.collapsed.circle : config.node.expanded.circle;
-            d3.select(this).call(dex.config.configureCircle, nodeConfig);
-          });
-  
-      nodeUpdate.select("text")
-        .each(
-          function(d)
-          {
-            var nodeConfig = (d._children) ?
-              config.node.collapsed.label : config.node.expanded.label;
-            d3.select(this).call(dex.config.configureLabel, nodeConfig);
-          })
-        .style("fill-opacity", 1);
-  
-      // Transition exiting nodes to the parent's new position.
-      var nodeExit = node.exit().transition()
-        .duration(duration)
-        .attr("transform", function(d) { return "translate(" + (source.y) + "," + (source.x) + ")"; })
-        .remove();
-  
-      nodeExit.select("circle")
-        .attr("r", 1e-6);
-  
-      nodeExit.select("text")
+      // Add text nodes configured like we want them.
+      nodeEnter.append("text")
+        .each(function(d)
+        {
+          var nodeConfig = (d._children) ?
+            config.node.collapsed.label : config.node.expanded.label;
+          d3.select(this).call(dex.config.configureLabel, nodeConfig);
+        })
+        .text(function(d) { return (d.name) ? d.name : d.category;})
         .style("fill-opacity", 1e-6);
+  
+        // Transition nodes to their new position.
+        var nodeUpdate = node.transition()
+          .duration(duration)
+          .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+    
+        nodeUpdate.selectAll("circle")
+          .each(
+            function(d)
+            {
+              var nodeConfig = (d._children) ?
+                config.node.collapsed.circle : config.node.expanded.circle;
+              d3.select(this).call(dex.config.configureCircle, nodeConfig);
+            });
+  
+        nodeUpdate.select("text")
+          .each(
+            function(d)
+            {
+              var nodeConfig = (d._children) ?
+                config.node.collapsed.label : config.node.expanded.label;
+              d3.select(this).call(dex.config.configureLabel, nodeConfig);
+            })
+          .style("fill-opacity", 1);
+  
+        // Transition exiting nodes to the parent's new position.
+        var nodeExit = node.exit().transition()
+          .duration(duration)
+          .attr("transform", function(d) { return "translate(" + (source.y) + "," + (source.x) + ")"; })
+          .remove();
+  
+        nodeExit.select("circle")
+          .attr("r", 1e-6);
+    
+        nodeExit.select("text")
+          .style("fill-opacity", 1e-6);
   
       // Update the links…
       var link = chartContainer.selectAll("path.link")
         .data(tree.links(nodes), function(d) { return d.target.id; });
   
-      // Enter any new links at the parent's previous position.
-      link.enter().insert("svg:path", "g")
-        .attr("class", "link")
-        .call(dex.config.configureStroke, config.link.stroke)
-        .style("fill", config.link.fill)
-        .style("fill-opacity", config.link.fillOpacity)
-        .attr("d", function(d)
+        // Enter any new links at the parent's previous position.
+        link.enter().insert("svg:path", "g")
+          .attr("class", "link")
+          .call(dex.config.configureStroke, config.link.stroke)
+          .style("fill", config.link.fill)
+          .style("fill-opacity", config.link.fillOpacity)
+          .attr("d", function(d)
+          {
+            var o = {x: source.x0, y: source.y0};
+            return diagonal({source: o, target: o});
+          })
+        .transition()
+          .duration(duration)
+          .attr("d", diagonal);
+  
+        // Transition links to their new position.
+        link.transition()
+          .duration(duration)
+          .attr("d", diagonal);
+    
+        // Transition exiting nodes to the parent's new position.
+        link.exit().transition()
+          .duration(duration)
+          .attr("d", function(d) {
+            var o = {x: source.x, y: source.y};
+            return diagonal({source: o, target: o});
+          })
+          .remove();
+  
+        // Stash the old positions for transition.
+        nodes.forEach(function(d)
         {
-          var o = {x: source.x0, y: source.y0};
-          return diagonal({source: o, target: o});
-        })
-      .transition()
-        .duration(duration)
-        .attr("d", diagonal);
-  
-      // Transition links to their new position.
-      link.transition()
-        .duration(duration)
-        .attr("d", diagonal);
-  
-      // Transition exiting nodes to the parent's new position.
-      link.exit().transition()
-        .duration(duration)
-        .attr("d", function(d) {
-          var o = {x: source.x, y: source.y};
-          return diagonal({source: o, target: o});
-        })
-        .remove();
-  
-      // Stash the old positions for transition.
-      nodes.forEach(function(d)
-      {
-        d.x0 = d.x;
-        d.y0 = d.y;
-      });
-    }
-  
-    // Toggle children.
-    function toggle(d)
-    {
-      if (d.children)
-      {
-        d._children = d.children;
-        d.children = null;
+          d.x0 = d.x;
+          d.y0 = d.y;
+        });
       }
-      else
+  
+      // Toggle children.
+      function toggle(d)
       {
-        d.children = d._children;
-        d._children = null;
+        if (d.children)
+        {
+          d._children = d.children;
+          d.children = null;
+        }
+        else
+        {
+          d.children = d._children;
+          d._children = null;
+        }
       }
-    }
   };
     
   return chart;

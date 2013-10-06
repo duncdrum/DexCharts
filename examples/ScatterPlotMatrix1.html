@@ -46,6 +46,7 @@ var csv = dex.csv.csv(labels, data);
 // Create our SVG
 var svg = d3.select('body')
   .append('svg:svg')
+  .attr("id", "ChartArea")
   .attr('width', 900)
   .attr('height', 800)
   .attr('class', 'chart');
@@ -57,7 +58,7 @@ for (var ri=0; ri<labels.length; ri++)
   {
     var plot = new ScatterPlot(
     {
-      'parent'           : svg,
+      'parent'           : "#ChartArea",
       'width'            : 150,
       'height'           : 150,
       'csv'              : csv,

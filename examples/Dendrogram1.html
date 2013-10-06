@@ -10,6 +10,7 @@
 <script>
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
   .attr("width", 1000)
   .attr("height", 800)
   .append("g");
@@ -28,7 +29,7 @@ var csv =
 // Configure a chart.
 var dendrogram = new Dendrogram(
 {
-  'parent'       : svg,
+  'parent'       : "#ChartArea",
   'csv'          : csv
 });
 
