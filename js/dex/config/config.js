@@ -77,30 +77,10 @@ dex.config.font = function(custom)
 dex.config.configureFont = function(node, config)
 {
   return node
-    .attr("font-family", config.family)
-    .attr("font-weight", config.weight)
-    .attr("font-style", config.style)
-    .style("font-size", config.size);
-};
-
-dex.config.label = function(custom)
-{
-  var config = 
-  {
-    'x' : 0,
-    'y' : 0,
-    'transform' : "",
-    'dy' : ".71em",
-    'font' : this.font(),
-    'text' : '',
-    'anchor' : 'end',
-    'color' : 'black'
-  };
-  if (custom)
-  {
-  	config = dex.object.overlay(custom, config);
-  }
-  return config;
+    .attr("font-family", dex.config.optionValue(config.family))
+    .attr("font-weight", dex.config.optionValue(config.weight))
+    .attr("font-style", dex.config.optionValue(config.style))
+    .style("font-size", dex.config.optionValue(config.size));
 };
 
 dex.config.tick = function(custom)
@@ -189,14 +169,47 @@ dex.config.stroke = function(custom)
   return config;
 };
 
+dex.config.optionValue = function(option)
+{
+  return function(d, i)
+  {
+     if (dex.object.isFunction(option))
+     {
+       return option(d, i);
+     }
+     else
+     {
+       return option;
+     }
+  };
+}
+
 dex.config.configureStroke = function(node, config)
 {
-  return node
-    .style('stroke-width', config.width)
-    .style('stroke', config.color)
-    .style('stroke-opacity', config.opacity)
-    .style('stroke-dasharray', config.dasharray);
+  dex.config.setStyle(node,'stroke-width', config.width);
+  dex.config.setStyle(node,'stroke', config.color);
+  dex.config.setStyle(node,'stroke-opacity', config.opacity);
+  dex.config.setStyle(node,'stroke-dasharray', config.dasharray);
+  
+  return node;
 };
+
+
+dex.config.configureFill = function(node, config)
+{
+  dex.config.setStyle(node,'fill', config.fill);
+  dex.config.setStyle(node,'fill-opacity', config.fillOpacity);
+  return node
+    .style('fill', dex.config.optionValue(config.fill))
+    .style('fill-opacity', dex.config.optionValue(config.fillOpacity));
+};
+
+dex.config.configureLink = function(node, config)
+{
+  dex.config.configureStroke(node, config.stroke);
+  dex.config.configureFill(node, config);
+  return node;
+}
 
 dex.config.rectangle = function(custom)
 {
@@ -206,6 +219,8 @@ dex.config.rectangle = function(custom)
     'height'  : 50,
     'x'       : 0,
     'y'       : 0,
+    'rx'      : 0,
+    'ry'      : 0,
     'stroke'  : dex.config.stroke(),
     'opacity' : 1,
     'color'   : d3.scale.category20()
@@ -217,18 +232,37 @@ dex.config.rectangle = function(custom)
  return config;
 };
 
-dex.config.configureRectangle = function(node, config, d)
+dex.config.configureRectangle = function(node, config)
 {
-  //dex.console.log("THIS", this, "D", d);
-	return node
-	  .attr('width', config.width)
-	  .attr('height', config.height)
-	  .attr('x', config.x)
-	  .attr('y', config.y)
-	  .attr('opacity', config.opacity)
-	  .style('fill', config.color)
-	  .call(dex.config.configureStroke, config.stroke);
+	  dex.config.setAttr(node, 'width', config.width);
+	  dex.config.setAttr(node, 'height', config.height);
+	  dex.config.setAttr(node, 'x', config.x);
+	  dex.config.setAttr(node, 'y', config.y);
+    dex.config.setAttr(node, 'rx', config.rx);
+    dex.config.setAttr(node, 'ry', config.ry);
+	  dex.config.setAttr(node, 'opacity', config.opacity);
+	  dex.config.setAttr(node, 'fill', config.color);
+
+	  return node.call(dex.config.configureStroke, config.stroke);
 };
+
+dex.config.setAttr = function(node, name, value)
+{
+  if (typeof value != 'undefined')
+  {
+    node.attr(name, dex.config.optionValue(value));
+  }
+  return node;
+}
+
+dex.config.setStyle = function(node, name, value)
+{
+  if (typeof value != 'undefined')
+  {
+    node.style(name, dex.config.optionValue(value));
+  }
+  return node;
+}
 
 dex.config.point = function(custom)
 {
@@ -289,27 +323,54 @@ dex.config.configureCircle = function(node, config)
     .attr('cy', config.center.y);
 };
 
+dex.config.label = function(custom)
+{
+  var config = 
+  {
+    'x' : 0,
+    'y' : 0,
+    'transform' : "",
+    'dy' : ".71em",
+    'font' : this.font(),
+    'text' : '',
+    'anchor' : 'end',
+    'color' : 'black',
+    'textLength' : null,
+    'lengthAdjust' : null,
+    'writingMode' : null,
+    'glyphOrientationVertical' : null
+  };
+  if (custom)
+  {
+    config = dex.object.overlay(custom, config);
+  }
+  return config;
+};
+
+
 dex.config.configureLabel = function(node, config, text)
 {
   //console.dir(node);
-	var rnode = node
-    .attr("x", config.x)
-    .attr("y", config.y)
-    .attr("transform", config.transform)
-    .attr("dy", config.dy)
-    .call(dex.config.configureFont, config.font)
-    //.text(config.text)
-    .style("text-anchor", config.anchor)
-    .attr("fill", config.color)
-    .style("fill-opacity", config.opacity);
-    
-  if (text)
+
+	dex.config.setAttr(node, "x", config.x);
+  dex.config.setAttr(node, "y", config.y);
+  dex.config.setAttr(node, "transform", config.transform);
+  dex.config.setAttr(node, "dy", config.dy);
+  node.call(dex.config.configureFont, config.font);
+  dex.config.setStyle(node, "text-anchor", config.anchor);
+  dex.config.setAttr(node, "fill", config.color);
+  dex.config.setStyle(node, "fill-opacity", config.opacity);
+  dex.config.setStyle(node, "textLength", config.textLength);
+  dex.config.setStyle(node, "lengthAdjust", config.lengthAdjust);
+  dex.config.setStyle(node, "writing-mode", config.writingMode);
+  dex.config.setStyle(node, "glyph-orientation-vertical", config.glyphOrientationVertical);
+  
+  if (typeof config.text != 'undefined')
   {
-  	//rnode.attr(text);
-  	rnode.text(text);
+    node.text(dex.config.optionValue(config.text));
   }
-    
-  return rnode;
+
+  return node;
 };
 
 dex.config.configureAxis = function(config)
