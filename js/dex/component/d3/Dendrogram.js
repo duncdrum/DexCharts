@@ -37,12 +37,12 @@ function Dendrogram(userConfig)
     {
      'expanded'  :
       {
-        'label'  : dex.config.label(),
+        'label'  : dex.config.label({'text' : function(d) { return (d.name) ? d.name : d.category;}}),
         'circle' : dex.config.circle()
       },
      'collapsed' :
       {
-        'label'  : dex.config.label(),
+        'label'  : dex.config.label({'text' : function(d) { return (d.name) ? d.name : d.category;}}),
         'circle' : dex.config.circle()
       }
     },
@@ -160,7 +160,7 @@ function Dendrogram(userConfig)
             config.node.collapsed.label : config.node.expanded.label;
           d3.select(this).call(dex.config.configureLabel, nodeConfig);
         })
-        .text(function(d) { return (d.name) ? d.name : d.category;})
+        //.text(function(d) { return (d.name) ? d.name : d.category;})
         .style("fill-opacity", 1e-6);
   
         // Transition nodes to their new position.
