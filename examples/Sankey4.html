@@ -41,7 +41,6 @@ var svg = d3.select("body").append("svg")
 var csv =
 {
   'header' : [ "FROM", "TO", "CATEGORY", "WEIGHT" ],
-  //'data'   : [["1", 400], ["2", 1000], [ "3", 500 ]]
   'data'   :
   [
     ["A", "B", "CATEGORY1", 2],
@@ -71,14 +70,16 @@ var sankey = new Sankey(
   //'link.stroke.dasharray' : "20 5",
   'relationships' :
   [
-    { 'source' : 0, 'target' : 1,
-      'value' : function(i)
+    {
+      'source' : 0,
+      'target' : 1,
+      'value' : function(csv, ri)
       {
-         return csv.data[i][3];
+         return csv.data[ri][3];
       },
-      'category' : function(i)
+      'category' : function(csv, ri)
       {
-        return csv.data[i][2];
+        return csv.data[ri][2];
       }
     }
   ]

@@ -15,7 +15,7 @@ path:hover {
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://d3js.org/topojson.v0.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="../dex.js"></script>
 <script src="../js/dex/component/d3/VerticalLegend.js"></script>
 <script src="../js/dex/component/d3/BarChart.js"></script>
@@ -116,12 +116,12 @@ var barChart = new BarChart(
     'csv' :
     {
       'header' : labels,
-      'data'   : []
+      'data'   : stateData
     },
     'xi' : 0,
     'yi' : d3.range(26).map(function(i) { return i+1;}),
     'yaxisLabelFontSize' : 18,
-    'yaxisLabel' : 'Taxes',
+    'yaxis.label.text' : 'Taxes',
     'yaxisFormat' : ",d",
     'xoffset' : 220,
     'yoffset' : 500

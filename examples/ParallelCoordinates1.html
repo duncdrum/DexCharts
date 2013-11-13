@@ -60,6 +60,8 @@ var svg = d3.select("body").append("svg")
   .append("g")
   .attr("transform", "translate(40,20)");
 
+var color = d3.scale.category10();
+
 // Configure a chart.
 var pcChart = new ParallelCoordinates(
   {
@@ -69,7 +71,10 @@ var pcChart = new ParallelCoordinates(
       'header' : ["A", "B", "C", "D"],
       'data'   : dex.datagen.randomMatrix(
         {"rows":10, "columns": 4, "min": 0, "max":100})
-    }
+    },
+    'normalize' : true,
+    'link.stroke.color' : function(d, i) { dex.console.log("I:", i); return color(i); },
+    'link.stroke.width' : 10,
   }
 );
 

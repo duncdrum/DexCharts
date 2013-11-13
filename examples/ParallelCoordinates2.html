@@ -60,16 +60,31 @@ var svg = d3.select("body").append("svg")
   .append("g")
   .attr("transform", "translate(40,20)");
 
+var csv =
+{
+  'header' : ["DEGREES", "RADIANS", "SIN(X)", "COS(X)", "TAN(X)"],
+  'data'   : []
+};
+
+for (x=-360; x<360; x+=1)
+{
+  var rad = x * Math.PI/180;
+  csv.data.push([ x, rad, Math.sin(rad), Math.cos(rad), Math.tan(rad)]);
+}
+
 // Configure a chart.
 var pcChart = new ParallelCoordinates(
   {
+    'width' : 1000,
+    'height' : 600,
+    //'selected.link.stroke.color' : "black",
+    'selected.link.stroke.width' : 2,
+    'unselected.link.stroke.color' : "grey",
+    'unselected.link.stroke.opacity': 0.05,
+    'unselected.link.stroke.dasharray' : '',
     'parent': "#ChartArea",
-    'csv' :
-    {
-      'header' : ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
-      'data'   : dex.datagen.randomMatrix({"rows":10,"columns":9,"min":0,"max":100})
-    },
-    'normalize'   : true,
+    'csv' : csv,
+    'normalize'   : false,
     'color'       : d3.scale.category20c(),
     'opacity'     : 50
   }
