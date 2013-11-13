@@ -1,35 +1,74 @@
 function ParallelCoordinates(userConfig)
 {
-  var chart = new DexComponent(userConfig,
+  var color = d3.scale.category20();
+
+  var defaults =
   {
     'id'                 : "ParallelCoordinates",
     'class'              : "ParallelCoordinates",
     'parent'             : null,
     'height'             : 400,
     'width'              : 600,
-    'opacity'            : 1,
-    'strokeWidth'        : 4,
-    'axisFontSize'       : 16,
-    'fontSize'           : 12,
-    'color'              : d3.scale.category20(),
-    'title'              : '',
+    //'color'              : d3.scale.category20(),
+    'title'              : 'Parallel Coordinates',
     'csv'                :
     {
       'header' : [ "X", "Y" ],
       'data'   : [[0,0],[1,1],[2,4],[3,9],[4,16]]
     },
     'rows'               : 0,
-    'columns'            : [],
     'xoffset'            : 0,
-    'yoffset'            : 0,
+    'yoffset'            : 50,
     'normalize'          : false,
-    'axisLabels'         :
+    'axis' : dex.config.yaxis(),
+    'verticalLabel' :
     {
-    	'stagger'          : false,
-    	'yoffset'          : -9,
-    	'staggeredYOffset' : -18
+      // If you want to stagger labels.
+      //'dy' : function(d, i) { return (i % 2) ? -10 : -30; },
+      'dy' : -10,
+      'font' : dex.config.font({'size' : 32 }),
+      'anchor' : 'middle',
+      'text' : function(d, i) { return d;}
+    },
+    'axisLabel' :
+    {
+      'font' : dex.config.font({'size' : 14, 'weight' : "bold" }),
+      'anchor' : 'left',
+    },
+    'selected.link' :
+    {
+      'stroke'      : dex.config.stroke(
+        {
+          'color' : function(d, i) { return color(i); },
+          'width' : 5
+        }),
+      'fill'        : "none",
+      'fillOpacity' : 1.0
+    },
+    'unselected.link' :
+    {
+      'stroke'      : dex.config.stroke(
+        {
+          'color' : function(d, i) { return color(i); },
+          'width' : 1,
+          'dasharray' : "10 10"
+        }),
+      'fill'        : "none",
+      'fillOpacity' : 0.1
+    },
+    'brush' :
+    {
+      'width'   : 16,
+      'x'       : -8,
+      'opacity' : 1,
+      'color'    : "green",
+      'stroke'  : dex.config.stroke({'color' : "black", 'width' : 2})
     }
-  });
+  };
+
+  var config = dex.object.overlay(dex.config.expand(userConfig), dex.config.expand(defaults));
+
+  var chart = new DexComponent(userConfig, defaults);
 
   chart.render = function()
   {
@@ -53,7 +92,10 @@ function ParallelCoordinates(userConfig)
     var y = {};
   
     var line = d3.svg.line();
-    var axis = d3.svg.axis().orient("left");
+
+    //var axis = d3.svg.axis().orient("left");
+    var axis = dex.config.configureAxis(config.axis);
+
     // Holds unselected paths.
     var background;
     // Holds selected paths.
@@ -118,18 +160,16 @@ function ParallelCoordinates(userConfig)
       .selectAll("path")
       .data(jsonData)
       .enter().append("path")
+      .call(dex.config.configureLink, config.unselected.link)
       .attr("d", path)
       .attr("id", "fillpath");
 
     foreground = chartContainer.append("g")
-      .attr("fill", "none")
-      .attr("stroke-opacity", config.opacity)
       .selectAll("path")
       .data(jsonData)
       .enter().append("path")
       .attr("d", path)
-      .attr("stroke", function(d, i) { return config.color(i); })
-      .attr("stroke-width", config.strokeWidth)
+      .call(dex.config.configureLink, config.selected.link)      
       .attr("title", function(d, i)
       {
         var info = "<table border=\"1\">";
@@ -142,21 +182,23 @@ function ParallelCoordinates(userConfig)
       .on("mouseover", function()
       {
         d3.select(this)
-          .style("stroke-width", config.strokeWidth + (config.strokeWidth/3))
-          .style("stroke-opacity", config.opacity);
+          .style("stroke-width", config.selected.link.stroke.width +  (config.selected.link.stroke.width/3))
+          .style("stroke-opacity", config.selected.link.stroke.opacity);
       })
       .on("mouseout", function()
       {
         d3.select(this)
-          .style("stroke-width", config.strokeWidth)
-          .style("stroke-opacity", config.opacity);
+          .style("stroke-width", config.selected.link.stroke.width)
+          .style("stroke-opacity", config.selected.link.stroke.opacity);
       });
 
     // Add a group element for each dimension.
     var g = chartContainer.selectAll(".dimension")
       .data(dimensions)
       .enter().append("g")
-      .attr("font-size", config.fontSize)
+      //.attr("font-size", config.fontSize)
+      // REM: Not quite a label...
+      .call(dex.config.configureLabel, config.axisLabel)
       .attr("class", "dimension")
       .attr("transform", function(d) { return "translate(" + x(d) + ")"; });
 
@@ -165,21 +207,7 @@ function ParallelCoordinates(userConfig)
       .attr("class", "axis")
       .each(function(d) { d3.select(this).call(axis.scale(y[d])); })
       .append("text")
-      .attr("text-anchor", "middle")
-      .attr("y", function(d,i)
-      {
-      	if (config.axisLabels.stagger)
-      	{
-      		if (i%2==1)
-      		{
-      		  return config.axisLabels.staggeredYOffset;
-      		}
-      	}
-
-      	return config.axisLabels.yoffset;
-      })
-      .attr("font-size", config.axisFontSize)
-      .text(String);
+      .call(dex.config.configureLabel, config.verticalLabel);
 
     // Add and store a brush for each axis.
     g.append("g")
@@ -192,9 +220,8 @@ function ParallelCoordinates(userConfig)
         	.on("brushend", brushend));
       })
       .selectAll("rect")
-      .attr("x", -8)
-      .attr("width", 16);
-
+      .call(dex.config.configureRectangle, config.brush);
+    
     // Returns the path for a given data point.
     function path(d)
     {
