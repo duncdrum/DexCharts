@@ -16,5 +16,5 @@ CORE=\
 	js/dex/core/DexComponent.js
 
 dex :
-	uglifyjs $(MODULES) $(CORE) -b -o dex.js
+	cat $(MODULES) $(CORE) > dex.js
 	uglifyjs $(MODULES) $(CORE) -o dex.min.js
