@@ -1,17 +1,22 @@
 dex.array = {};
 
-////
-//
-// dex.array : This module provides routines dealing with arrays.
-//
-////
+/**
+ *
+ *  @module dex.array
+ * 
+ * This module provides routines for dealing with arrays.
+ *  
+ */
 
 /**
  * 
  * Take a slice of an array.
  * 
  * @method dex.array.slice
- * @param
+ * @param (array) array
+ * @param (array) rowRange
+ * @param (integer) optLen
+ * 
  */
 dex.array.slice = function(array, rowRange, optLen)
 {
