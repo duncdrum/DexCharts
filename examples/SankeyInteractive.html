@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.css" />
+<style>
+
+.node rect {
+  cursor: move;
+  fill-opacity: .9;
+  shape-rendering: crispEdges;
+}
+ 
+.node text {
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff;
+}
+
+#Selectable .ui-selecting { background: #BBBBBB; }
+#Selectable .ui-selected { background: steelblue; color: white; }
+#Selectable ol {
+padding: 0px;
+list-style-type: none;
+}
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="../dex.js"></script>
+<script src="../js/dex/component/d3/Sankey.js"></script>
+<script src="../js/dex/component/jquery-ui/ConfigurationBox.js"></script>
+<script src="../js/dex/component/jquery-ui/Tabs.js"></script>
+<script src="../js/dex/component/jquery-ui/Selectable.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+<script>
+
+var width = 800;
+var height = 800;
+
+// Create an SVG for our chart.
+var svg = d3.select("body").append("svg")
+  .attr("id", "ChartArea")
+  .attr("width", width)
+  .attr("height", height);
+
+var csv = { 'header' : ["Party","Home State","President"],
+ 'data' : [["Independent","Virginia","George Washington"],
+["Federalist","Massachusetts","John Adams"],
+["Dem-Rep","Virginia","Thomas Jefferson"],
+["Dem-Rep","Virginia","James Madison"],
+["Dem-Rep","Virginia","James Monroe"],
+["Dem-Rep/Nat-Rep","Massachusetts","John Quincy Adams"],
+["Democratic","Tennessee","Andrew Jackson"],
+["Democratic","New York","Martin Van Buren"],
+["Whig","Ohio","William Henry Harrison"],
+["Whig","Virginia","John Tyler"],
+["Democratic","Tennessee","James K. Polk"],
+["Whig","Louisiana","Zachary Taylor"],
+["Whig","New York","Millard Fillmore"],
+["Democratic","New Hampshire","Franklin Pierce"],
+["Democratic","Pennsylvania","James Buchanan"],
+["Rep/Nat-Union","Illinois","Abraham Lincoln"],
+["Dem/Nat-Union","Tennessee","Andrew Johnson"],
+["Republican","Ohio","Ulysses S. Grant"],
+["Republican","Ohio","Rutherford B. Hayes"],
+["Republican","Ohio","James A. Garfield"],
+["Republican","New York","Chester A. Arthur"],
+["Democratic","New York","Grover Cleveland"],
+["Republican","Indiana","Benjamin Harrison"],
+["Democratic","New York","Grover Cleveland"],
+["Republican","Ohio","William McKinley"],
+["Republican","New York","Theodore Roosevelt"],
+["Republican","Ohio","William Howard Taft"],
+["Democratic","New Jersey","Woodrow Wilson"],
+["Republican","Ohio","Warren G. Harding"],
+["Republican","Massachusetts","Calvin Coolidge"],
+["Republican","Iowa","Herbert Hoover"],
+["Democratic","New York","Franklin D. Roosevelt"],
+["Democratic","Missouri","Harry S. Truman"],
+["Republican","Texas","Dwight D. Eisenhower"],
+["Democratic","Massachusetts","John F. Kennedy"],
+["Democratic","Texas","Lyndon B. Johnson"],
+["Republican","California","Richard Nixon"],
+["Republican","Michigan","Gerald Ford"],
+["Democratic","Georgia","Jimmy Carter"],
+["Republican","California","Ronald Reagan"],
+["Republican","Texas","George H. W. Bush"],
+["Democratic","Arkansas","Bill Clinton"],
+["Republican","Texas","George W. Bush"],
+["Democratic","Illinois","Barack Obama"]] };
+
+
+var palette = d3.scale.category10();
+var color = function(d) {
+  if (d.category == "Democratic")
+  {
+     return "blue";
+  }
+  else if (d.category == "Republican")
+  {
+     return "red";
+  }
+
+  return palette(d.category);
+};
+
+// Configure a chart.
+var sankey = new Sankey(
+{
+  'parent'  : "#ChartArea",
+  'color'   : d3.scale.category20c(),
+  'xoffset' : 0,
+  'csv'     : csv,
+  'width'   : width,
+  'height'  : height,
+  'link.stroke.color' : color,
+  'link.stroke.opacity' : .2,
+  'link.fillOpacity' : .2,
+  'mouseover.link.stroke.opacity' : .9,
+  'mouseover.link.stroke.color' : color,
+  'label.color' : "grey",
+  'label.font.size' : 16,
+  'label.font.weight' : "bold",
+  'label.font.style' : 'italic',
+  'relationships' :
+  [
+    { 'source' : 1, 'target' : 0,
+      'value' : function(i)
+      {
+         return 1;
+      },
+      'category' : function(i)
+      {
+        return csv.data[i][0];
+      }
+    },
+    { 'source' : 0, 'target' : 2,
+      'value' : function(i)
+      {
+         return 1;
+      },
+      'category' : function(i)
+      {
+        return csv.data[i][0];
+      }
+    }
+  ],
+  'node.padding' : 5,
+  'node.rectangle.stroke.color' : "black",
+  'node.rectangle.stroke.width' : "2",
+  'node.rectangle.stroke.dasharray' : "2 2"
+});
+
+var tabs = new Tabs();
+var configBox = new ConfigurationBox();
+var columnSelector = new Selectable(
+{
+  'label'     : "Columns",
+  'selection' : csv.header
+});
+
+tabs.add("Data", columnSelector);
+
+configBox.add(tabs);
+configBox.render();
+var selected = [];
+
+sankey.render();
+
+var clone = (function(){ 
+  return function (obj) { Clone.prototype=obj; return new Clone() };
+  function Clone(){}
+}());
+
+// LISTENERS:
+columnSelector.addListener("selected", sankey, function(chartEvent)
+{
+  var myCsv = clone(csv);
+
+  var i = selected.indexOf(chartEvent.id);
+  if (i>-1)
+  {
+    selected.splice(i, 1);
+  }
+
+  selected.push(chartEvent.id);
+  dex.console.log("SELECTED", selected, "CSV", csv, "MYCSV", myCsv);
+  d3.select(sankey.config.parent).remove();
+  sankey.attr('csv', dex.csv.columnSlice(myCsv, selected)).update();
+});
+
+</script>
