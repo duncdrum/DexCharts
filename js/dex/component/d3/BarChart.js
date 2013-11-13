@@ -20,14 +20,15 @@ function BarChart(userConfig)
     // The x an y indexes to chart.
     'xi'               : 0,
     'yi'               : [1],
-    'xoffset'          : 20,
-    'yoffset'          : 0,
+    'xoffset'          : 50,
+    'yoffset'          : 10,
     'color'            : d3.scale.category20(),
     'xmin'             : null,
     'ymin'             : null,
+    'rectangle'        : dex.config.rectangle()
   };
 
-  var config = dex.object.overlay(userConfig, defaults);
+  var config = dex.object.overlay(dex.config.expand(userConfig), dex.config.expand(defaults));
 
   //console.log("CDOMAIN: ");
   //console.dir(config.csv.data.map(function (r) { return r[0]; }));
@@ -40,15 +41,25 @@ function BarChart(userConfig)
       .rangeRoundBands([0, config.width], .1),
     'label' : {
                 'text' : "X",
-                'x'    : config.width/2 - config.xoffset,
+                'x'    : config.width/2,
                 'y'    : 10
               }
   });
 
   defaults.yaxis = dex.config.yaxis(
   {
-    'scale' : d3.scale.linear().range([config.height, 0])
+    'scale' : d3.scale.linear().range([config.height, 0]),
+    'label' : { 'text' : "Y", 'x' : (-config.height/2), 'y' : -50 }
   });
+
+  defaults.rectangle.x = function(d) { return defaults.xaxis.scale(d[0])};
+  defaults.rectangle.y = function(d) { return defaults.yaxis.scale(d[1])};
+  defaults.rectangle.width =
+    defaults.xaxis.scale(config.csv.data[1][config.xi]) - defaults.xaxis.scale(config.csv.data[0][config.xi]);
+  defaults.rectangle.height = function(d) {
+    return config.height - defaults.yaxis.scale(d[1]);
+  };
+  defaults.rectangle.color = function(d) { return config.color(d[3]);};
 
   var chart = new DexComponent(userConfig, defaults);
 
@@ -98,7 +109,7 @@ function BarChart(userConfig)
       .attr("transform", "translate(" + config.xoffset + "," + config.yoffset + ")");
   
     var data = config.csv.data;
-  
+
     // Translate all of the y data columns to numerics.
     data.forEach(function(d)
     {
@@ -120,14 +131,9 @@ function BarChart(userConfig)
     }
   
     // Establish the domain of the y axis.
-    console.dir(yextent);
     yaxis.scale().domain(yextent);
 
-    chartContainer.select(".xaxis").append("text")
-      .call(dex.config.configureLabel, config.xaxis.label);
-
     // X Axis
-    console.log(config.height)
     chartContainer.append("g")
         .attr("class", "xaxis")
         .attr("transform", "translate(0," + config.height + ")")
@@ -148,39 +154,20 @@ function BarChart(userConfig)
         .attr("class", "yaxis")
         .call(yaxis)
       .append("text")
-        .call(dex.config.configureLabel, config.yaxis.label)
-        .text(config.yaxis.label.text);
+        .call(dex.config.configureLabel, config.yaxis.label);
+
+    chartContainer.select(".yaxis").append("text")
+      .call(dex.config.configureLabel, config.yaxis.label);
 
     var barData = dex.matrix.combine(
           dex.matrix.slice(data, [config.xi]),
           dex.matrix.slice(data, config.yi)
        );
-
-    console.dir(data);
-    console.log("SCALE(" + data[1][config.xi] + ")=" + config.xaxis.scale(data[1][config.xi]));
-    console.dir(config.xaxis.scale);
-
-    var barWidth = xaxis.scale()(data[1][config.xi]) - xaxis.scale()(data[0][config.xi]);
-    dex.console.log("BAR WIDTH: " + barWidth);
     
     chartContainer.selectAll(".bar")
       .data(barData)
       .enter().append("rect")
-      .attr("class", "bar")
-      .attr("x", function(d) {
-          console.log("XBAR---");
-          console.dir(d[0]);
-          console.log(xaxis.scale()(d[0]));
-         return xaxis.scale()(d[0]) })//+ config.xaxis.scale(d[3]); })
-      .style("fill", function(d) { return config.color(d[3]);})
-      .attr("width", barWidth)
-      .attr("y", function(d) { return yaxis.scale()(d[1]); })
-      .attr("height", function(d)
-      {
-        console.log("config.yaxis.scale(" + d[1] + ")=" + config.yaxis.scale(d[1]));
-        console.dir(config.yaxis.scale(d[1]));
-        return config.height - config.yaxis.scale(d[1]);
-      });
+      .call(dex.config.configureRectangle, config.rectangle);
   };
 
   return chart;
