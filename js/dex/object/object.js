@@ -7,6 +7,21 @@ dex.object = {};
 //
 ////
 
+dex.object.keys = function(obj)
+{
+  var keys = [];
+
+  for(var key in obj)
+  {
+    if(obj.hasOwnProperty(key))
+    {
+      keys.push(key);
+    }
+  }
+
+  return keys;
+};
+
 dex.object.clone = function(obj)
 {
   var i, attr, len;
