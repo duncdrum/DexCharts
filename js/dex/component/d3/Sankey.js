@@ -1,12 +1,561 @@
-// SANKEY.JS
-//from Mike Bostock
+
+
+function Sankey(userConfig)
+{
+  var defaultColor = d3.scale.category10();
+
+  var defaults =
+  {
+    // The parent container of this chart.
+    'parent'           : null,
+    // Set these when you need to CSS style components independently.
+    'id'               : 'Sankey',
+    'class'            : 'Sankey',
+    // Our data...
+    'csv'              :
+    {
+      // Give folks without data something to look at anyhow.
+      'header'         : [ "X", "Y", "WEIGHT"],
+      'data'           : [["A1","A2", 1],["B1","B2", 2],["C1","C2", 2], ["C2", "C3", 4]]
+    },
+    'relationships'    : null,
+    // width and height of our bar chart.
+    'width'            : "100%",
+    'height'           : "100%",
+    // The x an y indexes to chart.
+    "transform"        : "",
+    'layoutIterations' : 32,
+    'columnTitle'      : dex.config.label(
+      {
+        'x' : function(d) {
+        var center = window.innerWidth / 2;
+        //var center = (typeof userConfig.width !== 'undefined' ?
+        //  userConfig.width : defaults.width) / 2;
+
+        var nodeWidth = (typeof userConfig.node !== 'undefined' &&
+          typeof userConfig.node.rectangle !== 'undefined' &&
+          typeof userConfig.node.rectangle.width !== 'undefined') ?
+          userConfig.node.rectangle.width : defaults.node.rectangle.width;
+
+        var nodePadding = (typeof userConfig.node !== 'undefined' &&
+          typeof userConfig.node.padding !== 'undefined') ?
+          userConfig.node.padding : defaults.node.padding;
+
+        //dex.console.log("d.x=" + d.x + ", width=" + window.innerWidth + ", nodeWidth=" + nodeWidth +
+        //  ", nodePadding=" + nodePadding + ", center=" + center);
+        if (+d > center)
+        {
+          //return +d-nodePadding-nodeWidth;
+          return +d + nodeWidth/2;
+        }
+        else
+        {
+          //return +d + nodeWidth + nodePadding;
+          return +d + nodeWidth/2;
+        }
+      },
+      "y" : 10,
+      "writingMode" : "tb",
+      "glyphOrientationVertical" : 0,
+      "anchor" : function(d, i) {
+        //var center = (typeof userConfig.width !== 'undefined' ?
+        // userConfig.width : defaults.width) / 2;
+        var center = window.innerWidth / 2;
+
+        if (+d > center)
+        {
+          // End if horizontal
+          return "start";
+        }
+        else
+        {
+          return "start";
+        }
+      },
+      "text" : function(d, i) { return d + ", i" + i; }
+      }
+    ),
+    'label'            : 
+    dex.config.label({
+      'x' : function(d) {
+        var center = window.innerWidth / 2;
+        //var center = (typeof userConfig.width !== 'undefined' ?
+        //  userConfig.width : defaults.width) / 2;
+
+        var nodeWidth = (typeof userConfig.node !== 'undefined' &&
+          typeof userConfig.node.rectangle !== 'undefined' &&
+          typeof userConfig.node.rectangle.width !== 'undefined') ?
+          userConfig.node.rectangle.width : defaults.node.rectangle.width;
+
+        var nodePadding = (typeof userConfig.node !== 'undefined' &&
+          typeof userConfig.node.padding !== 'undefined') ?
+          userConfig.node.padding : defaults.node.padding;
+
+        //dex.console.log("d.x=" + d.x + ", width=" + window.innerWidth + ", nodeWidth=" + nodeWidth +
+        //  ", nodePadding=" + nodePadding + ", center=" + center);
+        if (d.x > center)
+        {
+          return -nodePadding;
+        }
+        else
+        {
+          return nodeWidth + nodePadding;
+        }
+      },
+      'y' : function(d) { return d.dy / 2; },
+      'transform' : null,
+      'dy': '.35em',
+      'anchor' : function(d, i) {
+        //var center = (typeof userConfig.width !== 'undefined' ?
+        // userConfig.width : defaults.width) / 2;
+        var center = window.innerWidth / 2;
+
+        if (d.x > center)
+        {
+          return "end";
+        }
+        else
+        {
+          return "start";
+        }
+      },
+      'font' :
+      {
+        'size' : 14
+      },
+      'color' : "black",
+      'opacity' : 1,
+      'text' : function(d) { return d.name; }
+    }),
+    //'columnLayout' : function(node, nodeMap) { return nodeMap[node.name].column },
+    'link' :
+    {
+      'stroke'      : dex.config.stroke({
+        'opacity' : .2,
+        'color' : function(d) { return defaultColor(d.category); },
+        'width' : function(d) { return Math.max(1, d.dy); }}),
+      'fill'        : 'none',
+      'fillOpacity' : 0.4,
+      'curvature'   : 0.5
+    },
+    'mouseover' :
+    {
+      'link' :
+      {
+        'stroke'    : dex.config.stroke({
+          'opacity' : .8,
+          'width'   : function(d) { return Math.max(1, d.dy); },
+          'color'   : function(d) { return defaultColor(d.category); },
+          }),
+        'fill'        : 'none',
+        'fillOpacity' : .8
+      },
+      'node' :
+      {
+        'stroke'      : dex.config.stroke({
+          'opacity' : .8,
+          'width'   : function(d) { return Math.max(1, d.dy); },
+          'color'   : function(d) { return defaultColor(d.category);}}),
+        'fill'        : 'none',
+        'fillOpacity' : .8
+      }
+    },
+    'node' :
+    {
+      'padding'   : 4,
+      'rectangle' : dex.config.rectangle(
+        {
+          'width'  : 32,
+          'color'  : function(d) { return defaultColor(d.name.replace(/ .*/, "")); },
+          'height' : function(d) { return d.dy; },
+          'stroke' : dex.config.stroke({'color' : function(d) {return d3.rgb(d.color).darker(2); }})
+        })
+    },
+    "manualColumnLayout" : false
+  };
+
+  //dex.console.log("USER-CONFIG", userConfig, "DEFAULTS:", defaults);
+
+  var config = dex.object.overlay(dex.config.expand(userConfig), dex.config.expand(defaults));
+
+  if (!config.relationships)
+  {
+    // Last column does not represent weight
+    if (config.csv.header.length < 3 ||
+        !dex.csv.isColumnNumeric(config.csv, config.csv.header.length-1))
+    {
+      config.relationships = [];
+      
+      for (i=1; i<config.csv.header.length; i++)
+      {
+        config.relationships.push(
+        {
+          'source'   : i-1,
+          'target'   : i,
+          'value'    : function(csv, ri) { return 1; },
+          'category' : function(csv, ri) { return 1; },
+          'column'   : function(csv, ri, ci) { return i; }
+        });
+      }
+    }
+    // Assume last numeric column represents weight.
+    else
+    {
+      config.relationships = [];
+      
+      for (i=1; i<config.csv.header.length-1; i++)
+      {
+        config.relationships.push(
+        {
+          'source'   : i-1,
+          'target'   : i,
+          'value'    : function(csv, ri) { return csv.data[ri][csv.header.length-1]; },
+          'category' : function(csv, ri) { return 1; },
+          'column'   : function(csv, ri, ci) { return i; }
+        });
+      }
+    }
+  }
+
+  var chart = new DexComponent(userConfig, config);
+
+  chart.renderGui = function()
+  {
+    dex.console.log("SETTINGS", d3.select("#settings").select("#" + chart.config.id).selectAll("#setting"));
+    d3.select("#settings").select("#" + chart.config.id).selectAll("#setting").each(function(d)
+    {
+      dex.console.log("SETTING", d);
+    });
+  };
+
+  chart.render = function()
+  {
+    window.onresize = this.resize;
+    this.update();
+  };
+
+  chart.resize = function()
+  {
+    //var width  = d3.select(config.parent).property("clientWidth");
+    //var height = d3.select(config.parent).property("clientHeight");
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    //dex.console.log(config.id + " RESIZING: " + width + "x" + height);
+    d3.selectAll("#" + config.id).remove();
+
+    chart.attr("width", width).attr("height", height).update();
+  };
+
+  chart.update = function()
+  {
+    var config = chart.config;
+    //dex.console.log("UPDATING CHART....");
+    //dex.console.log("-- WIDTH : " + config.width);
+    //dex.console.log("-- HEIGHT: " + config.height);
+    var width  = d3.select(config.parent).property("clientWidth");
+    var height = d3.select(config.parent).property("clientHeight");
+
+    var svg = d3.select(config.parent).append("svg")
+      .attr("id", config.id)
+      .attr("width", config.width)
+      .attr("height", config.height)
+      .append("g")
+      .attr("transform", config.transform);
+
+    var sankeyData = [];
+
+    var nodeMap = {};
+
+    for (ri=0; ri<config.relationships.length; ri++)
+    {
+      for (i=0; i<config.csv.data.length; i++)
+      {
+        var relation = [];
+        var source;
+        var target;
+
+        if (dex.object.isFunction(config.relationships[ri].source))
+        {
+          source = config.relationships[ri].source(config.csv, i);
+        }
+        else
+        {
+          source =
+          {
+            'nodeName' : config.csv.data[i][config.relationships[ri].source],
+            'name'     : config.csv.data[i][config.relationships[ri].source],
+            'column'   : (config.relationships[ri].column) ?
+              config.relationships[ri].column(csv, i, config.relationships[ri].source) :
+              config.relationships[ri].source
+          };
+        }
+
+        if (dex.object.isFunction(config.relationships[ri].target))
+        {
+          target = config.relationships[ri].target(config.csv, i);
+        }
+        else
+        {
+          target =
+          {
+            'nodeName' : config.csv.data[i][config.relationships[ri].target],
+            'name'     : config.csv.data[i][config.relationships[ri].target],
+            'column'   : (config.relationships[ri].column) ?
+              config.relationships[ri].column(csv, i, config.relationships[ri].target) :
+              config.relationships[ri].target
+          }
+        }
+
+        relation.source = source.nodeName;
+        relation.target = target.nodeName;
+
+        // Store this to translate nodenames back to display names.
+        nodeMap[source.nodeName] = source;
+        nodeMap[target.nodeName] = target;
+
+        // Wrap source and target info:
+        //dex.console.log("RELATION", config.relationships[ri]);
+        if (typeof config.relationships[ri].category === "undefined")
+        {
+          //relation.category = csv.data[i][config.relationships[ri].source];
+          relation.category = 1;
+        }
+        else if (dex.object.isFunction(config.relationships[ri].category))
+        {
+          relation.category = config.relationships[ri].category(config.csv, i);
+        }
+        else
+        {
+          relation.category = config.relationships[ri].category;
+        }
+
+        relation.linkid = "L" + i;
+
+        if (typeof config.relationships[ri].value === "undefined")
+        {
+          relation.value = 1;
+        }
+        else if (dex.object.isFunction(config.relationships[ri].value))
+        {
+          relation.value = config.relationships[ri].value(config.csv, i);
+        }
+        else
+        {
+          relation.value = config.relationships[ri].value;
+        }
+
+        sankeyData.push(relation);
+      }
+    }
+    //dex.console.log("sankeyData", sankeyData);
+    var units = "Units";
+ 
+    var formatNumber = d3.format(",.0f"),    // zero decimal places
+        format = function(d) { return formatNumber(d) + " " + units; };
+
+    svg.onresize = chart.resize;
+ 
+    function manualColumnLayout(nodes, nodeWidth, size)
+    {
+      var numSinks = 1;
+
+      nodes.forEach(function(node)
+      {
+        //node.x = (nodeMap[node.name].column) * nodeWidth;
+        node.x = (nodeMap[node.name].column-1) * nodeWidth;
+        numSinks = Math.max(numSinks, node.x);
+        node.dx = nodeWidth;
+      });
+
+      var nodeBreadth = (size[0] - nodeWidth) / (numSinks-1);
+        nodes.forEach(function(node) { node.x *= nodeBreadth; });
+    }
+ 
+    // Set the sankey diagram properties
+    var sankey = d3.sankey()
+      .nodeWidth(config.node.rectangle.width)
+      .nodePadding(config.node.padding)
+      .size([width - config.node.padding, height - config.node.padding]);
+ 
+    if (config.manualColumnLayout)
+    {
+      sankey.columnLayout(manualColumnLayout);
+    }
+ 
+    var path = sankey.link();
+
+    //set up graph in same style as original example but empty
+    graph = {"nodes" : [], "links" : []};
+    
+    sankeyData.forEach(function (d, i)
+    {
+      graph.nodes.push({ "name": d.source });
+      graph.nodes.push({ "name": d.target });
+      graph.links.push({ "source": d.source, "target": d.target, "value": +d.value,
+      "category" : d.category, "linkid": d.linkid });
+    });
+
+    //dex.console.log("GRAPH NODES 1", graph.nodes);
+
+    //thanks Mike Bostock https://groups.google.com/d/msg/d3-js/pl297cFtIQk/Eso4q_eBu1IJ
+    //this handy little function returns only the distinct / unique nodes
+   graph.nodes = d3.keys(d3.nest()
+      .key(function (d) { return d.name; })
+      .map(graph.nodes));
+
+    //dex.console.log("GRAPH NODES 2", graph.nodes);
+
+    // it appears d3 with force layout wants a numeric source and target
+    // so loop through each link replacing the text with its index from node
+    graph.links.forEach(function (d, i) {
+      graph.links[i].source = graph.nodes.indexOf(graph.links[i].source);
+      graph.links[i].target = graph.nodes.indexOf(graph.links[i].target);
+    });
+
+    //now loop through each nodes to make nodes an array of objects rather than an array of strings
+    graph.nodes.forEach(function (d, i) {
+      graph.nodes[i] = { "name": d };
+    });
+
+    sankey
+      .nodes(graph.nodes)
+      .links(graph.links)
+      .curvature(config.link.curvature)
+      .layout(config.layoutIterations);
+
+    // add in the links
+    var link = svg.append("g").selectAll(".link")
+      .data(graph.links)
+      .enter().append("path")
+      .attr("class", "link")
+      .attr("id", function(d) { return d.linkid; })
+      .attr("d", path)
+      .call(dex.config.configureLink, config.link)
+      .sort(function(a, b) { return b.dy - a.dy; })
+      .on("mouseover", function(d) {
+        d3.selectAll("#" + d.linkid)//.style("stroke-opacity", 1)
+        .call(dex.config.configureLink, config.mouseover.link);
+      })
+      .on("mouseout", function(d) {
+        d3.selectAll("#" + d.linkid)//.style("stroke-opacity", config.link.stroke.opacity);
+        .call(dex.config.configureLink, config.link);
+      });
+
+    // add the link titles
+    link.append("title")
+      .text(function(d) {
+        return nodeMap[d.source.name].name + " -> " + 
+        nodeMap[d.target.name].name + "\n" + format(d.value);
+        });
+
+    // add in the nodes
+    var node = svg.append("g").selectAll(".node")
+        .data(graph.nodes)
+      .enter().append("g")
+        .attr("class", "node")
+        .attr("transform", function(d) { 
+        return "translate(" + d.x + "," + d.y + ")"; })
+      .call(d3.behavior.drag()
+        .origin(function(d) { return d; })
+        .on("dragstart", function() { 
+        this.parentNode.appendChild(this); })
+        .on("drag", dragmove));
+   
+    // add the rectangles for the nodes
+    node.append("rect")
+      .call(dex.config.configureRectangle, config.node.rectangle)      
+      .on("mouseover", function(d) {
+        var links = (d.sourceLinks.length > 0) ?
+          d.sourceLinks : d.targetLinks;
+        
+        links.forEach(function (link)
+        {
+          d3.selectAll("#" + link.linkid)
+          .call(dex.config.configureLink, config.mouseover.node);
+        });
+      })
+     .on("mouseout", function(d) {
+
+        var links = (d.sourceLinks.length > 0) ?
+          d.sourceLinks : d.targetLinks;
+        links.forEach(function (link)
+        {
+          d3.selectAll("#" + link.linkid)
+          .call(dex.config.configureLink, config.link);
+        });
+      })
+      .append("title")
+        .text(function(d) { 
+        return nodeMap[d.name].name + "\n" + format(d.value); });
+ 
+    config.label.text = function(d) { return nodeMap[d.name].name; };
+ 
+    /////////// A HACK TO ADD TITLE LABELS
+    var locations = {};
+    var rects = d3.selectAll("rect").each(function(rect)
+    {
+      locations[rect.x] = true;
+    });
+ 
+    var orderedLocations = dex.object.keys(locations).sort(function(a,b) { return a - b; });
+
+    //var locationWidth = (orderedLocations[1] - orderedLocations[0]) / 2;
+
+    //orderedLocations = orderedLocations.map(function(d) { return +d + locationWidth});
+
+    var titles = svg.append("g").selectAll("text")
+      .data(orderedLocations)
+      .enter()
+      .append("text")
+      .call(dex.config.configureLabel, config.columnTitle)
+      .text(function(d, i) { return csv.header[i]; });
+
+   //////////// END OF HACK
+   
+    // add in the title for the nodes
+    node.append("text")
+      .call(dex.config.configureLabel, config.label);
+
+    // the function for moving the nodes
+    function dragmove(d)
+    {
+      d3.select(this).attr("transform", 
+          "translate(" + (
+               d.x = Math.max(0, Math.min(width - d.dx, d3.event.x))
+            ) + "," + (
+                     d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))
+              ) + ")");
+      sankey.relayout();
+      link.attr("d", path);
+    }
+  };
+
+  return chart;
+}
+
+// SANKEY.JS : from Mike Bostock
 d3.sankey = function() {
   var sankey = {},
       nodeWidth = 24,
       nodePadding = 8,
+      columnLayout = defaultColumnLayout,
+      curvature = .5,
       size = [1, 1],
       nodes = [],
       links = [];
+
+  sankey.columnLayout = function(_) {
+    if (!arguments.length) return columnLayout;
+    columnLayout = _;
+    return sankey;
+  };
+
+  sankey.curvature = function(_) {
+    if (!arguments.length) return curvature;
+    curvature = +_;
+    return sankey;
+  };
 
   sankey.nodeWidth = function(_) {
     if (!arguments.length) return nodeWidth;
@@ -41,7 +590,7 @@ d3.sankey = function() {
   sankey.layout = function(iterations) {
     computeNodeLinks();
     computeNodeValues();
-    computeNodeBreadths();
+    computeNodeBreadths(nodes);
     computeNodeDepths(iterations);
     computeLinkDepths();
     return sankey;
@@ -53,7 +602,7 @@ d3.sankey = function() {
   };
 
   sankey.link = function() {
-    var curvature = .5;
+//    var curvature = .5;
 
     function link(d) {
       var x0 = d.source.x + d.source.dx,
@@ -109,12 +658,18 @@ d3.sankey = function() {
   // Nodes are assigned the maximum breadth of incoming neighbors plus one;
   // nodes with no incoming links are assigned breadth zero, while
   // nodes with no outgoing links are assigned the maximum breadth.
-  function computeNodeBreadths() {
+  function computeNodeBreadths()
+  {
+    columnLayout(nodes, nodeWidth, size);
+  }
+
+  function defaultColumnLayout(nodes, nodeWidth, size)
+  {
     var remainingNodes = nodes,
         visited = {},
         x = 0;
 
-    dex.console.log("NODE", nodes[0]);
+    //dex.console.log("NODE", nodes[0]);
     while (remainingNodes.length) {
       nextNodes = [];
       visited[remainingNodes[0].name] = true;
@@ -136,7 +691,6 @@ d3.sankey = function() {
       ++x;
     }
 
-    //
     moveSinksRight(x);
     scaleNodeBreadths((size[0] - nodeWidth) / (x - 1));
   }
@@ -301,263 +855,3 @@ d3.sankey = function() {
 
   return sankey;
 };
-
-function Sankey(userConfig)
-{
-  var defaults =
-  {
-    // The parent container of this chart.
-    'parent'           : null,
-    // Set these when you need to CSS style components independently.
-    'id'               : 'Sankey',
-    'class'            : 'Sankey',
-    // Our data...
-    'csv'              :
-    {
-      // Give folks without data something to look at anyhow.
-      'header'         : [ "X", "Y", "WEIGHT"],
-      'data'           : [["DA1","DA2", 1],["B1","B2", 2],["C1","C2", 2], ["C2", "C3", 4]]
-    },
-    'relationships'    : null,
-    // width and height of our bar chart.
-    'width'            : 600,
-    'height'           : 400,
-    // The x an y indexes to chart.
-    'xoffset'          : 20,
-    'yoffset'          : 0,
-    'color'            : d3.scale.category20(),
-    'link' :
-    {
-      'stroke'      : dex.config.stroke({'opacity' : .2}),
-      'fill'        : 'none',
-      'fillOpacity' : .2
-    },
-    'node' :
-    {
-      'width'   : 32,
-      'padding' : 10
-    }
-  };
-        
-  dex.console.log("USER-CONFIG", userConfig, "DEFAULTS:", defaults);
-
-  defaults.link.stroke.width = function(d) { return Math.max(1, d.dy); }
-
-  var config = dex.object.overlay(dex.config.expand(userConfig), dex.config.expand(defaults));
-
-  if (!config.relationships)
-  {
-    if (config.csv.header.length < 3 ||
-        !dex.csv.isColumnNumeric(config.csv, config.csv.header.length-1))
-    {
-      config.relationships =
-      [
-        // Default relationship: Equal weighting of 1.
-        { 'source' : 0, 'target' : 1,
-          'value' : function (i) { return 1; },
-          'category' : function(i) { return 1}}
-      ];
-    }
-    else
-    {
-      config.relationships = [];
-      
-      for (i=1; i<config.csv.header.length-1; i++)
-      {
-        config.relationships.push(
-        {
-          'source'   : i-1,
-          'target'   : i,
-          'value'    : function(i) { return config.csv.data[i][config.csv.header.length-1]; },
-          'category' : function(i) { return 1; }
-        });
-      }
-    }
-  }
-
-  var chart = new DexComponent(userConfig, config);
-  chart.render = function()
-  {
-    this.update();
-  };
-
-  chart.update = function()
-  {
-    var sankeyData =
-    [
-      {
-        'source'   : "A1",
-        'target'   : "A2",
-        'value'    : 1,
-        'category' : 1
-      },
-      {
-        'source'   : "B1",
-        'target'   : "B2",
-        'value'    : 2,
-        'category' : 2
-      },
-    ];
-
-    sankeyData = [];
-
-
-    for (ri=0; ri<config.relationships.length; ri++)
-    {
-      for (i=0; i<config.csv.data.length; i++)
-      {
-        var relation = [];
-        dex.console.log("SOURCE", config.relationships[ri].source);
-        if (dex.object.isFunction(config.relationships[ri].source))
-        {
-          relation.source   = config.relationships[ri].source(i);
-        }
-        else
-        {
-          relation.source   = config.csv.data[i][config.relationships[ri].source];
-        }
-        if (dex.object.isFunction(config.relationships[ri].target))
-        {
-          relation.target   = config.relationships[ri].target(i);
-        }
-        else
-        {
-          relation.target   = config.csv.data[i][config.relationships[ri].target];
-        }
-        relation.category = config.relationships[ri].category(i);
-
-        relation.value = config.relationships[ri].value(i);
-        sankeyData.push(relation);
-      }
-    }
-    var units = "Units";
- 
-    var formatNumber = d3.format(",.0f"),    // zero decimal places
-        format = function(d) { return formatNumber(d) + " " + units; };
- 
-    // append the svg canvas to the page
-    var svg = d3.select("#ChartArea").append("svg")
-      .attr("width", config.width)
-      .attr("height", config.height)
-      .append("g")
-      .attr("transform", 
-        "translate(" + config.xoffset + "," + config.yoffset + ")");
- 
-    // Set the sankey diagram properties
-    var sankey = d3.sankey()
-      .nodeWidth(config.node.width)
-      .nodePadding(config.node.padding)
-      .size([config.width - config.node.padding, config.height - config.node.padding]);
- 
-    var path = sankey.link();
-
-    //set up graph in same style as original example but empty
-    graph = {"nodes" : [], "links" : []};
-    
-    sankeyData.forEach(function (d)
-    {
-      graph.nodes.push({ "name": d.source });
-      graph.nodes.push({ "name": d.target });
-      graph.links.push({ "source": d.source, "target": d.target, "value": +d.value,
-      "category" : d.category });
-    });
-
-    //thanks Mike Bostock https://groups.google.com/d/msg/d3-js/pl297cFtIQk/Eso4q_eBu1IJ
-    //this handy little function returns only the distinct / unique nodes
-    graph.nodes = d3.keys(d3.nest()
-      .key(function (d) { return d.name; })
-      .map(graph.nodes));
-    
-    // it appears d3 with force layout wants a numeric source and target
-    // so loop through each link replacing the text with its index from node
-    graph.links.forEach(function (d, i) {
-      graph.links[i].source = graph.nodes.indexOf(graph.links[i].source);
-      graph.links[i].target = graph.nodes.indexOf(graph.links[i].target);
-    });
-
-    //now loop through each nodes to make nodes an array of objects rather than an array of strings
-    graph.nodes.forEach(function (d, i) {
-      graph.nodes[i] = { "name": d };
-    });
- 
-    sankey
-      .nodes(graph.nodes)
-      .links(graph.links)
-      .layout(32);
-
-    // add in the links
-    var link = svg.append("g").selectAll(".link")
-      .data(graph.links)
-      .enter().append("path")
-      .attr("class", "link")
-      .call(dex.config.configureStroke, config.link.stroke)
-//          .style("fill", config.link.fill)
-//          .style("fill-opacity", config.link.fillOpacity)
-      .attr("d", path)
-      // Width of connection
-      .style('fill', config.link.fill)
-      .style('fill-opacity', config.link.fillOpacity)
-
-      .sort(function(a, b) { return b.dy - a.dy; });
-
-    // add the link titles
-    link.append("title")
-      .text(function(d) {
-        return d.source.name + " -> " + 
-        d.target.name + "\n" + format(d.value);
-        });
-
-    // add in the nodes
-    var node = svg.append("g").selectAll(".node")
-        .data(graph.nodes)
-      .enter().append("g")
-        .attr("class", "node")
-        .attr("transform", function(d) { 
-        return "translate(" + d.x + "," + d.y + ")"; })
-      .call(d3.behavior.drag()
-        .origin(function(d) { return d; })
-        .on("dragstart", function() { 
-        this.parentNode.appendChild(this); })
-        .on("drag", dragmove));
-   
-    // add the rectangles for the nodes
-    node.append("rect")
-        .attr("height", function(d) { return d.dy; })
-        .attr("width", sankey.nodeWidth())
-        .style("fill", function(d) { 
-        return d.color = config.color(d.name.replace(/ .*/, "")); })
-        .style("stroke", function(d) { 
-        return d3.rgb(d.color).darker(2); })
-      .append("title")
-        .text(function(d) { 
-        return d.name + "\n" + format(d.value); });
-   
-    // add in the title for the nodes
-    node.append("text")
-        .attr("x", -6)
-        .attr("y", function(d) { return d.dy / 2; })
-        .attr("dy", ".35em")
-        .attr("text-anchor", "end")
-        .attr("transform", null)
-        .text(function(d) { return d.name; })
-        .filter(function(d) { return d.x < config.width / 2; })
-        .attr("x", 6 + sankey.nodeWidth())
-        //.call(dex.config.configureLabel, config.node.label)
-        .attr("text-anchor", "start");
-
-    // the function for moving the nodes
-    function dragmove(d)
-    {
-      d3.select(this).attr("transform", 
-          "translate(" + (
-               d.x = Math.max(0, Math.min(config.width - d.dx, d3.event.x))
-            ) + "," + (
-                     d.y = Math.max(0, Math.min(config.height - d.dy, d3.event.y))
-              ) + ")");
-      sankey.relayout();
-      link.attr("d", path);
-    }
-  };
-
-  return chart;
-}
