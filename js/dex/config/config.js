@@ -364,7 +364,7 @@ dex.config.configureLabel = function(node, config, text)
   dex.config.setStyle(node, "lengthAdjust", config.lengthAdjust);
   dex.config.setStyle(node, "writing-mode", config.writingMode);
   dex.config.setStyle(node, "glyph-orientation-vertical", config.glyphOrientationVertical);
-  
+
   if (typeof config.text != 'undefined')
   {
     node.text(dex.config.optionValue(config.text));
@@ -380,13 +380,20 @@ dex.config.configureAxis = function(config)
     .tickSubdivide(config.tick.subdivide)
     .tickSize(config.tick.size.major, config.tick.size.minor,
       config.tick.size.end)
-    .tickPadding(config.tick.padding)
-    .tickFormat(config.tick.format)
-    .orient(config.orient)
-    .scale(config.scale);
+    .tickPadding(config.tick.padding);
 
-    //console.log("CONFIGURING AXIS WITH SCALE:");
-    //console.dir(config.scale);
+  // REM: Horrible way of doing this.  Need a function which
+  // is more generic and smarter to short circuit stuff like
+  // this.  But...for now it does what I want.
+  if (!dex.object.isFunction(config.tick.format))
+  {
+    axis.tickFormat(config.tick.format);
+  }
+
+  axis
+  .orient(config.orient)
+  .scale(config.scale);
+
     //axis.scale = config.scale;
     return axis;
 };
