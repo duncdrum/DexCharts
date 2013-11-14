@@ -183,3 +183,30 @@ map.addListener("selectState", pcChart, function(chartEvent)
 
 # Configuration
 
+Most configuration options can be configured with literals or dynamic functions.  Most of the visuals include reusable configurable types such as:
+
+* Basic Shapes such as lines, circles and rectangles.
+* Strokes
+* Labels, fonts, etc...
+
+## Fonts
+
+| Option  | Default    | Description |
+| ------- |:-----------| -----:|
+| family  | sans-serif | Sets the basic font family.  Ex: 'Arial'. |
+| size    | 18         | Sets the size, in pixels, of the font. |
+| style   | normal     | Sets the style of the font. Ex: normal, italic, oblique |
+| variant | normal     | Sets the font variant.  Ex: normal, small-caps |
+| weight  | normal     | Sets the weight of the font.  Ex: normal, bold, 100, 200, 300, 400, 500, 600, 700, 800, 900 |
+
+
+## Strokes
+
+| Option    | Default | Description |
+| --------- |:--------| -----:|
+| color     | black   | Sets the color of the stroke. Named colors and colors of the form #fff and #ffffff are accepted. |
+| dasharray | empty   | Sets the pattern of the line to be drawn.  Ex: '1 1' would be a dashed line. |
+| opacity   | 1       | Sets the opacity.  Values range from 0 to 1 with 0 representing a stroke which is fully tranparent and 1 representing a stroke which is fully opaque. |
+| width     | 1       | Sets the width (in pixels) of the stroke. |
+
+
