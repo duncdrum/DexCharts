@@ -14,21 +14,18 @@ Future versions will include:
 
 ## Gallery
 
-* [Bar Chart](http://dexvis.com/vis/blog/2013/mar/reusable6/html/BarChart1.html)
-* [Pie Chart #1](http://dexvis.com/vis/blog/2013/mar/reusable6/html/PieChart1.html)
-* [Pie Multiples](http://dexvis.com/vis/blog/2013/mar/reusable6/html/PieChart2.html)
-* [Donut Multiples](http://dexvis.com/vis/blog/2013/mar/reusable6/html/PieChart3.html)
-* [Line Chart #1](http://dexvis.com/vis/blog/2013/mar/reusable6/html/LineChart1.html)
-* [Line Chart #2](http://dexvis.com/vis/blog/2013/mar/reusable6/html/LineChart2.html)
-* [Line Chart #3](http://dexvis.com/vis/blog/2013/mar/reusable6/html/LineChart3.html)
-* [Parallel Coordinates #1](http://dexvis.com/vis/blog/2013/mar/reusable6/html/ParallelCoordinates1.html)
-* [Parallel Coordinates #2](http://dexvis.com/vis/blog/2013/mar/reusable6/html/ParallelCoordinates2.html)
-* [Parallel Coordinates / Map Combination](http://dexvis.com/vis/blog/2013/mar/reusable6/html/ParallelCoordinates3.html)
-* [State Map](http://dexvis.com/vis/blog/2013/mar/reusable6/html/StateMap.html)
-* [Combo State Map/Bar Chart](http://dexvis.com/vis/blog/2013/mar/reusable6/html/StateMap2.html)
-* [Scatter Plot](http://dexvis.com/vis/blog/2013/mar/reusable6/html/ScatterPlot1.html)
-* [Scatter Plot/Line Chart Combo](http://dexvis.com/vis/blog/2013/mar/reusable6/html/ScatterPlot2.html)
-* [Scatter Plot Matrix](http://dexvis.com/vis/blog/2013/mar/reusable6/html/ScatterPlotMatrix.html)
+* [Bar Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart1
+.html)
+* [Bar Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart2
+.html)
+* [Bar Chart 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart3
+.html)
+* [Chord Chart 1](http://dexvis.com/dexcharts/dist/2013.11
+.14/examples/Chord1
+.html)
+* [Chord Chart 2](http://dexvis.com/dexcharts/dist/2013.11
+.14/examples/Chord2
+.html)
 
 ## Usage
 
@@ -61,7 +58,15 @@ _**Step 4: Include D3**_
 
 Create one or more SVG containers for your charts::
 
-You can do it via code like this:
+Via html:
+
+Or you can do it via html like this:
+
+```html
+<svg id="MyChart" width="1000" height="1000"></svg>
+```
+
+Or you can create the SVG in JavaScript code:
 
 ```javascript
 var svg = d3.select("body").append("svg")
@@ -72,12 +77,6 @@ var svg = d3.select("body").append("svg")
   .attr("transform", "translate(40,20)");
 ```
 
-Or you can do it via html like this:
-
-```html
-<svg id="ChartArea" width="100%" height="100%"></svg>
-```
-
 _**Step 5: Instantiate a chart**_
 
 Next, we must configure and instantiate a chart.
@@ -85,7 +84,7 @@ Next, we must configure and instantiate a chart.
 ```javascript
 var mychart = new BarChart(
   {
-    'parent' : svg,
+    'parent' : '#MyChart',
     'csv'    :
     {
       'header' : [ "SALESMAN", "AGE", "SALES"],
@@ -183,43 +182,3 @@ Please download and explore the provided examples.
 ![Horizontal Legend](http://dexvis.files.wordpress.com/2013/03/horizontalordinallegend.png?w=636&h=170)
 ### Vertical Legends
 ![Vertical Legend](http://dexvis.files.wordpress.com/2013/03/image12.png?w=780&h=543)
-
-## Roadmap
-
-### New Charts
-
-* Area Charts
-* Bubble Plots
-* Chord Diagrams
-* Motion Charts
-* Hive Plots
-* Sankey Diagrams
-* Force Diagrams
-* Force Tree Diagrams
-* Starburst Diagrams
-* Partition Diagrams
-* Radar Charts
-* Node Link Diagrams
-* Indented Trees
-* Tension Diagrams
-* CoOccurrence Diagrams
-* Heatmaps
-* Circular Heatmaps
-* Packed Circles
-* Table diagram
-
-### UI Controls
-
-* Checkbox
-* Selectors
-
-### Library functions
-
-* R-Like data generation functions
-* Data acquisition
-
-### Integration with other frameworks
-
-* ThreeJS
-* ProcessingJS
-* R (How I love R - 40 years of wisdom packed in one venereable and powerful applicaton)
