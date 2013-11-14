@@ -14,7 +14,7 @@ Future versions will include:
 
 ## Gallery
 
-![alt text](https://raw.github.com/PatMartin/DexCharts/master/images/chord1.png "Chord Chart")
+![alt text](https://raw.github.com/PatMartin/DexCharts/master/images/examples/chord1.png "Chord Chart")
 
 * [Bar Chart](http://dexvis.com/vis/blog/2013/mar/reusable6/html/BarChart1.html)
 * [Pie Chart #1](http://dexvis.com/vis/blog/2013/mar/reusable6/html/PieChart1.html)
