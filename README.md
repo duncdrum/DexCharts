@@ -12,7 +12,9 @@ Future versions will include:
 * Ability to cross over from D3JS to other frameworks such as ThreeJS/WebGL.
 * Pluggable tool support.  IE: Charts will know enough about themselves to provide hints to tools so that they are easily integrated into visualization [tools such as Dex](http://dexvis.com/).  There is a method to my madness...
 
-## Examples
+## Gallery
+
+![alt text](https://raw.github.com/PatMartin/DexCharts/master/images/chord1.png "Chord Chart")
 
 * [Bar Chart](http://dexvis.com/vis/blog/2013/mar/reusable6/html/BarChart1.html)
 * [Pie Chart #1](http://dexvis.com/vis/blog/2013/mar/reusable6/html/PieChart1.html)
