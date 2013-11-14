@@ -209,4 +209,33 @@ Most configuration options can be configured with literals or dynamic functions.
 | opacity   | 1       | Sets the opacity.  Values range from 0 to 1 with 0 representing a stroke which is fully tranparent and 1 representing a stroke which is fully opaque. |
 | width     | 1       | Sets the width (in pixels) of the stroke. |
 
+## Labels
 
+| Option     | Default | Description |
+| ---------- |:--------| -----:|
+| x                        | 0     | Sets the x location of this label. |
+| y                        | 0     | Sets the y location of this label. |
+| transform                | 0     | Applies a SVG transformation to this label. |
+| dy                       | .71em | Sets the number of minor ticks to display. |
+| font                     | FONT  | Sets the font for this label.  See: Fonts. |
+| text                     | ''    | Sets the text value of this label. |
+| anchor                   | 5     | Sets the anchor of this label.  Ex: start, middle, end |
+| color                    | 5     | Sets the color of the label. |
+| textLength               | ',d'  | Sets the length of the text.  The text will be adjusted to fit this length. |
+| lengthAdjust             |       | Configures the tick label.  See Label configuration options. |
+| writingMode              |       | Specifies whether the text is left to right, right to left, top to bottom, etc... Ex: lr-tb, rl-tb, tb-rl, lr, rl, tb, inherit |
+| glyphOrientationVertical |       | The glyph orientation affects the amount that the current text position advances as each glyph is rendered.  |
+  
+
+## Ticks
+
+| Option     | Default | Description |
+| ---------- |:--------| -----:|
+| count      | 5     | Sets the number of major ticks to display. |
+| subdivide  | 3     | Sets the number of minor ticks to display. |
+| size.major | 5     | Sets the size (in pixels) of the major ticks. |
+| size.minor | 3     | Sets the size (in pixels) of the minor ticks. |
+| size.end   | 5     | Sets the size (in pixels) of the ticks at either end of the axis. |
+| padding    | 5     | Sets the padding. |
+| format     | ',d'  | Sets the format of the tick labels. |
+| label      | LABEL | Configures the tick label.  See Label configuration options. |
