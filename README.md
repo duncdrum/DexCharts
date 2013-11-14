@@ -14,18 +14,11 @@ Future versions will include:
 
 ## Gallery
 
-* [Bar Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart1
-.html)
-* [Bar Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart2
-.html)
-* [Bar Chart 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart3
-.html)
-* [Chord Chart 1](http://dexvis.com/dexcharts/dist/2013.11
-.14/examples/Chord1
-.html)
-* [Chord Chart 2](http://dexvis.com/dexcharts/dist/2013.11
-.14/examples/Chord2
-.html)
+* [Bar Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart1.html)
+* [Bar Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart2.html)
+* [Bar Chart 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart3.html)
+* [Chord Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Chord1.html)
+* [Chord Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Chord2.html)
 
 ## Usage
 
