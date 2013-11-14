@@ -311,20 +311,29 @@ Most configuration options can be configured with literals or dynamic functions.
 
 ### Sankey Diagram
 
-| Option             | Default | Description |
-| ------------------ |:--------| -----:|
-| parent             |         | The path to this component's parent element.  Ex: #SankeyParent |
-| id                 | Sankey  | The id of this component's container element. |
-| class              | Sankey  | The class of this component's container element. |
-| csv                |         | The data for this diagram.  See CSV. |
-| relationships      |         | The relationship data for this diagram, whose format is described in greater detail later in this section. |
-| height             | 100%    | The height of the sankey diagram in either pixels or a percentage of available bounding box size. |
-| width              | 100%    | |
-| transform          |         | |
-| layoutIterations   |         | |
-| columnTitle        | LABEL   | |
-| label              |         | |
-| link               |         | |
-| mouseover.link     |         | |
-| mouseover.node     |         | |
-| manualColumnLayout | false   | |
+| Option                     | Default | Description |
+| -------------------------- |:--------| -----:|
+| parent                     |         | The path to this component's parent element.  Ex: #SankeyParent |
+| id                         | Sankey  | The id of this component's container element. |
+| class                      | Sankey  | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
+| relationships              |         | The relationship data for this diagram, whose format is described in greater detail later in this section. |
+| height                     | 100%    | The height of the sankey diagram in either pixels or a percentage of available bounding box size. |
+| width                      | 100%    | The width of the sankey diagram in either pixels or a percentage of available bounding box size. |
+| transform                  |         | The SVG transformation(s) to apply. |
+| layoutIterations           | 32      | The number of iterations to expend when attempting to optimize node and link layout. |
+| columnTitle                | LABEL   | The label for each column. See Labels. |
+| label                      | LABEL   | The label for each node.  See Labels. |
+| link.stroke                | STROKE  | The stroke for each link.  See Strokes. |
+| link.fill                  | none    | The fill for each link. |
+| link.fillOpacity           |         | The fillOpacity for each link. |
+| link.curvature             | 0.5     | Radians of curvature. |
+| mouseover.link.stroke      | STROKE  | The stroke of a link when the mouse is moved over it.  See Strokes. |
+| mouseover.link.fill        | none    | The fill of the link when the mouse is over it. |
+| mouseover.link.fillOpacity | 0.8     | The fill opacity of the link when the mouse is over it. |
+| mouseover.node.stroke      | STROKE  | Tne stroke of all of the incoming and outgoing links from this node when the mouse is moved over it.  See Strokes.|
+| mouseover.node.fill        | none    | The fill of all the incoming and outgoing links from this node when the mouse is moved over it. |
+| mouseover.node.fillOpacity | .8      | The fill opacity of all the incoming and outgoing links from this node when the mouse is moved over it. |
+| node.padding | 4 | The padding around each node segregating labels and other nodes. |
+| node.rectangle | RECTANGLE | This controls the appearance of each node.  See Rectangles. |
+| manualColumnLayout | false   | If false, Sankey will attempt to lay the nodes out in an optimized fashion.  However, if true, then the system will assume that each column of data represesents a column of nodes and will align columnar nodes on top of one another.  The first column will be leftmost in the layout.  Manual layout is much faster automated layout. |
