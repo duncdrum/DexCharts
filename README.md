@@ -14,8 +14,6 @@ Future versions will include:
 
 ## Gallery
 
-![alt text](https://raw.github.com/PatMartin/DexCharts/master/images/examples/chord1.png "Chord Chart")
-
 * [Bar Chart](http://dexvis.com/vis/blog/2013/mar/reusable6/html/BarChart1.html)
 * [Pie Chart #1](http://dexvis.com/vis/blog/2013/mar/reusable6/html/PieChart1.html)
 * [Pie Multiples](http://dexvis.com/vis/blog/2013/mar/reusable6/html/PieChart2.html)
@@ -63,12 +61,21 @@ _**Step 4: Include D3**_
 
 Create one or more SVG containers for your charts::
 
+You can do it via code like this:
+
 ```javascript
 var svg = d3.select("body").append("svg")
+  .attr("id", "MyChart")
   .attr("width", 1000)
   .attr("height", 800)
   .append("g")
   .attr("transform", "translate(40,20)");
+```
+
+Or you can do it via html like this:
+
+```html
+<svg id="ChartArea" width="100%" height="100%"></svg>
 ```
 
 _**Step 5: Instantiate a chart**_
