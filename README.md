@@ -309,6 +309,24 @@ Most configuration options can be configured with literals or dynamic functions.
 
 ## Visual Components
 
+### Bar Chart
+
+### Chord Chart
+
+### Clustered Force
+
+### Dendrogram
+
+### HeatMap
+
+### Horizontal Legends
+
+### Line Charts
+
+### Parallel Coordinates
+
+### Pie Chart
+
 ### Sankey Diagram
 
 | Option                     | Default | Description |
@@ -337,3 +355,29 @@ Most configuration options can be configured with literals or dynamic functions.
 | node.padding | 4 | The padding around each node segregating labels and other nodes. |
 | node.rectangle | RECTANGLE | This controls the appearance of each node.  See Rectangles. |
 | manualColumnLayout | false   | If false, Sankey will attempt to lay the nodes out in an optimized fashion.  However, if true, then the system will assume that each column of data represesents a column of nodes and will align columnar nodes on top of one another.  The first column will be leftmost in the layout.  Manual layout is much faster automated layout. |
+
+### Scatter Plot
+
+### UI Controls
+
+#### Configuration Box
+
+#### Selectable
+
+#### Slider
+
+#### Tabs
+
+### ThreeJS
+
+#### ScatterPlot3D
+### Maps
+
+#### US County Map
+
+#### US State Map
+
+#### World Country Map
+
+### Vertical Legend
+
