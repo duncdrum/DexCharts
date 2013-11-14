@@ -189,7 +189,9 @@ Most configuration options can be configured with literals or dynamic functions.
 * Strokes
 * Labels, fonts, etc...
 
-## Fonts
+## General
+
+### Fonts
 
 | Option  | Default    | Description |
 | ------- |:-----------| -----:|
@@ -200,7 +202,7 @@ Most configuration options can be configured with literals or dynamic functions.
 | weight  | normal     | Sets the weight of the font.  Ex: normal, bold, 100, 200, 300, 400, 500, 600, 700, 800, 900 |
 
 
-## Strokes
+### Strokes
 
 | Option    | Default | Description |
 | --------- |:--------| -----:|
@@ -209,14 +211,14 @@ Most configuration options can be configured with literals or dynamic functions.
 | opacity   | 1       | Sets the opacity.  Values range from 0 to 1 with 0 representing a stroke which is fully tranparent and 1 representing a stroke which is fully opaque. |
 | width     | 1       | Sets the width (in pixels) of the stroke. |
 
-## Fills
+### Fills
 
 | Option      | Default | Description |
 | ----------- |:--------| -----:|
 | fill        |         | Sets the color of the entity to be filled. |
 | fillOpacity |         | Sets the opacity of the filling. |
 
-## Links
+### Links
 
 | Option      | Default | Description |
 | ----------- |:--------| -----:|
@@ -224,7 +226,7 @@ Most configuration options can be configured with literals or dynamic functions.
 | fill        |         | Sets the color of the entity to be filled. |
 | fillOpacity |         | Sets the opacity of the filling. 
 
-## Labels
+### Labels
 
 | Option     | Default | Description |
 | ---------- |:--------| -----:|
@@ -242,7 +244,7 @@ Most configuration options can be configured with literals or dynamic functions.
 | glyphOrientationVertical |       | The glyph orientation affects the amount that the current text position advances as each glyph is rendered.  |
   
 
-## Ticks
+### Ticks
 
 | Option     | Default | Description |
 | ---------- |:--------| -----:|
@@ -255,7 +257,7 @@ Most configuration options can be configured with literals or dynamic functions.
 | format     | ',d'  | Sets the format of the tick labels. |
 | label      | LABEL | Configures the tick label.  See Label configuration options. |
 
-## Axis
+### Axis
 
 | Option     | Default | Description |
 | ---------- |:--------| -----:|
@@ -264,16 +266,23 @@ Most configuration options can be configured with literals or dynamic functions.
 | scale  | 5     | Set the scale of the axis.  Ex: d3.scale.linear(), d3.scale.ordinal() |
 | label  | LABEL | See Labels. |
 
-## Shapes
+### CSV
 
-### Points
+| Option     | Default | Description |
+| ---------- |:--------| -----:|
+| header     | []   | An array containing the names of each column.  Ex: [ 'C1', 'C2' ] |
+| data       | [[]] | An array of arrays.  Each row of the array represents a row of data.  Ex: [[1, 2],[3,4]] |
+
+### Shapes
+
+#### Points
 
 | Option | Default | Description |
 | ------ |:--------| -----:|
 | x      | 0       | The x coordinate of the point. |
 | y      | 0       | The y coordinate of the point. |
 
-### Rectangles
+#### Rectangles
 
 | Option  | Default | Description |
 | ------- |:--------| -----:|
@@ -287,8 +296,8 @@ Most configuration options can be configured with literals or dynamic functions.
 | color   |         | The color of the rectangle. |
 | stroke  | STROKE  | See Strokes. |
 
-	  
-### Circles
+
+#### Circles
 
 | Option        | Default | Description |
 | ------------- |:--------| -----:|
@@ -297,3 +306,25 @@ Most configuration options can be configured with literals or dynamic functions.
 | style.stroke  | STROKE  | See Strokes. |
 | style.color   |         | The color of the circle. |
 | style.opacity | 1       | The opacity of the circle.  |
+
+## Visual Components
+
+### Sankey Diagram
+
+| Option             | Default | Description |
+| ------------------ |:--------| -----:|
+| parent             |         | The path to this component's parent element.  Ex: #SankeyParent |
+| id                 | Sankey  | The id of this component's container element. |
+| class              | Sankey  | The class of this component's container element. |
+| csv                |         | The data for this diagram.  See CSV. |
+| relationships      |         | The relationship data for this diagram, whose format is described in greater detail later in this section. |
+| height             | 100%    | The height of the sankey diagram in either pixels or a percentage of available bounding box size. |
+| width              | 100%    | |
+| transform          |         | |
+| layoutIterations   |         | |
+| columnTitle        | LABEL   | |
+| label              |         | |
+| link               |         | |
+| mouseover.link     |         | |
+| mouseover.node     |         | |
+| manualColumnLayout | false   | |
