@@ -1,18 +1,13 @@
 # Introduction
 
-DexCharts is a library which provides reusable charts for D3. DexCharts aims to provide:
+DexCharts is a library which provides highly interactive, configurable, and interoperable HTML5 reusable charts.
 
 * A variety of reusable charts and charting components to choose from.
 * A framework for interconnecting these charts via listeners.
 
-Future versions will include:
+## Live Examples
 
-* More charts of course.
-* More options and configurability on existing charts.
-* Ability to cross over from D3JS to other frameworks such as ThreeJS/WebGL.
-* Pluggable tool support.  IE: Charts will know enough about themselves to provide hints to tools so that they are easily integrated into visualization [tools such as Dex](http://dexvis.com/).  There is a method to my madness...
-
-## Gallery
+There are many examples bundled with DexCharts.  Click on any of the following links to check them out.
 
 * [Bar Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart1.html)
 * [Bar Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart2.html)
@@ -50,6 +45,16 @@ Future versions will include:
 * [3D Scatter Plot 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlot3D1.html)
 * [3D Scatter Plot 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlot3D2.html)
 * [3D Scatter Plot 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlot3D3.html)
+* [Scatter Plot Matrix](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlotMatrix1.html)
+* [State Map 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/StateMap1.html)
+* [State Map 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/StateMap2.html)
+* [UI Controls 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/UI1.html)
+* [UI Controls 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/UI2.html)
+* [UI Controls 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/UI3.html)
+* [UI Controls 4](http://dexvis.com/dexcharts/dist/2013.11.14/examples/UI4.html)
+* [US County Map 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/USCountyMap1.html)
+* [Vertical Legend 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/VerticalLegend1.html)
+* [World Country Map 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/WorldCountryMap1.html)
 
 ## Usage
 
@@ -175,34 +180,6 @@ map.addListener("selectState", pcChart, function(chartEvent)
   	}
   });
 ```
-# Available Charts
 
-Currently, I am starting small for now.  There are a small set of useful components provided with this initial release.  Each component is highly configurable.  If one of these components does not do what you need, feel free to let me know.
+# Configuration
 
-Please download and explore the provided examples.
-
-## Charts
-### Bar Charts
-![Bar Chart Example](http://dexvis.files.wordpress.com/2013/03/barchart1.png?w=688&h=715)
-### Clustered Force Diagrams
-![Clustered Force Example](http://dexvis.files.wordpress.com/2013/03/image29.png?w=611&h=567)
-### Line Charts
-![Line Chart Example](http://dexvis.files.wordpress.com/2013/03/reusabledemo2.png?w=640)
-### Parallel Coordinates
-![Parallel Coordinates Example](http://dexvis.files.wordpress.com/2013/03/image27.png?w=471&h=360)
-### Pie Charts
-![Pie Chart Example](http://dexvis.files.wordpress.com/2013/03/image21.png?w=386&h=411)
-### Scatter Plots
-![Scatter Plot Example](http://dexvis.files.wordpress.com/2013/03/scatterplot1.png?w=663&h=655)
-## Maps
-### US State Map
-![US State Map Example](http://dexvis.files.wordpress.com/2013/03/image10.png?w=666&h=368)
-### US County Map
-![US County Map Example](http://dexvis.files.wordpress.com/2013/03/image32.png?w=621&h=343)
-### World Country Map
-![World Country Map Example](http://dexvis.files.wordpress.com/2013/03/image33.png?w=619&h=442)
-## Legends
-### Horizontal Legends
-![Horizontal Legend](http://dexvis.files.wordpress.com/2013/03/horizontalordinallegend.png?w=636&h=170)
-### Vertical Legends
-![Vertical Legend](http://dexvis.files.wordpress.com/2013/03/image12.png?w=780&h=543)
