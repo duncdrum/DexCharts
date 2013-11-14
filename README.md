@@ -216,6 +216,13 @@ Most configuration options can be configured with literals or dynamic functions.
 | fill        |         | Sets the color of the entity to be filled. |
 | fillOpacity |         | Sets the opacity of the filling. |
 
+## Links
+
+| Option      | Default | Description |
+| ----------- |:--------| -----:|
+| stroke      | STROKE  | See Strokes. |
+| fill        |         | Sets the color of the entity to be filled. |
+| fillOpacity |         | Sets the opacity of the filling. 
 
 ## Labels
 
@@ -252,6 +259,41 @@ Most configuration options can be configured with literals or dynamic functions.
 
 | Option     | Default | Description |
 | ---------- |:--------| -----:|
-| tick   | TICK | See Ticks. |
+| tick   | TICK  | See Ticks. |
 | orient | 3     | Sets the orientation of the axis. Ex: top, bottom, left, right. |
 | scale  | 5     | Set the scale of the axis.  Ex: d3.scale.linear(), d3.scale.ordinal() |
+| label  | LABEL | See Labels. |
+
+## Shapes
+
+### Points
+
+| Option | Default | Description |
+| ------ |:--------| -----:|
+| x      | 0       | The x coordinate of the point. |
+| y      | 0       | The y coordinate of the point. |
+
+### Rectangles
+
+| Option  | Default | Description |
+| ------- |:--------| -----:|
+| width   | 0       | The width of the rectangle in pixels. |
+| height  | 0       | The height of the rectangle in pixels. |
+| x       | 0       | The x coordinate of the upper left vertex of the rectangle. |
+| y       | 0       | The y coordinate of the upper left vertex of the rectangle. |
+| rx      | 0       | The x radius of the edges of the rectangle.  Non-zero values will cause the rectangle to be rounded at the corners.  |
+| ry      | 0       | The y radius of the edges of the rectangle.  Non-zero values will cause the rectangle to be rounded at the corners.  |
+| opacity | 1       | The opacity of the rectangle where 0 is transparent, 1 is opaque. |
+| color   |         | The color of the rectangle. |
+| stroke  | STROKE  | See Strokes. |
+
+	  
+### Circles
+
+| Option        | Default | Description |
+| ------------- |:--------| -----:|
+| center        | POINT   | The center of the circle.  See Points. |
+| radius        | 0       | The radius of the circle in pixels. |
+| style.stroke  | STROKE  | See Strokes. |
+| style.color   |         | The color of the circle. |
+| style.opacity | 1       | The opacity of the circle.  |
