@@ -19,6 +19,9 @@ Future versions will include:
 * [Bar Chart 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart3.html)
 * [Chord Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Chord1.html)
 * [Chord Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Chord2.html)
+* [Dendrogram 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Dendrogram1.html)
+* [Dendrogram 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Dendrogram2.html)
+* [Dendrogram 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Dendrogram3.html)
 
 ## Usage
 
