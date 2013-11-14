@@ -22,6 +22,13 @@ Future versions will include:
 * [Dendrogram 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Dendrogram1.html)
 * [Dendrogram 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Dendrogram2.html)
 * [Dendrogram 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Dendrogram3.html)
+* [HeatMap 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/HeatMap1.html)
+* [Horizontal Legend 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/HorizontalLegend1.html)
+* [Legend 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Legends1.html)
+* [Line Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/LineChart1.html)
+* [Line Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/LineChart2.html)
+* [Line Chart 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/LineChart3.html)
+* [Line Chart 4](http://dexvis.com/dexcharts/dist/2013.11.14/examples/LineChart4.html)
 
 ## Usage
 
