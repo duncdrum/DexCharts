@@ -209,6 +209,14 @@ Most configuration options can be configured with literals or dynamic functions.
 | opacity   | 1       | Sets the opacity.  Values range from 0 to 1 with 0 representing a stroke which is fully tranparent and 1 representing a stroke which is fully opaque. |
 | width     | 1       | Sets the width (in pixels) of the stroke. |
 
+## Fills
+
+| Option      | Default | Description |
+| ----------- |:--------| -----:|
+| fill        |         | Sets the color of the entity to be filled. |
+| fillOpacity |         | Sets the opacity of the filling. |
+
+
 ## Labels
 
 | Option     | Default | Description |
@@ -239,3 +247,11 @@ Most configuration options can be configured with literals or dynamic functions.
 | padding    | 5     | Sets the padding. |
 | format     | ',d'  | Sets the format of the tick labels. |
 | label      | LABEL | Configures the tick label.  See Label configuration options. |
+
+## Axis
+
+| Option     | Default | Description |
+| ---------- |:--------| -----:|
+| tick   | TICK | See Ticks. |
+| orient | 3     | Sets the orientation of the axis. Ex: top, bottom, left, right. |
+| scale  | 5     | Set the scale of the axis.  Ex: d3.scale.linear(), d3.scale.ordinal() |
