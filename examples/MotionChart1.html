@@ -1,102 +1,89 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-#titletext
-{
-  font-family: "Arial Rounded MT", Arial, Helvetica, sans-serif;
-  font-weight: bold;
-  text-align: left;
-  color: steelblue;
-}
+  #titletext {
+    font-family: "Arial Rounded MT", Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    text-align: left;
+    color: steelblue;
+  }
 
-#timeLabel.ui-widget-content {
+  #timeLabel.ui-widget-content {
     background-color: transparent;
-    background-image:none !important;
-    border:none !important;
-}
+    background-image: none !important;
+    border: none !important;
+  }
 
-#timeLabel
-{
-  float : left;
-  width : 400;
-}
+  #timeLabel {
+    float: left;
+    width: 400;
+  }
 
-text
-{
-  font: 14px sans-serif;
-}
+  text {
+    font: 14px sans-serif;
+  }
 
-.dot
-{
-  stroke: #000;
-}
+  .dot {
+    stroke: #000;
+  }
 
-.axis path,.axis line
-{
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
+  .axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
 
-.label
-{
-  fill: #777;
-}
+  .label {
+    fill: #777;
+  }
 
-label
-{
-  display: inline-block;
-  width: 5em;
-}
+  label {
+    display: inline-block;
+    width: 5em;
+  }
 
-.timeLabel
-{
-  font: 500 100px "Helvetica Neue";
-  fill: #ddd;
-}
+  .timeLabel {
+    font: 500 100px "Helvetica Neue";
+    fill: #ddd;
+  }
 
-.year.label.active
-{
-  fill: #aaa;
-}
+  .year.label.active {
+    fill: #aaa;
+  }
 
-.overlay
-{
-  fill: none;
-  pointer-events: all;
-  cursor: ew-resize;
-}
+  .overlay {
+    fill: none;
+    pointer-events: all;
+    cursor: ew-resize;
+  }
 </style>
 <body>
+<svg id="ChartArea" height="800" width="800"></svg>
+<svg id="TimeLabel" height="400" width="400"></svg>
+
 <script src="http://d3js.org/d3.v3.js"></script>
 <script src="../dex.js"></script>
 <script src="../js/dex/component/d3/MotionChart.js"></script>
 <script>
-// Create an SVG for our chart.
-var svg = d3.select("body").append("svg")
-  .attr("width", 1000)
-  .attr("height", 800)
-  .append("g");
-var timeLabel = d3.select("body").append("svg")
-  .attr("width", 400)
-  .attr("height", 400)
-  .append("g");
-
-var csv =
-{
-  'header' : [ 'time', 'x', 'y', 'category', 'size' ],
-  'data'   : []
-};
-
-for (var year=1800; year<2000; year += 1)
-{
-  for (var cat=1; cat<3; cat++)
+  var csv =
   {
-  	csv.data.push([year, 'NAME', cat, cat, cat, cat]);
-  }
-}
+    'header': [ 'time', 'category', 'x', 'y', 'size' ],
+    'data': []
+  };
 
-// Configure a chart.
-var motionChart = new MotionChart({'parent' : svg, 'timeLabel' : timeLabel });
-motionChart.render();
+  for (var year = 1800; year < 2000; year += 1) {
+    for (var cat = 1; cat < 3; cat++) {
+      csv.data.push([year, 'NAME', cat, cat, cat, cat]);
+    }
+  }
+
+  dex.console.log("CSV", csv);
+
+  // Configure a chart.
+  var motionChart = new MotionChart({
+    'parent': "#ChartArea",
+    'timeLabel': "#TimeLabel",
+    'csv' : csv
+  });
+  motionChart.render();
 </script>
