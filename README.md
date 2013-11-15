@@ -40,9 +40,9 @@ There are many examples bundled with DexCharts.  Here are a few.
 | Parallel Coordinates   | [Parallel Coordinates 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ParallelCoordinates3.html)||
 | Parallel Coordinates   | [Parallel Coordinates 4](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ParallelCoordinates4.html)||
 | Pie Chart              | [Pie Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/PieChart1.html) ||
-| Pie Chart              |  [Pie Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/PieChart2.html) ||
-| Pie Chart              |  [Pie Chart 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/PieChart3.html)||
-| Sankey                 |  [Sankey 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey1.html)||
+| Pie Chart              | [Pie Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/PieChart2.html) ||
+| Pie Chart              | [Pie Chart 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/PieChart3.html)||
+| Sankey                 | [Sankey 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey1.html)||
 | Sankey                 | [Sankey 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey2.html)||
 | Sankey                 | [Sankey 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey3.html)||
 | Sankey                 | [Sankey 4](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey4.html)||
@@ -345,7 +345,7 @@ A bar chart or bar graph is a chart with rectangular bars with lengths proportio
 
 | Option          | Default  | Description |
 | --------------- |:---------| -----------:|
-| parent          |          | The path to this component's parent element.  Ex: #BarChartParent |
+| parent          |          | The path to this component's parent element.  Ex: #ChordChartParent |
 | id              | Chord    | The id of this component's container element. |
 | class           | Chord    | The class of this component's container element. |
 | csv             |          | The data for this diagram.  See CSV. |
@@ -369,30 +369,30 @@ A bar chart or bar graph is a chart with rectangular bars with lengths proportio
 
 ### Clustered Force
 
-| Option                     | Default  | Description |
-| -------------------------- |:---------| -----:|
-| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
-| id                         | BarChart | The id of this component's container element. |
-| class                      | BarChart | The class of this component's container element. |
-| csv                        |         | The data for this diagram.  See CSV. |
+| Option                     | Default        | Description |
+| -------------------------- |:---------------| -----:|
+| parent                     |                | The path to this component's parent element.  Ex: #ClusteredForceParent |
+| id                         | ClusteredForce | The id of this component's container element. |
+| class                      | ClusteredForce | The class of this component's container element. |
+| csv                        |                | The data for this diagram.  See CSV. |
 
 ### Dendrogram
 
-| Option                     | Default  | Description |
-| -------------------------- |:---------| -----:|
-| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
-| id                         | BarChart | The id of this component's container element. |
-| class                      | BarChart | The class of this component's container element. |
-| csv                        |         | The data for this diagram.  See CSV. |
+| Option                     | Default    | Description |
+| -------------------------- |:-----------| -----:|
+| parent                     |            | The path to this component's parent element.  Ex: #DendrogramParent |
+| id                         | Dendrogram | The id of this component's container element. |
+| class                      | Dendrogram | The class of this component's container element. |
+| csv                        |            | The data for this diagram.  See CSV. |
 
 ### HeatMap
 
 | Option                     | Default  | Description |
 | -------------------------- |:---------| -----:|
-| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
-| id                         | BarChart | The id of this component's container element. |
-| class                      | BarChart | The class of this component's container element. |
-| csv                        |         | The data for this diagram.  See CSV. |
+| parent                     |          | The path to this component's parent element.  Ex: #HeatMapParent |
+| id                         | HeatMap  | The id of this component's container element. |
+| class                      | HeatMap  | The class of this component's container element. |
+| csv                        |          | The data for this diagram.  See CSV. |
 
 ### Horizontal Legends
 
@@ -449,7 +449,7 @@ A bar chart or bar graph is a chart with rectangular bars with lengths proportio
 | link.fill                  | none    | The fill for each link. |
 | link.fillOpacity           |         | The fillOpacity for each link. |
 | link.curvature             | 0.5     | Radians of curvature. |
-| mouseover.link.stroke      | STROKE  | The stroke of a link when the mouse is moved over it.  See Strokes. |
+| mouseover.link.stroke      | [link](#Strokes)  | The stroke of a link when the mouse is moved over it.  See Strokes. |
 | mouseover.link.fill        | none    | The fill of the link when the mouse is over it. |
 | mouseover.link.fillOpacity | 0.8     | The fill opacity of the link when the mouse is over it. |
 | mouseover.node.stroke      | STROKE  | Tne stroke of all of the incoming and outgoing links from this node when the mouse is moved over it.  See Strokes.|
