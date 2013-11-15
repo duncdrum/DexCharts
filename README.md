@@ -17,51 +17,55 @@ Pardon the dust right now.  I am in the middle of a documentation and refactorin
 
 There are many examples bundled with DexCharts.  Here are a few.
 
-| [Bar Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart1.html) | [Bar Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart2.html) | [Bar Chart 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart3.html) |
 
-* [Chord Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Chord1.html)
-* [Chord Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Chord2.html)
-* [Dendrogram 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Dendrogram1.html)
-* [Dendrogram 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Dendrogram2.html)
-* [Dendrogram 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Dendrogram3.html)
-* [HeatMap 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/HeatMap1.html)
-* [Horizontal Legend 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/HorizontalLegend1.html)
-* [Legend 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Legends1.html)
-* [Line Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/LineChart1.html)
-* [Line Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/LineChart2.html)
-* [Line Chart 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/LineChart3.html)
-* [Line Chart 4](http://dexvis.com/dexcharts/dist/2013.11.14/examples/LineChart4.html)
-* [Parallel Coordinates 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ParallelCoordinates1.html)
-* [Parallel Coordinates 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ParallelCoordinates2.html)
-* [Parallel Coordinates 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ParallelCoordinates3.html)
-* [Parallel Coordinates 4](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ParallelCoordinates4.html)
-* [Pie Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/PieChart1.html)
-* [Pie Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/PieChart2.html)
-* [Pie Chart 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/PieChart3.html)
-* [Sankey 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey1.html)
-* [Sankey 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey2.html)
-* [Sankey 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey3.html)
-* [Sankey 4](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey4.html)
-* [Sankey 5](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey5.html)
-* [Sankey 6](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey6.html)
-* [Sankey 7](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey7.html)
-* [Sankey 8](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey8.html)
-* [Sankey 9](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey9.html)
-* [Scatter Plot 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlot1.html)
-* [Scatter Plot 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlot2.html)
-* [3D Scatter Plot 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlot3D1.html)
-* [3D Scatter Plot 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlot3D2.html)
-* [3D Scatter Plot 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlot3D3.html)
-* [Scatter Plot Matrix](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlotMatrix1.html)
-* [State Map 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/StateMap1.html)
-* [State Map 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/StateMap2.html)
-* [UI Controls 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/UI1.html)
-* [UI Controls 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/UI2.html)
-* [UI Controls 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/UI3.html)
-* [UI Controls 4](http://dexvis.com/dexcharts/dist/2013.11.14/examples/UI4.html)
-* [US County Map 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/USCountyMap1.html)
-* [Vertical Legend 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/VerticalLegend1.html)
-* [World Country Map 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/WorldCountryMap1.html)
+| Chart Type | Short Description | Long Description |
+|:-- |:-- |:-- |
+| Bar Chart   | [Basic Example](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart3.html) | This example demonstrates a bare bones bar chart. |
+| Bar Chart   | [Basic Example 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart1.html) | This is another basic usage example. |
+| Bar Chart   | [High Resolution](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart2.html) | This chart looks like a line chart, however, in reality it is a fine grained bar chart. |
+| Chord Chart | [Basic Example](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Chord1.html)| This is a basic example of a chord chart. |
+| Chord Chart | [Parallel Coordinates / Chord Chart](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Chord2.html) | This is a more complicated example demonstrating parallel coordinates chart dynamically creating a Chord Chart. |
+| Dendrogram  | [Dendrogram 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Dendrogram1.html) ||
+| Dendrogram  | [Dendrogram 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Dendrogram2.html) ||
+| Dendrogram  | [Dendrogram 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Dendrogram3.html) ||
+| Heat Map    | [HeatMap 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/HeatMap1.html) ||
+| Horizontal Legend | [Horizontal Legend 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/HorizontalLegend1.html) ||
+| Legends     | [Legend 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Legends1.html) ||
+| Line Chart | [Line Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/LineChart1.html) ||
+| Line Chart | [Line Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/LineChart2.html) ||
+| Line Chart | [Line Chart 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/LineChart3.html) ||
+| Line Chart | [Line Chart 4](http://dexvis.com/dexcharts/dist/2013.11.14/examples/LineChart4.html) ||
+| Parallel Coordinates | [Parallel Coordinates 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ParallelCoordinates1.html)||
+| Parallel Coordinates | [Parallel Coordinates 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ParallelCoordinates2.html)||
+| Parallel Coordinates | [Parallel Coordinates 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ParallelCoordinates3.html)||
+| Parallel Coordinates | [Parallel Coordinates 4](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ParallelCoordinates4.html)||
+| Pie Chart | [Pie Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/PieChart1.html) ||
+| Pie Chart |  [Pie Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/PieChart2.html) ||
+| Pie Chart |  [Pie Chart 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/PieChart3.html)||
+| Sankey |  [Sankey 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey1.html)||
+| Sankey | [Sankey 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey2.html)||
+| Sankey | [Sankey 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey3.html)||
+| Sankey | [Sankey 4](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey4.html)||
+| Sankey | [Sankey 5](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey5.html)||
+| Sankey | [Sankey 6](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey6.html)||
+| Sankey | [Sankey 7](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey7.html)||
+| Sankey | [Sankey 8](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey8.html)||
+| Sankey | [Sankey 9](http://dexvis.com/dexcharts/dist/2013.11.14/examples/Sankey9.html)||
+| Scatter Plot | [Scatter Plot 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlot1.html)||
+| Scatter Plot | [Scatter Plot 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlot2.html)||
+| 3D Scatter Plot | [3D Scatter Plot 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlot3D1.html)||
+| 3D Scatter Plot | [3D Scatter Plot 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlot3D2.html)||
+| 3D Scatter Plot | [3D Scatter Plot 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlot3D3.html)||
+| Scatter Plot Matrix | [Scatter Plot Matrix](http://dexvis.com/dexcharts/dist/2013.11.14/examples/ScatterPlotMatrix1.html)||
+| Map | [State Map 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/StateMap1.html)||
+| Map | [State Map 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/StateMap2.html)||
+| UI Controls | [UI Controls 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/UI1.html)||
+| UI Controls | [UI Controls 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/UI2.html)||
+| UI Controls | [UI Controls 3](http://dexvis.com/dexcharts/dist/2013.11.14/examples/UI3.html)||
+| UI Controls | [UI Controls 4](http://dexvis.com/dexcharts/dist/2013.11.14/examples/UI4.html)||
+| Map | [US County Map 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/USCountyMap1.html)||
+| Vertical Legend | [Vertical Legend 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/VerticalLegend1.html)||
+| Map | [World Country Map 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/WorldCountryMap1.html)||
 
 ## Usage
 
