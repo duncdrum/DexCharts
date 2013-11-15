@@ -449,7 +449,7 @@ A bar chart or bar graph is a chart with rectangular bars with lengths proportio
 | link.fill                  | none    | The fill for each link. |
 | link.fillOpacity           |         | The fillOpacity for each link. |
 | link.curvature             | 0.5     | Radians of curvature. |
-| mouseover.link.stroke      | [link](#Strokes)  | The stroke of a link when the mouse is moved over it.  See Strokes. |
+| mouseover.link.stroke      | [Stroke](####Strokes)  | The stroke of a link when the mouse is moved over it. |
 | mouseover.link.fill        | none    | The fill of the link when the mouse is over it. |
 | mouseover.link.fillOpacity | 0.8     | The fill opacity of the link when the mouse is over it. |
 | mouseover.node.stroke      | STROKE  | Tne stroke of all of the incoming and outgoing links from this node when the mouse is moved over it.  See Strokes.|
