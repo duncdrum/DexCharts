@@ -459,6 +459,8 @@ Most configuration options can be configured with literals or dynamic functions.
 
 ### Scatter Plot
 
+Is it one word or two?  This is a mystery which has troubled engineers throughout time.  Either way, scatterplots are a very useful way to quickly understand a numeric or even ordinal distributions.
+
 | Option                     | Default  | Description |
 | -------------------------- |:---------| -----:|
 | parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
@@ -468,12 +470,7 @@ Most configuration options can be configured with literals or dynamic functions.
 
 ### UI Controls
 
-| Option                     | Default  | Description |
-| -------------------------- |:---------| -----:|
-| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
-| id                         | BarChart | The id of this component's container element. |
-| class                      | BarChart | The class of this component's container element. |
-| csv                        |         | The data for this diagram.  See CSV. |
+This section contains controls which can be dropped into a Dex Chart.
 
 #### Configuration Box
 
