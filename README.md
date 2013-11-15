@@ -1,15 +1,6 @@
 # Introduction
 
-DexCharts is a library which provides highly HTML5 visualizations.
-
-DexCharts aims to provide a framework which is:
-
-* Reusable
-* Interactive
-* Configurable
-* Interoperable
-* Portable
-* Easy to use
+DexCharts is a library which provides powerful visualization capabilities within the browser.
 
 Pardon the dust right now.  I am in the middle of a documentation and refactoring effort.
 
