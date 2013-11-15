@@ -145,7 +145,7 @@ function Sankey(userConfig)
         'stroke'    : dex.config.stroke({
           'opacity' : .8,
           'width'   : function(d) { return Math.max(1, d.dy); },
-          'color'   : function(d) { return defaultColor(d.category); },
+          'color'   : function(d) { return defaultColor(d.category); }
           }),
         'fill'        : 'none',
         'fillOpacity' : .8
