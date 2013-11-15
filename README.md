@@ -1,13 +1,21 @@
 # Introduction
 
-DexCharts is a library which provides highly interactive, configurable, and interoperable HTML5 reusable charts.
+DexCharts is a library which provides highly HTML5 visualizations.
 
-* A variety of reusable charts and charting components to choose from.
-* A framework for interconnecting these charts via listeners.
+DexCharts aims to provide a framework which is:
+
+* Reusable
+* Interactive
+* Configurable
+* Interoperable
+* Portable
+* Easy to use
+
+Pardon the dust right now.  I am in the middle of a documentation and refactoring effort.
 
 ## Live Examples
 
-There are many examples bundled with DexCharts.  Click on any of the following links to check them out.
+There are many examples bundled with DexCharts.  Here are a few.
 
 * [Bar Chart 1](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart1.html)
 * [Bar Chart 2](http://dexvis.com/dexcharts/dist/2013.11.14/examples/BarChart2.html)
@@ -229,7 +237,7 @@ Most configuration options can be configured with literals or dynamic functions.
 ### Labels
 
 | Option     | Default | Description |
-| ---------- |:--------| -----:|
+| ---------- |:------------| -----:|
 | x                        | 0     | Sets the x location of this label. |
 | y                        | 0     | Sets the y location of this label. |
 | transform                | 0     | Applies a SVG transformation to this label. |
@@ -247,7 +255,7 @@ Most configuration options can be configured with literals or dynamic functions.
 ### Ticks
 
 | Option     | Default | Description |
-| ---------- |:--------| -----:|
+| ---------- |:------| -----:|
 | count      | 5     | Sets the number of major ticks to display. |
 | subdivide  | 3     | Sets the number of minor ticks to display. |
 | size.major | 5     | Sets the size (in pixels) of the major ticks. |
@@ -259,17 +267,17 @@ Most configuration options can be configured with literals or dynamic functions.
 
 ### Axis
 
-| Option     | Default | Description |
-| ---------- |:--------| -----:|
-| tick   | TICK  | See Ticks. |
-| orient | 3     | Sets the orientation of the axis. Ex: top, bottom, left, right. |
-| scale  | 5     | Set the scale of the axis.  Ex: d3.scale.linear(), d3.scale.ordinal() |
-| label  | LABEL | See Labels. |
+| Option | Default | Description |
+| ------ |:--------| -----------:|
+| tick   | TICK    | See Ticks. |
+| orient | 3       | Sets the orientation of the axis. Ex: top, bottom, left, right. |
+| scale  | 5       | Set the scale of the axis.  Ex: d3.scale.linear(), d3.scale.ordinal() |
+| label  | LABEL   | See Labels. |
 
 ### CSV
 
 | Option     | Default | Description |
-| ---------- |:--------| -----:|
+| ---------- |:--------| -----------:|
 | header     | []   | An array containing the names of each column.  Ex: [ 'C1', 'C2' ] |
 | data       | [[]] | An array of arrays.  Each row of the array represents a row of data.  Ex: [[1, 2],[3,4]] |
 
@@ -278,14 +286,14 @@ Most configuration options can be configured with literals or dynamic functions.
 #### Points
 
 | Option | Default | Description |
-| ------ |:--------| -----:|
+| ------ |:--------| -----------:|
 | x      | 0       | The x coordinate of the point. |
 | y      | 0       | The y coordinate of the point. |
 
 #### Rectangles
 
 | Option  | Default | Description |
-| ------- |:--------| -----:|
+| ------- |:--------| -----------:|
 | width   | 0       | The width of the rectangle in pixels. |
 | height  | 0       | The height of the rectangle in pixels. |
 | x       | 0       | The x coordinate of the upper left vertex of the rectangle. |
@@ -300,7 +308,7 @@ Most configuration options can be configured with literals or dynamic functions.
 #### Circles
 
 | Option        | Default | Description |
-| ------------- |:--------| -----:|
+| ------------- |:--------| -----------:|
 | center        | POINT   | The center of the circle.  See Points. |
 | radius        | 0       | The radius of the circle in pixels. |
 | style.stroke  | STROKE  | See Strokes. |
@@ -311,21 +319,111 @@ Most configuration options can be configured with literals or dynamic functions.
 
 ### Bar Chart
 
+| Option    | Default  | Description |
+| --------- |:----------| ----------:|
+| parent    |           | The path to this component's parent element.  Ex: #BarChartParent |
+| id        | BarChart  | The id of this component's container element. |
+| class     | BarChart  | The class of this component's container element. |
+| csv       |           | The data for this diagram.  See CSV. |
+| width     | 600       | The width of this chart. |
+| height    | 400       | The height of this chart. |
+| xi        | 0         | The index of the column which will be used for the x axis. |
+| yi        | [1]       | An array of indices for the columns which will be used for the y axis values. |
+| xoffset   | 50        | Move the chart left (negative values) or to the right (positive values). |
+| yoffset   | 10        | Move the chart up (negative values) or down (positive values) |
+| color     |           | Determines the color for each group of bars. |
+| xmin      |           | The minimum x value. Ex: if 0, will cause the x axis to begin at 0. |
+| ymin      |           | The minimum y value. Ex: if 0, will cause the bars to start at minimum value 0. |
+| rectangle | RECTANGLE | This controls the appearance of the bars.  See Rectangles. |
+
 ### Chord Chart
+
+| Option          | Default  | Description |
+| --------------- |:---------| -----------:|
+| parent          |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id              | Chord    | The id of this component's container element. |
+| class           | Chord    | The class of this component's container element. |
+| csv             |          | The data for this diagram.  See CSV. |
+| width           | 600      | The width of this chart. |
+| height          | 400      | The height of this chart. |
+| transform       | 50       | Apply a SVG transform to the chart. |
+| padding         | 0.05     | Controls the padding between chords. |
+| color           |          | Controls the color scheme of the chords and links. |
+| nodes.mouseover | LINK     | Controls the appearance of nodes when the mouse is over them. See Links. |
+| links.mouseout  | LINK     | Controls the appearance of nodes when the mouse is not over them. See Links. |
+| links.mouseover | LINK     | Controls the appearance of links when the mouse is over them. See Links. |
+| nodes.mouseout  | LINK     | Controls the appearance of links when the mouse is not over them. See Links. |
+| opacity         | 100      | Controls the opacity of the chord links. |
+| chordOpacity    | 50       | Controls the opacity of the chords. |
+| innerRadius     | 130      | This controls the inner radius of the chord diagram. |
+| outerRadius     | 200      | This controls the outer radius of the chord diagram. |
+| tick            | LINE     | This controls the appearance of the tick.  See Lines. |
+| tick.length     |          | An additional field specifying the length of the tick. |
+| title           | LABEL    | This controls the appearance of the title.  See Labels. |
+| label           | LABEL    | This controls the appearance of the chord labels. See Labels. |
 
 ### Clustered Force
 
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
+
 ### Dendrogram
+
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
 
 ### HeatMap
 
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
+
 ### Horizontal Legends
+
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
 
 ### Line Charts
 
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
+
 ### Parallel Coordinates
 
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
+
 ### Pie Chart
+
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
 
 ### Sankey Diagram
 
@@ -358,26 +456,110 @@ Most configuration options can be configured with literals or dynamic functions.
 
 ### Scatter Plot
 
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
+
 ### UI Controls
+
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
 
 #### Configuration Box
 
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
+
 #### Selectable
+
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
 
 #### Slider
 
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
+
 #### Tabs
+
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
 
 ### ThreeJS
 
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
+
 #### ScatterPlot3D
+
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
+
 ### Maps
 
 #### US County Map
 
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
+
 #### US State Map
+
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
 
 #### World Country Map
 
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
+
 ### Vertical Legend
 
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
+| id                         | BarChart | The id of this component's container element. |
+| class                      | BarChart | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
