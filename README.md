@@ -245,7 +245,7 @@ Most configuration options can be configured with literals or dynamic functions.
 | y                        | 0     | Sets the y location of this label. |
 | transform                | 0     | Applies a SVG transformation to this label. |
 | dy                       | .71em | Sets the number of minor ticks to display. |
-| font                     | FONT  | Sets the font for this label.  See: Fonts. |
+| font                     | [Font](#fonts)  | Sets the font for this label.  See: Fonts. |
 | text                     | ''    | Sets the text value of this label. |
 | anchor                   | 5     | Sets the anchor of this label.  Ex: start, middle, end |
 | color                    | 5     | Sets the color of the label. |
@@ -272,7 +272,7 @@ Most configuration options can be configured with literals or dynamic functions.
 
 | Option | Default | Description |
 | ------ |:--------| -----------:|
-| tick   | TICK    | See Ticks. |
+| tick   | [Tick](#ticks)    | See Ticks. |
 | orient | 3       | Sets the orientation of the axis. Ex: top, bottom, left, right. |
 | scale  | 5       | Set the scale of the axis.  Ex: d3.scale.linear(), d3.scale.ordinal() |
 | label  | [Label](#labels)   | See Labels. |
@@ -339,7 +339,7 @@ A bar chart or bar graph is a chart with rectangular bars with lengths proportio
 | color     |           | Determines the color for each group of bars. |
 | xmin      |           | The minimum x value. Ex: if 0, will cause the x axis to begin at 0. |
 | ymin      |           | The minimum y value. Ex: if 0, will cause the bars to start at minimum value 0. |
-| rectangle | RECTANGLE | This controls the appearance of the bars.  See Rectangles. |
+| rectangle | [Rectangle](#rectangles) | This controls the appearance of the bars.  See Rectangles. |
 
 ### Chord Chart
 
@@ -362,10 +362,10 @@ A bar chart or bar graph is a chart with rectangular bars with lengths proportio
 | chordOpacity    | 50       | Controls the opacity of the chords. |
 | innerRadius     | 130      | This controls the inner radius of the chord diagram. |
 | outerRadius     | 200      | This controls the outer radius of the chord diagram. |
-| tick            | LINE     | This controls the appearance of the tick.  See Lines. |
+| tick            | [Line](#lines)   | This controls the appearance of the tick.  See Lines. |
 | tick.length     |          | An additional field specifying the length of the tick. |
-| title           | LABEL    | This controls the appearance of the title.  See Labels. |
-| label           | LABEL    | This controls the appearance of the chord labels. See Labels. |
+| title           | [Label](#labels)    | This controls the appearance of the title.  See Labels. |
+| label           | [Label](#labels)    | This controls the appearance of the chord labels. See Labels. |
 
 ### Clustered Force
 
@@ -443,8 +443,8 @@ A bar chart or bar graph is a chart with rectangular bars with lengths proportio
 | width                      | 100%    | The width of the sankey diagram in either pixels or a percentage of available bounding box size. |
 | transform                  |         | The SVG transformation(s) to apply. |
 | layoutIterations           | 32      | The number of iterations to expend when attempting to optimize node and link layout. |
-| columnTitle                | LABEL   | The label for each column. See Labels. |
-| label                      | LABEL   | The label for each node.  See Labels. |
+| columnTitle                | [Label](#labels)   | The label for each column. See Labels. |
+| label                      | [Label](#labels)   | The label for each node.  See Labels. |
 | link.stroke                | [Stroke](#strokes) | The stroke for each link.  See Strokes. |
 | link.fill                  | none    | The fill for each link. |
 | link.fillOpacity           |         | The fillOpacity for each link. |
