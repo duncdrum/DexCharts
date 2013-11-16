@@ -2,136 +2,80 @@
 <meta charset="utf-8">
 <style>
 
-body {
-  font: 10px sans-serif;
-}
+  body {
+    font: 10px sans-serif;
+  }
 
-.xaxis path,
-.xaxis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
+  .xaxis path,
+  .xaxis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
 
-.xaxis path {
-  /*display: none;*/
-}
+  .xaxis path {
+    /*display: none;*/
+  }
 
-.yaxis path,
-.yaxis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
+  .yaxis path,
+  .yaxis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
 
-.yaxis path {
-  /*display: none;*/
-}
+  .yaxis path {
+    /*display: none;*/
+  }
 
-#ConfigurationBox {
-  display:inline;
-  float:left;
-  width: 300px;
-  height: 250px;
-  padding: 0.5em;
-}
-#ConfigurationBox h3 {
-  text-align: center;
-  margin: 0;
-}
-
-#Selectable .ui-selecting { background: #BBBBBB; }
-#Selectable .ui-selected { background: steelblue; color: white; }
-#Selectable ol {
-padding: 0px;
-list-style-type: none;
-}
-
-#Tabs-left { 
-    position: relative; 
-    padding-left: 6.5em; 
-} 
-#Tabs-left .ui-tabs-nav { 
-    position: absolute; 
-    left: 0.25em; 
-    top: 0.25em; 
-    bottom: 0.25em; 
-    width: 6em; 
-    padding: 0.2em 0 0.2em 0.2em; 
-} 
-#Tabs-left .ui-tabs-nav li { 
-    right: 1px; 
-    width: 100%; 
-    border-right: none; 
-    border-bottom-width: 1px !important; 
-    -moz-border-radius: 4px 0px 0px 4px; 
-    -webkit-border-radius: 4px 0px 0px 4px; 
-    border-radius: 4px 0px 0px 4px; 
-    overflow: hidden; 
-} 
-#Tabs-left .ui-tabs-nav li.ui-tabs-selected, 
-#Tabs-left .ui-tabs-nav li.ui-state-active { 
-    border-right: 1px solid transparent; 
-} 
-#Tabs-left .ui-tabs-nav li a { 
-    float: right;
-    width: 100%;
-    text-align: right;
-}
-
-.SliderLabel {
-}
-
-.SliderInput {
-}
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.js"></script>
 <script src="../dex.js"></script>
-<script src="../js/dex/component/jquery-ui/ConfigurationBox.js"></script>
-<script src="../js/dex/component/jquery-ui/Tabs.js"></script>
-<script src="../js/dex/component/jquery-ui/Slider.js"></script>
-<script src="../js/dex/component/jquery-ui/Selectable.js"></script>
 <script src="../js/dex/component/d3/BarChart.js"></script>
 <script>
 
-// Create an SVG for our chart.
-var svg = d3.select("body").append("svg")
-  .attr("id", "MyChart")
-  .attr("width", 1000)
-  .attr("height", 800)
-  .append("g")
-  .attr("transform", "translate(40,20)");
+  // Create an SVG for our chart.
+  var svg = d3.select("body").append("svg")
+      .attr("id", "MyChart")
+      .attr("width", 1000)
+      .attr("height", 800)
+      .append("g")
+      .attr("transform", "translate(40,20)");
 
-var csv =
-{
-  'header' : ["X", "SIN(X)", "COS(X)"],
-  'data'   : []
-};
+  var csv =
+  {
+    'header': ["X", "SIN(X)", "COS(X)"],
+    'data': []
+  };
 
-for (x=-360; x<360; x+=1)
-{
-  csv.data.push([ x, Math.sin(x * Math.PI/180), Math.cos(x * Math.PI/180)]);
-}
+  for (x = -360; x < 360; x += 1) {
+    csv.data.push([ x, Math.sin(x * Math.PI / 180), Math.cos(x * Math.PI / 180)]);
+  }
 
-//dex.console.log("CDATA", d3.range(csv.data.length));
-var color = d3.scale.category10();
+  //dex.console.log("CDATA", d3.range(csv.data.length));
+  var color = d3.scale.category10();
 
-// Configure a chart.
-var bar = new BarChart(
-{
-  'parent' : "#MyChart",
-  'height' : 400,
-  'width'  : 1000,
-  'csv'    : csv,
-  'yi'     : [1, 2],
+  // Configure a chart.
+  var bar = new BarChart(
+      {
+        'parent': "#MyChart",
+        'height': 400,
+        'width': 1000,
+        'csv': csv,
+        'yi': [1, 2],
 //  'ymin'   : 0,
-  'rectangle.color' : function(d, i) { dex.console.log("I", d); return color(d[3]); },
-  'rectangle.opacity' : .5,
-  'rectangle.stroke.width' : 0
-  //'xaxis.scale' : d3.scale.ordinal().range([0, 600])
-});
+        'rectangle.color': function (d, i) {
+          dex.console.log("I", d);
+          return color(d[3]);
+        },
+        'bars.mouseover.opacity': 1,
+        'bars.mouseout.opacity': .5,
+        'bars.mouseover.stroke.width': 0,
+        'bars.mouseout.stroke.width': 0
+        //'xaxis.scale' : d3.scale.ordinal().range([0, 600])
+      });
 
-bar.render();
+  bar.render();
 
 </script>

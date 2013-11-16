@@ -25,18 +25,16 @@ function BarChart(userConfig) {
         [4, 16]
       ]
     },
-    'ymin' : 0,
-    'xmin' : 0,
+    'ymin' : null,
+    'xmin' : null,
     // width and height of our bar chart.
     'width': 600,
     'height': 400,
     // The x an y indexes to chart.
     'xi': 0,
-    'yi': [1],
+    'yi': [0],
     'transform': 'translate(100 100)',
     'color': d3.scale.category20(),
-    //'xmin': null,
-    //'ymin': null,
     bars: {
       'mouseover': dex.config.rectangle({
         'stroke': {'width': 2, 'color' : "red"}}),
@@ -120,7 +118,7 @@ function BarChart(userConfig) {
     yextent[1] = chart.config.ymax;
   }
 
-  console.log("YEXTENT:" + yextent);
+  //console.log("YEXTENT:" + yextent);
   chart.config.yaxis.scale.domain(yextent);
 
   chart.render = function () {
@@ -131,8 +129,8 @@ function BarChart(userConfig) {
     var chart = this;
     var config = chart.config;
 
-    console.dir("XAXIS--");
-    console.dir(config.xaxis);
+    //console.dir("XAXIS--");
+    //console.dir(config.xaxis);
     var xaxis = dex.config.configureAxis(config.xaxis);
     var yaxis = dex.config.configureAxis(config.yaxis);
 
@@ -191,6 +189,9 @@ function BarChart(userConfig) {
       dex.matrix.slice(data, [config.xi]),
       dex.matrix.slice(data, config.yi)
     );
+
+    //dex.console.log("CSV DATA", csv);
+    //dex.console.log("BAR DATA", barData);
 
     chartContainer.selectAll(".bar")
       .data(barData)
