@@ -315,22 +315,24 @@ Most configuration options can be configured with literals or dynamic functions.
 
 A bar chart or bar graph is a chart with rectangular bars with lengths proportional to the values that they represent. The bars can be plotted vertically or horizontally. A vertical bar chart is sometimes called a column bar chart.  Ironically, this, the simplest of charts, has given me the most trouble.  I need to invest quite a bit more time into this component, however, it is currently usable at least.
 
-| Option    | Default  | Description |
-| --------- |:----------| ----------:|
-| parent    |           | The path to this component's parent element.  Ex: #BarChartParent |
-| id        | BarChart  | The id of this component's container element. |
-| class     | BarChart  | The class of this component's container element. |
-| csv       |           | The data for this diagram.  See CSV. |
-| width     | 600       | The width of this chart. |
-| height    | 400       | The height of this chart. |
-| xi        | 0         | The index of the column which will be used for the x axis. |
-| yi        | [1]       | An array of indices for the columns which will be used for the y axis values. |
-| xoffset   | 50        | Move the chart left (negative values) or to the right (positive values). |
-| yoffset   | 10        | Move the chart up (negative values) or down (positive values) |
-| color     |           | Determines the color for each group of bars. |
-| xmin      |           | The minimum x value. Ex: if 0, will cause the x axis to begin at 0. |
-| ymin      |           | The minimum y value. Ex: if 0, will cause the bars to start at minimum value 0. |
-| rectangle | [Rectangle](#rectangles) | This controls the appearance of the bars.  See Rectangles. |
+| Option         | Default   | Description |
+| -------------- |:----------| ----------:|
+| parent         |           | The path to this component's parent element.  Ex: #BarChartParent |
+| id             | BarChart  | The id of this component's container element. |
+| class          | BarChart  | The class of this component's container element. |
+| csv            |           | The data for this diagram.  See CSV. |
+| width          | 600       | The width of this chart. |
+| height         | 400       | The height of this chart. |
+| xi             | 0         | The index of the column which will be used for the x axis. |
+| yi             | [1]       | An array of indices for the columns which will be used for the y axis values. |
+| xoffset        | 50        | Move the chart left (negative values) or to the right (positive values). |
+| yoffset        | 10        | Move the chart up (negative values) or down (positive values) |
+| color          |           | Determines the color for each group of bars. |
+| xmin           | 0         | The minimum x value. Ex: if 0, will cause the x axis to begin at 0. |
+| ymin           | 0         | The minimum y value. Ex: if 0, will cause the bars to start at minimum value 0. |
+| bars.mouseover | [Rectangle](#rectangles) | This controls the appearance of the bars when the mouse is over them. |
+| bars.mouseout  | [Rectangle](#rectangles) | This controls the appearance of the bars when the mouse is not over them. |
+
 
 ### Chord Chart
 
@@ -452,7 +454,7 @@ A bar chart or bar graph is a chart with rectangular bars with lengths proportio
 
 ### Scatter Plot
 
-Is it one word or two?  This is a mystery which has troubled engineers throughout time.  Either way, scatterplots are a very useful way to quickly understand a numeric or even ordinal distributions.
+Is it one word or two?  This is a mystery which has haunted engineers throughout time.  Either way, scatterplots are a very useful way to quickly understand a numeric or even ordinal distributions.
 
 | Option                     | Default     | Description |
 | -------------------------- |:------------| -----:|
