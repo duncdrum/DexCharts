@@ -16,9 +16,9 @@ There are many examples bundled with DexCharts.  Here are a few.
 | [Bar Chart](#bar-chart)     | [Styling](http://dexvis.com/dexcharts/dist/current/examples/BarChart3.html) | This demonstrates some of the styling options associated with a bar chart. |
 | [Chord Chart](#chord-chart) | [Basic Example](http://dexvis.com/dexcharts/dist/current/examples/Chord1.html)| This is a basic example of a chord chart. |
 | [Chord Chart](#chord-chart) | [Styling](http://dexvis.com/dexcharts/dist/current/examples/Chord2.html) | This is a more complicated example demonstrating parallel coordinates chart dynamically creating a Chord Chart. |
-| Dendrogram             | [Dendrogram 1](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram1.html) ||
-| Dendrogram             | [Dendrogram 2](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram2.html) ||
-| Dendrogram             | [Dendrogram 3](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram3.html) ||
+| [Dendrogram](#dendrogram)   | [Dendrogram 1](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram1.html) ||
+| [Dendrogram](#dendrogram)   | [Dendrogram 2](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram2.html) ||
+| [Dendrogram](#dendrogram)   | [Dendrogram 3](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram3.html) ||
 | Heat Map               | [HeatMap 1](http://dexvis.com/dexcharts/dist/current/examples/HeatMap1.html) ||
 | Horizontal Legend      | [Horizontal Legend 1](http://dexvis.com/dexcharts/dist/current/examples/HorizontalLegend1.html) ||
 | Legends                | [Legend 1](http://dexvis.com/dexcharts/dist/current/examples/Legends1.html) ||
@@ -391,36 +391,36 @@ A bar chart or bar graph is a chart with rectangular bars with lengths proportio
 
 | Option                     | Default  | Description |
 | -------------------------- |:---------| -----:|
-| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
-| id                         | BarChart | The id of this component's container element. |
-| class                      | BarChart | The class of this component's container element. |
+| parent                     |          | The path to this component's parent element.  Ex: #HorizontalLegendParent |
+| id                         | HorizontalLegend | The id of this component's container element. |
+| class                      | HorizontalLegend | The class of this component's container element. |
 | csv                        |         | The data for this diagram.  See CSV. |
 
 ### Line Charts
 
 | Option                     | Default  | Description |
 | -------------------------- |:---------| -----:|
-| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
-| id                         | BarChart | The id of this component's container element. |
-| class                      | BarChart | The class of this component's container element. |
+| parent                     |          | The path to this component's parent element.  Ex: #LineChartParent |
+| id                         | LineChart | The id of this component's container element. |
+| class                      | LineChart | The class of this component's container element. |
 | csv                        |         | The data for this diagram.  See CSV. |
 
 ### Parallel Coordinates
 
 | Option                     | Default  | Description |
 | -------------------------- |:---------| -----:|
-| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
-| id                         | BarChart | The id of this component's container element. |
-| class                      | BarChart | The class of this component's container element. |
+| parent                     |          | The path to this component's parent element.  Ex: #ParCoordParent |
+| id                         | ParCoord | The id of this component's container element. |
+| class                      | ParCoord | The class of this component's container element. |
 | csv                        |         | The data for this diagram.  See CSV. |
 
 ### Pie Chart
 
 | Option                     | Default  | Description |
 | -------------------------- |:---------| -----:|
-| parent                     |          | The path to this component's parent element.  Ex: #BarChartParent |
-| id                         | BarChart | The id of this component's container element. |
-| class                      | BarChart | The class of this component's container element. |
+| parent                     |          | The path to this component's parent element.  Ex: #PieChartParent |
+| id                         | PieChart | The id of this component's container element. |
+| class                      | PieChart | The class of this component's container element. |
 | csv                        |         | The data for this diagram.  See CSV. |
 
 ### Sankey Diagram
