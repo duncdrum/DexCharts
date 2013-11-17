@@ -25,27 +25,29 @@ function Chord(userConfig) {
     'nodes': {
       'mouseout': dex.config.link(
         {
-          'stroke.color': "grey",
-          'stroke.dasharray': '5 5',
-          'stroke.width': 2,
+          'stroke.color': "black",
+          //'stroke.dasharray': '5 5',
+          'stroke.width': 1,
           'fill.fillColor': function (d, i) {
             //dex.console.log("COLORD", d);
             return(config.color(d.index));
           },
           'fill.fillOpacity': 0.5,
+          'fill.fill' : 'none',
           'd': d3.svg.arc(),
           'transform' : ''
         }),
       'mouseover': dex.config.link(
         {
           'stroke.color': "red",
-          'stroke.dasharray': '5 5',
-          'stroke.width': 2,
+          //'stroke.dasharray': '5 5',
+          'stroke.width': 1,
           'fill.fillColor': function (d, i) {
             //dex.console.log("COLORD", d);
             return(config.color(d.index));
           },
           'fill.fillOpacity': 1,
+          'fill.fill' : 'none',
           'd': d3.svg.arc(),
           'transform' : ''
         })},
@@ -54,11 +56,12 @@ function Chord(userConfig) {
         {
           'stroke.color': "grey",
           'stroke.dasharray': '',
-          'stroke.width': 1,
+          'stroke.width': 0,
           'fill.fillColor': function (d, i) {
             return(config.color(d.target.index));
           },
           'fill.fillOpacity': 0.5,
+          'fill.fill' : 'none',
           'd': d3.svg.chord(),
           'transform' : ''
         }),
@@ -66,12 +69,13 @@ function Chord(userConfig) {
         {
           'stroke.color': "red",
           'stroke.dasharray': '',
-          'stroke.width': 2,
+          'stroke.width': 0,
           'fill.fillColor': function (d, i) {
             return(config.color(d.target.index));
           },
           'transform' : "",
           'fill.fillOpacity': 1,
+          'fill.fill' : 'none',
           'd': d3.svg.chord()
         })},
 //                .style("fill", function (d) {
@@ -82,14 +86,14 @@ function Chord(userConfig) {
     'outerRadius': 200,
     'tick.start.x' : 1,
     'tick.start.y' : 0,
-    'tick.end.x' : 50,
+    'tick.end.x' : 5,
     'tick.end.y' : 0,
-    'tick.length' : 50,
+    'tick.padding' : 10,
     'tick.stroke' : dex.config.stroke(
       {
-        'width' : 5,
-        'color' : 'steelblue',
-        'dasharray' : '1 2'
+        'width' : 2,
+        'color' : 'black'
+        //'dasharray' : '1 2'
       }),
     'title': dex.config.label(),
     'label': dex.config.label()
@@ -133,7 +137,7 @@ function Chord(userConfig) {
       .sortSubgroups(d3.descending)
       .matrix(chordData.connections);
 
-    dex.console.log("LINKS", config.links);
+    //dex.console.log("LINKS", config.links);
 
     chartContainer.append("g")
       .selectAll("path")
@@ -143,11 +147,11 @@ function Chord(userConfig) {
       .call(dex.config.configureLink, config.nodes.mouseout)
       .on("mouseover", function (activeChord) {
         d3.select(this).call(dex.config.configureLink, config.nodes.mouseover);
-        dex.console.log("F", activeChord);
+        //dex.console.log("F", activeChord);
         d3.selectAll("g.chord path")
           .filter(function (d) {
             //return false;
-            dex.console.log("ACTIVE D", d);
+            //dex.console.log("ACTIVE D", d);
             return d.source.index == activeChord.index || d.target.index == activeChord.index;
           })
           //.call("opacity", config.links.mouseover.fill.fillOpacity);
@@ -156,11 +160,11 @@ function Chord(userConfig) {
       .on("mouseout", function (inactiveChord) {
         d3.select(this)
           .call(dex.config.configureLink, config.nodes.mouseout)
-        dex.console.log("INACTIVE", inactiveChord);
+        //dex.console.log("INACTIVE", inactiveChord);
         d3.selectAll("g.chord path")
           .filter(function (d) {
             //return false;
-            dex.console.log("INACTIVE D", d);
+            //dex.console.log("INACTIVE D", d);
             return d.source.index == inactiveChord.index || d.target.index == inactiveChord.index;
           })
           .call(dex.config.configureLink, config.links.mouseout);
@@ -200,7 +204,7 @@ function Chord(userConfig) {
       //.style("stroke", "#000");
 
     ticks.append("text")
-      .attr("x", config.tick.length + (config.tick.length / 4))
+      .attr("x", config.tick.padding + (config.tick.padding / 4))
       .attr("dy", ".35em")
       .attr("font-size", config.label.font.size)
       .attr("text-anchor", function (d) {
@@ -208,7 +212,7 @@ function Chord(userConfig) {
       })
       .attr("transform", function (d) {
         return d.angle > Math.PI ? "rotate(180)translate(-" +
-          ((config.tick.length * 2) + (config.tick.length / 2)) + ")" : null;
+          ((config.tick.padding * 2) + (config.tick.padding / 2)) + ")" : null;
       })
       .text(function (d) {
         return d.label;

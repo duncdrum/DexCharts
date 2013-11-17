@@ -3,16 +3,11 @@
 <style>
 </style>
 <body>
+<svg id="ChordDiagram" height="1000" width="1000"></svg>
 <script src="http://d3js.org/d3.v3.js"></script>
 <script src="../dex.js"></script>
 <script src="../js/dex/component/d3/Chord.js"></script>
 <script>
-  // Create an SVG for our chart.
-  var svg = d3.select("body").append("svg")
-      .attr('id', "ChordDiagram")
-      .attr("width", 1000)
-      .attr("height", 1000);
-
   var csv =
   {
     'header': [ "Presidency", "President", "Party", "Home State" ],

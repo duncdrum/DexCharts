@@ -190,7 +190,7 @@ dex.config.fill = function (custom) {
 };
 
 dex.config.configureFill = function (node, config) {
-  dex.console.log("configureFill", node, config);
+  //dex.console.log("configureFill", node, config);
   dex.config.setAttr(node, 'fill', config.fillColor);
   dex.config.setAttr(node, 'fill-opacity', config.fillOpacity)
     .style("fill-opacity", config.fillOpacity);
@@ -215,7 +215,6 @@ dex.config.configureLink = function (node, config) {
   dex.config.configureFill(node, config.fill);
   dex.config.setAttr(node, 'transform', config.transform);
   dex.config.setAttr(node, 'd', config.d);
-  dex.console.log("LINK", "NODE", node, "CONFIG", config);
 
   return node;
 }
@@ -231,7 +230,8 @@ dex.config.rectangle = function (custom) {
     'ry': 0,
     'stroke': dex.config.stroke(),
     'opacity': 1,
-    'color': d3.scale.category20()
+    'color': d3.scale.category20(),
+    'transform' : ''
   };
   if (custom) {
     config = dex.object.overlay(custom, config);
@@ -248,6 +248,7 @@ dex.config.configureRectangle = function (node, config) {
   dex.config.setAttr(node, 'ry', config.ry);
   dex.config.setAttr(node, 'opacity', config.opacity);
   dex.config.setAttr(node, 'fill', config.color);
+  dex.config.setAttr(node, 'transform', config.transform);
 
   return node.call(dex.config.configureStroke, config.stroke);
 };
@@ -316,23 +317,6 @@ dex.config.configurePoint = function (node, config) {
     .attr('y', config.center.cy);
 };
 
-dex.config.circle = function (custom) {
-  var config =
-  {
-    'center': dex.config.point(),
-    'radius': 10,
-    'style': {
-      'stroke': dex.config.stroke(),
-      'color': d3.scale.category20(),
-      'opacity': 1.0
-    }
-  };
-  if (custom) {
-    config = dex.object.overlay(custom, config);
-  }
-  return config;
-};
-
 // Configures: opacity, color, stroke.
 dex.config.configureShapeStyle = function (node, config) {
   return node
@@ -341,12 +325,33 @@ dex.config.configureShapeStyle = function (node, config) {
     .style('fill', config.color);
 };
 
+dex.config.circle = function (custom) {
+  var config =
+  {
+    'cx': 0,
+    'cy' : 0,
+    'r': 10,
+    'fill' : dex.config.fill(),
+    'stroke' : dex.config.stroke(),
+    'transform' : '',
+    'title' : ''
+  };
+  if (custom) {
+    config = dex.object.overlay(custom, config);
+  }
+  return config;
+};
+
 dex.config.configureCircle = function (node, config) {
-  return node
-    .call(dex.config.configureShapeStyle, config.style)
-    .attr('r', config.radius)
-    .attr('cx', config.center.x)
-    .attr('cy', config.center.y);
+  dex.config.setAttr(node, "r", config.r);
+  dex.config.setAttr(node, "cx", config.cx);
+  dex.config.setAttr(node, "cy", config.cy);
+  dex.config.setAttr(node, "transform", config.transform);
+  dex.config.setAttr(node, "title", config.title);
+  node.call(dex.config.configureStroke, config.stroke);
+  node.call(dex.config.configureFill, config.fill);
+
+  return node;
 };
 
 dex.config.label = function (custom) {
@@ -1197,6 +1202,11 @@ dex.csv.visitCells = function(csv, func)
 };
 dex.datagen = {};
 
+/**
+ *
+ * @param spec The specification for this matrix.
+ * @returns {Array}
+ */
 dex.datagen.randomMatrix = function(spec)
 {
 	var ri, ci;

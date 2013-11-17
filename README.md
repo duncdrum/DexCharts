@@ -10,13 +10,12 @@ There are many examples bundled with DexCharts.  Here are a few.
 
 
 | Chart Type             | Short Description | Long Description |
-|:---------------------- |:----------------- |:-- |
-| Bar Chart              | [Basic Example](http://dexvis.com/dexcharts/dist/current/examples/BarChart3.html) | This example demonstrates the basic use of a bar chart. |
-| Bar Chart              | [Basic Example 2](http://dexvis.com/dexcharts/dist/current/examples/BarChart1.html) | This is another basic usage example. |
-| Bar Chart              | [High Resolution](http://dexvis.com/dexcharts/dist/current/examples/BarChart2.html) | This chart looks like a line chart, however, in reality it is a fine grained bar chart. |
-| Bar Chart              | [High Resolution](http://dexvis.com/dexcharts/dist/current/examples/BarChart3.html) | This demonstrates some of the styling options associated with a bar chart. |
-| Chord Chart            | [Basic Example](http://dexvis.com/dexcharts/dist/current/examples/Chord1.html)| This is a basic example of a chord chart. |
-| Chord Chart            | [Parallel Coordinates / Chord Chart](http://dexvis.com/dexcharts/dist/current/examples/Chord2.html) | This is a more complicated example demonstrating parallel coordinates chart dynamically creating a Chord Chart. |
+|:--------------------------- |:----------------- |:-- |
+| [Bar Chart](#bar-chart)     | [Basic Example](http://dexvis.com/dexcharts/dist/current/examples/BarChart1.html) | This example demonstrates the basic use of a bar chart. |
+| [Bar Chart](#bar-chart)     | [Basic Example 2](http://dexvis.com/dexcharts/dist/current/examples/BarChart2.html) |  This chart looks like a line chart, however, in reality it is a fine grained bar chart. |
+| [Bar Chart](#bar-chart)     | [High Resolution](http://dexvis.com/dexcharts/dist/current/examples/BarChart3.html) | This demonstrates some of the styling options associated with a bar chart. |
+| [Chord Chart](#chord-chart) | [Basic Example](http://dexvis.com/dexcharts/dist/current/examples/Chord1.html)| This is a basic example of a chord chart. |
+| [Chord Chart](#chord-chart) | [Parallel Coordinates / Chord Chart](http://dexvis.com/dexcharts/dist/current/examples/Chord2.html) | This is a more complicated example demonstrating parallel coordinates chart dynamically creating a Chord Chart. |
 | Dendrogram             | [Dendrogram 1](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram1.html) ||
 | Dendrogram             | [Dendrogram 2](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram2.html) ||
 | Dendrogram             | [Dendrogram 3](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram3.html) ||

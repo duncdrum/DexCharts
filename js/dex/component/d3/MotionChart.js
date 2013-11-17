@@ -129,10 +129,8 @@ function MotionChart(userConfig) {
     var config = this.config;
     var csv = config.csv;
 
-    dex.console.log("FINAL-DATA", csv);
-
     if (config.debug) {
-      console.log("===== HeatMap Configuration =====");
+      console.log("===== Motion Chart Configuration =====");
       console.dir(config);
     }
 
@@ -145,6 +143,9 @@ function MotionChart(userConfig) {
     var play = true;
 
     var timeGroups = dex.csv.group(csv, [config.index.time]);
+
+    dex.console.log("Time Groups", timeGroups);
+
     for (ri = 0; ri < timeGroups.length; ri++) {
       timeGroups[ri].data = dex.csv.group(timeGroups[ri].csv, [ config.index.name, config.index.category ])
     }
@@ -277,6 +278,8 @@ function MotionChart(userConfig) {
       .style("font-size", timeFontSize + "px")
       .attr("y", timeFontSize)
       .attr("x", timeFontSize * timeLenMax);
+
+    dex.console.log("TIMEMIN", timeMin);
 
     // Add a dot per nation. Initialize the data at 1800, and set the colors.
     var dot = chartContainer.append("g")

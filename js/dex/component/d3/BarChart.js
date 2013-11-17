@@ -32,7 +32,7 @@ function BarChart(userConfig) {
     'height': 400,
     // The x an y indexes to chart.
     'xi': 0,
-    'yi': [0],
+    'yi': [1],
     'transform': 'translate(100 100)',
     'color': d3.scale.category20(),
     bars: {

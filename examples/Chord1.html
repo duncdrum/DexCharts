@@ -13,19 +13,7 @@ var svg = d3.select("body").append("svg")
   .attr("width", 1000)
   .attr("height", 1000);
 
-var csv =
-{
-  'header' : d3.range(3).map(function(d) { return "C"+d;}),
-  'data'   : dex.datagen.randomMatrix({"rows":3, "columns": 3, "min": 0, "max":100}),
-};
-
 csv =
-{
-  'header' : [ "C1", "C2", "C3" ],
-  'data'   : [["A", "B", "C"], ["A", "B", "D"]]
-};
-
-csv2 =
 {
   'header' : [ "Presidency","President","Party","Home State" ],
   'data'   :
@@ -77,20 +65,16 @@ csv2 =
   ]
 };
 
-csv2 = dex.csv.columnSlice(csv2, [1,2]);
-
 // Configure a chart.
 var chord = new Chord(
   {
     'parent'       : '#ChordDiagram',
     'height'       : 800,
     'width'        : 800,
-    'xoffset'      : 500,
-    'yoffset'      : 400,
     'innerRadius'  : 180,
     'outerRadius'  : 200,
     'color'        : d3.scale.category20c(),
-    'csv'          : csv2
+    'csv'          : dex.csv.columnSlice(csv, [1,2])
   }
 );
 chord.render();

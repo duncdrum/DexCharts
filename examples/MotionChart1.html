@@ -58,8 +58,8 @@
   }
 </style>
 <body>
-<svg id="ChartArea" height="800" width="800"></svg>
-<svg id="TimeLabel" height="400" width="400"></svg>
+<svg id="ChartArea" height="600" width="600"></svg>
+<svg id="timeLabel" height="100" width="400"></svg>
 
 <script src="http://d3js.org/d3.v3.js"></script>
 <script src="../dex.js"></script>
@@ -71,7 +71,7 @@
     'data': []
   };
 
-  for (var year = 1800; year < 2000; year += 1) {
+  for (var year = 1900; year < 2000; year += 1) {
     for (var cat = 1; cat < 3; cat++) {
       csv.data.push([year, 'NAME', cat, cat, cat, cat]);
     }
@@ -82,7 +82,7 @@
   // Configure a chart.
   var motionChart = new MotionChart({
     'parent': "#ChartArea",
-    'timeLabel': "#TimeLabel",
+    'timeLabel': "#timeLabel",
     'csv' : csv
   });
   motionChart.render();

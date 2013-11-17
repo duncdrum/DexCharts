@@ -1,5 +1,10 @@
 dex.datagen = {};
 
+/**
+ *
+ * @param spec The specification for this matrix.
+ * @returns {Array}
+ */
 dex.datagen.randomMatrix = function(spec)
 {
 	var ri, ci;
