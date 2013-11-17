@@ -64,7 +64,7 @@ body {
 // Create an SVG for our chart.
 var svg = d3.select("body").append("svg")
   .attr("id", "ChartArea")
-  .attr("width", 1000)
+  .attr("width", 1200)
   .attr("height",800)
   .append("g")
   .attr("transform", "translate(40,20)");
@@ -73,14 +73,13 @@ var pcChart = new ParallelCoordinates(
   {
     'parent'      : "#ChartArea",
     'id'          : "ParChart",
-    'xoffset'     : 0,
-    'yoffset'     : 10,
+    'transform'     : 'translate(0 10)',
     'csv' :
     {
       'header' : ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10" ],
       'data'   : dex.datagen.randomMatrix(
       	{"rows":10, "columns": 10, "min": 0, "max":100})
-    },
+    }
   }
 );
 
@@ -89,8 +88,7 @@ var cforce = new ClusteredForce(
   {
     'parent'    : "#ChartArea",
     'id'        : "CForce",
-    'xoffset'   : 450,
-    'yoffset'   : 0,
+    'transform' : 'translate(500 0)',
     'width'     : 600,
     'height'    : 600,
     'csv'       : pcChart.attr("csv"),
