@@ -1,77 +1,72 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-.chart {}
+  .chart {
+  }
 
-.main text
-{
-  font: 10px sans-serif;	
-}
+  .main text {
+    font: 10px sans-serif;
+  }
 
-.axis line, .axis path
-{
-  shape-rendering: crispEdges;
-  stroke: black;
-  fill: none;
-}
+  .axis line, .axis path {
+    shape-rendering: crispEdges;
+    stroke: black;
+    fill: none;
+  }
 
-circle
-{
-  fill: steelblue;
-}
+  circle {
+    fill: steelblue;
+  }
 
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
-}
+  .line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+  }
 </style>
 <body>
-<script src="http://d3js.org/d3.v3.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.3.9/d3.min.js"></script>
 <script src="../dex.js"></script>
 <script src="../js/dex/component/d3/ScatterPlot.js"></script>
 <script src="../js/dex/component/d3/LineChart.js"></script>
 <svg id="ChartArea" height="600" class="chart" width="900"></svg>
 <script>
 
-// Data setup.
-var labels = [ "X", "Y" ];
-var data = d3.range(100).map(
-  function(i) { return [ i, Math.random()*100];});
+  // Data setup.
+  var labels = [ "X", "Y" ];
+  var data = d3.range(100).map(function (i) {
+    return [ i, Math.random() * 100];
+  });
 
-var csv = dex.csv.csv(labels, data);
+  var csv = dex.csv.csv(labels, data);
 
-var scatterplot = new ScatterPlot(
-  {
-    'parent'           : "#ChartArea",
-    'width'            : 400,
-    'height'           : 400,
-    'csv'              : csv,
-    'xoffset'          : 50,
-    'yoffset'          : 50,
-    'unselectedRadius' : 2,
-    'selectedRadius'   : 4,
-    'unselectedColor'  : "steelblue"
-  }
-);
-scatterplot.render();
+  var scatterplot = new ScatterPlot({
+        'parent'           : "#ChartArea",
+        'width'            : 400,
+        'height'           : 400,
+        'csv'              : csv,
+        'transform'        : 'translate(50,0)',
+        'unselectedRadius' : 2,
+        'selectedRadius'   : 4,
+        'unselectedColor'  : "steelblue"
+      }
+  );
+  scatterplot.render();
 
-var linechart = new LineChart(
-  {
-	'parent' : "#ChartArea",
-	'width'  : 400,
-	'height' : 400,
-	'csv'    : csv,
-	'xoffset': 500,
-	'yoffset' : 50
-  }
-);
-linechart.render();
+  var linechart = new LineChart({
+        'parent'    : "#ChartArea",
+        'width'     : 400,
+        'height'    : 400,
+        'csv'       : csv,
+        'transform' : 'translate(500,0)'
+      }
+  );
+  linechart.render();
 
-scatterplot.addListener("brushend", linechart, function(chartEvent)
-  {
+  scatterplot.addListener("brushend", linechart, function (chartEvent) {
     d3.selectAll("#LineChart").remove();
     linechart.attr('csv.data', chartEvent.data);
+    //linechart.attr('xaxis').domain([0,200]);
     linechart.update();
   });
 

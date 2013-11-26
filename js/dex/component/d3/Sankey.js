@@ -25,7 +25,7 @@ function Sankey(userConfig)
     // The x an y indexes to chart.
     "transform"        : "",
     'layoutIterations' : 32,
-    'columnTitle'      : dex.config.label(
+    'columnTitle'      : dex.config.text(
       {
         'x' : function(d) {
         var center = window.innerWidth / 2;
@@ -76,7 +76,7 @@ function Sankey(userConfig)
       }
     ),
     'label'            : 
-    dex.config.label({
+    dex.config.text({
       'x' : function(d) {
         var center = window.innerWidth / 2;
         //var center = (typeof userConfig.width !== 'undefined' ?
@@ -508,14 +508,14 @@ function Sankey(userConfig)
       .data(orderedLocations)
       .enter()
       .append("text")
-      .call(dex.config.configureLabel, config.columnTitle)
+      .call(dex.config.configureText, config.columnTitle)
       .text(function(d, i) { return csv.header[i]; });
 
    //////////// END OF HACK
    
     // add in the title for the nodes
     node.append("text")
-      .call(dex.config.configureLabel, config.label);
+      .call(dex.config.configureText, config.label);
 
     // the function for moving the nodes
     function dragmove(d)

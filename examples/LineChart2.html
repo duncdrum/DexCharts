@@ -2,182 +2,83 @@
 <meta charset="utf-8">
 <style>
 
-body {
-  font: 10px sans-serif;
-}
+  body {
+    font: 10px sans-serif;
+  }
 
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
 
-.x.axis path {
-  /*display: none;*/
-}
+  .x.axis path {
+    /*display: none;*/
+  }
 
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
-}
+  .line {
+    fill: none;
+  }
 
 </style>
 <body>
-<script src="http://d3js.org/d3.v3.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.3.9/d3.min.js"></script>
 <script src="../dex.js"></script>
 <script src="../js/dex/component/d3/LineChart.js"></script>
 <script>
-// Here is basic CSV data.  CSV will be the core input type
-// for all of our reusable charts:
-var data = [[ "x", "abs(x)", "x^2", "x^3", "cos(x)", "sin(x)" ]];
+  // Here is basic CSV data.  CSV will be the core input type
+  // for all of our reusable charts:
+  var data = [
+    [ "x", "abs(x)", "x^2", "x^3", "cos(x)", "sin(x)" ]
+  ];
 
-for (var i=-360;i<=360; i=i+10)
-{
-  data.push([i, Math.abs(i), i*i, i*i*i, Math.cos(i*(Math.PI/180)), Math.sin(i*(Math.PI/180)) ]);
-}
-
-// Extract the header:
-var labels = data[0];
-
-// Remove the header from the data.
-data.splice(0, 1);
-
-// Create an SVG for our chart.
-var svg = d3.select("body").append("svg")
-  .attr("id", "ChartArea")
-  .attr("width", 2000)
-  .attr("height", 2000)
-  .append("g")
-  .attr("transform", "translate(40,10)");
-
-// Create the chart:
-var chart = new LineChart(
-{
-  'parent'      : "#ChartArea",
-  'id'          : "LineChart",
-  'lineColors'  : d3.scale.category10(),
-  'pointColors' : d3.scale.category10(),
-  'height'      : 400,
-  'width'       : 400,
-  'yoffset'     : 10,
-  'xoffset'     : 20,
-  'xi'          : 0,
-  'yi'          : [ 4, 5 ],
-  'csv'         :
-  {
-	'header' : labels,
-    'data'   : data,
-  },
-  'xaxis' :
-  {
-  	'label' :
-  	{
-  	  'anchor' : 'end',
-  	  'color'  : 'black',
-  	  'dy'     : '.71em',
-  	  'font'   :
-  	  {
-  	  	'family'  : 'sans-serif',
-  	  	'size'    : 16,
-  	  	'style'   : 'normal',
-  	  	'variant' : 'normal',
-  	  	'weight'  : 'normal'
-  	  },
-  	  'text' : "Custom X",
-  	  'transform' : "",
-  	  'x' : 250,
-  	  'y' : 20
-  	},
-  	'orient' : 'bottom',
-  	'tick' :
-  	{
-   	  'count' : 5,
-  	  'format' : d3.format(',d'),
-  	  'subdivide' : 3,
-  	  'padding' : 5,
-  	  'size' :
-  	  {
-  	  	'major' : 5,
-  	  	'minor' : 3,
-  	  	'end' : 5
-  	  },
-  	  'label'  :
-  	  {
-  	    'anchor' : 'end',
-  	    'color'  : 'black',
-  	    'dy'     : '.71em',
-  	    'font'   :
-  	    {
-  	  	  'family'  : 'sans-serif',
-  	  	  'size'    : 16,
-  	  	  'style'   : 'normal',
-  	  	  'variant' : 'normal',
-  	  	  'weight'  : 'normal'
-  	    },
-  	    'transform' : "",
-  	    'x' : 0,
-  	    'y' : 10
-  	  }
-  	}
-  },
-  'yaxis' :
-  {
-  	'label' :
-  	{
-  	  'anchor' : 'end',
-  	  'color'  : 'red',
-  	  'dy'     : '.71em',
-  	  'font'   :
-  	  {
-  	  	'family'  : 'sans-serif',
-  	  	'size'    : 24,
-  	  	'style'   : 'normal',
-  	  	'variant' : 'normal',
-  	  	'weight'  : 'normal'
-  	  },
-  	  'text' : "Custom Y",
-  	  'transform' : "",
-  	  'x' : -150,
-  	  'y' : -50
-  	},
-  	'orient' : 'left',
-  	'tick' :
-  	{
-  	  'count' : 5,
-  	  'format' : d3.format(',d'),
-  	  'subdivide' : 3,
-  	  'padding' : 5,
-  	  'size' :
-  	  {
-  	  	'major' : 5,
-  	  	'minor' : 3,
-  	  	'end' : 5
-  	  },
-  	  'label'  :
-  	  {
-  	    'anchor' : 'end',
-  	    'color'  : 'black',
-  	    'dy'     : '.71em',
-  	    'font'   :
-  	    {
-  	  	  'family'  : 'sans-serif',
-  	  	  'size'    : 16,
-  	  	  'style'   : 'normal',
-  	  	  'variant' : 'normal',
-  	  	  'weight'  : 'normal'
-  	    },
-  	    'transform' : "",
-  	    'x' : -10,
-  	    'y' : -5
-  	  }
-  	}
+  for (var i = -360; i <= 360; i = i + 10) {
+    data.push([i, Math.abs(i), i * i, i * i * i, Math.cos(i * (Math.PI / 180)), Math.sin(i * (Math.PI / 180)) ]);
   }
-});
 
-chart.attr("xaxis.label.font.size", 24);
-chart.attr("yaxis.label.transform", "rotate(-90)");
-chart.render();
+  // Extract the header:
+  var labels = data[0];
+
+  // Remove the header from the data.
+  data.splice(0, 1);
+
+  // Create an SVG for our chart.
+  var svg = d3.select("body").append("svg")
+      .attr("id", "ChartArea")
+      .attr("width", 2000)
+      .attr("height", 2000)
+      .append("g")
+      .attr("transform", "translate(40,10)");
+
+  // Create the chart:
+  var chart = new LineChart({
+    'parent'                         : "#ChartArea",
+    'id'                             : "LineChart",
+    'lineColors'                     : d3.scale.category10(),
+    'pointColors'                    : d3.scale.category10(),
+    'height'                         : 400,
+    'width'                          : 400,
+    'transform'                      : 'translate(50, 50)',
+    'xi'                             : 0,
+    'yi'                             : [ 4, 5 ],
+    'csv'                            : {
+      'header' : labels,
+      'data'   : data
+    },
+    'transform'                      : 'translate(100, 30)',
+    'xaxis.axisLabel.text'           : "X",
+    'xaxis.axisLabel.dx'             : 195,
+    'xaxis.axisLabel.dy'             : 60,
+    'xaxis.axisLabel.fill.fillColor' : 'black',
+    'yaxis.axisLabel.text'           : "f(X)",
+    'yaxis.axisLabel.dx'             : -80,
+    'yaxis.axisLabel.dy'             : 200,
+    'yaxis.axisLabel.fill.fillColor' : 'black'
+  });
+
+  chart.attr("xaxis.label.font.size", 24);
+  chart.attr("yaxis.label.transform", "rotate(-90)");
+  chart.render();
 </script>
 

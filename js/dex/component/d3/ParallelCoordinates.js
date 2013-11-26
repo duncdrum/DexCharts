@@ -3,16 +3,16 @@ function ParallelCoordinates(userConfig) {
 
   var defaults =
   {
-    'id': "ParallelCoordinates",
-    'class': "ParallelCoordinates",
-    'parent': null,
-    'height': 400,
-    'width': 600,
+    'id'              : "ParallelCoordinates",
+    'class'           : "ParallelCoordinates",
+    'parent'          : null,
+    'height'          : 400,
+    'width'           : 600,
     //'color'              : d3.scale.category20(),
-    'title': 'Parallel Coordinates',
-    'csv': {
-      'header': [ "X", "Y" ],
-      'data': [
+    'title'           : 'Parallel Coordinates',
+    'csv'             : {
+      'header' : [ "X", "Y" ],
+      'data'   : [
         [0, 0],
         [1, 1],
         [2, 4],
@@ -20,58 +20,60 @@ function ParallelCoordinates(userConfig) {
         [4, 16]
       ]
     },
-    'rows': 0,
-    'xoffset': 0,
-    'yoffset': 50,
-    'normalize': false,
-    'axis': dex.config.yaxis(),
-    'verticalLabel': {
+    'rows'            : 0,
+    'transform'       : 'translate(50 50)',
+    'normalize'       : false,
+    'axis'            : dex.config.axis({'orient' : 'left'}),
+    'verticalLabel'   : dex.config.text({
       // If you want to stagger labels.
       //'dy' : function(d, i) { return (i % 2) ? -10 : -30; },
-      'dy': -10,
-      'font': dex.config.font({'size': 32 }),
-      'anchor': 'middle',
-      'text': function (d) {
+      'dy'     : -10,
+      'font'   : dex.config.font({'size' : 32 }),
+      'anchor' : 'middle',
+      'text'   : function (d) {
         return d;
       }
-    },
-    'axisLabel': {
-      'font': dex.config.font({'size': 14, 'weight': "bold" }),
-      'anchor': 'left'
-    },
-    'selected.link': {
-      'stroke': dex.config.stroke(
+    }),
+    'axisLabel'       : dex.config.text({
+      'font'   : dex.config.font({'size' : 14 }),
+      'anchor' : 'left'}),
+    'selected.link'   : {
+      'stroke' : dex.config.stroke(
         {
-          'color': function (d, i) {
+          'color' : function (d, i) {
             return color(i);
           },
-          'width': 5
+          'width' : 5
         }),
-      'fill': "none",
-      'fillOpacity': 1.0
+      'fill'   : {
+        'fillColor'   : "none",
+        'fillOpacity' : 1.0
+      }
     },
-    'unselected.link': {
-      'stroke': dex.config.stroke(
+    'unselected.link' : {
+      'stroke' : dex.config.stroke(
         {
-          'color': function (d, i) {
+          'color'     : function (d, i) {
             return color(i);
           },
-          'width': 1,
-          'dasharray': "10 10"
+          'width'     : 1,
+          'dasharray' : "10 10"
         }),
-      'fill': "none",
-      'fillOpacity': 0.1
+      'fill'   : {
+        'fillColor'   : "none",
+        'fillOpacity' : 0.1
+      }
     },
-    'brush': {
-      'width': 16,
-      'x': -8,
-      'opacity': 1,
-      'color': "green",
-      'stroke': dex.config.stroke({'color': "black", 'width': 2})
+    'brush'           : {
+      'width'   : 16,
+      'x'       : -8,
+      'opacity' : 1,
+      'color'   : "green",
+      'stroke'  : dex.config.stroke({'color' : "black", 'width' : 2})
     }
   };
 
-  //var config = dex.object.overlay(dex.config.expand(userConfig), dex.config.expand(defaults));
+//var config = dex.object.overlay(dex.config.expand(userConfig), dex.config.expand(defaults));
 
   var chart = new DexComponent(userConfig, defaults);
 
@@ -97,7 +99,12 @@ function ParallelCoordinates(userConfig) {
     var line = d3.svg.line();
 
     //var axis = d3.svg.axis().orient("left");
-    var axis = dex.config.configureAxis(config.axis);
+    dex.console.log(config.axis);
+    var scale = dex.config.createScale(dex.config.scale(config.axis.scale));
+    config.axis.scale = scale;
+    dex.console.log(config.axis);
+    var axis = d3.svg.axis();
+    dex.config.configureAxis(axis, config.axis);
 
     // Holds unselected paths.
     var background;
@@ -110,8 +117,7 @@ function ParallelCoordinates(userConfig) {
     var chartContainer = d3.select(config.parent).append("g")
       .attr("id", config["id"])
       .attr("class", config["class"])
-      .attr("transform",
-        "translate(" + config.xoffset + "," + config.yoffset + ")");
+      .attr("transform", config.transform);
 
     // Extract the list of dimensions and create a scale for each.
     //x.domain(dimensions = d3.keys(cars[0]).filter(function(d)
@@ -198,7 +204,7 @@ function ParallelCoordinates(userConfig) {
       .enter().append("g")
       //.attr("font-size", config.fontSize)
       // REM: Not quite a label...
-      .call(dex.config.configureLabel, config.axisLabel)
+      .call(dex.config.configureText, config.axisLabel)
       .attr("class", "dimension")
       .attr("transform", function (d) {
         return "translate(" + x(d) + ")";
@@ -211,7 +217,7 @@ function ParallelCoordinates(userConfig) {
         d3.select(this).call(axis.scale(y[d]));
       })
       .append("text")
-      .call(dex.config.configureLabel, config.verticalLabel);
+      .call(dex.config.configureText, config.verticalLabel);
 
     // Add and store a brush for each axis.
     g.append("g")
@@ -279,7 +285,7 @@ function ParallelCoordinates(userConfig) {
       }
 
       //dex.console.log("Selected: ", dex.json.toCsv(activeData, dimensions));
-      chart.notify({ "type": "select", "selected": dex.json.toCsv(activeData, dimensions)});
+      chart.notify({ "type" : "select", "selected" : dex.json.toCsv(activeData, dimensions)});
     }
   };
 

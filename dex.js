@@ -16,6 +16,13 @@ dex.range = function(start, len)
 	
 	return range;
 };
+/**
+ *
+ * @module dex.config
+ *
+ * This module contains many support routines for configuring things.
+ *
+ */
 dex.config = {};
 
 /**
@@ -71,109 +78,174 @@ dex.config.expand = function (config) {
   return expanded;
 };
 
+/**
+ *
+ * This routine will take two hierarchies, top and bottom, and expand dot ('.')
+ * delimited names such as: 'foo.bar.biz.baz' into a structure:
+ * { 'foo' : { 'bar' : { 'biz' : 'baz' }}}
+ * It will then overlay the top hierarchy onto the bottom one.  This is useful
+ * for configuring objects based upon a default configuration while allowing
+ * the client to conveniently override these defaults as needed.
+ *
+ * @param top The top object hierarchy.
+ * @param bottom The bottom, base object hierarchy.
+ * @returns {Object|*} A new object representing the expanded top object
+ * hierarchy overlaid on top of the expanded bottom object hierarchy.
+ *
+ */
 dex.config.expandAndOverlay = function (top, bottom) {
   return dex.object.overlay(dex.config.expand(top), dex.config.expand(bottom));
-}
+};
 
+/**
+ *
+ * Return the configuration for a font given the defaults and user
+ * customizations.
+ *
+ * @param custom The user customizations.
+ * @returns {Object|*}
+ */
 dex.config.font = function (custom) {
-  var config =
-  {
-    'size': 18,
-    'family': 'sans-serif',
-    'style': 'normal',
-    'variant': 'normal',
-    'weight': 'normal'
-  };
-
-  return (custom) ? dex.object.overlay(custom, config) : config;
-};
-
-dex.config.configureFont = function (node, config) {
-  return node
-    .attr("font-family", dex.config.optionValue(config.family))
-    .attr("font-weight", dex.config.optionValue(config.weight))
-    .attr("font-style", dex.config.optionValue(config.style))
-    .style("font-size", dex.config.optionValue(config.size));
-};
-
-dex.config.tick = function (custom) {
-  var config =
-  {
-    'count': 5,
-    //'tickValues'  : null,
-    'subdivide': 3,
-    'size': {
-      'major': 5,
-      'minor': 3,
-      'end': 5
-    },
-    'padding': 5,
-    'format': d3.format(",d"),
-    'label': this.label()
-  };
-  if (custom) {
-    config = dex.object.overlay(custom, config);
-  }
-  return config;
-};
-
-dex.config.xaxis = function (custom) {
-  var config =
-  {
-    'scale': d3.scale.linear(),
-    'orient': "bottom",
-    'tick': this.tick(),
-    'label': this.label()
-  };
-  if (custom) {
-    config = dex.object.overlay(custom, config);
-  }
-  return config;
-};
-
-dex.config.yaxis = function (custom) {
-  var config =
-  {
-    'scale': d3.scale.linear(),
-    'orient': 'left',
-    'tick': this.tick(),
-    'label': this.label({'transform': 'rotate(-90)'})
-  };
-  if (custom) {
-    config = dex.object.overlay(custom, config);
-  }
-  return config;
-};
-
-dex.config.stroke = function (custom) {
   var defaults =
   {
-    'width': 1,
-    'color': "black",
-    'opacity': 1,
-    'dasharray': ''
+    'family'        : 'sans-serif',
+    'size'          : 18,
+    'weight'        : 'normal',
+    'style'         : 'normal',
+    'decoration'    : 'none',
+    'wordSpacing'   : 'normal',
+    'letterSpacing' : 'normal',
+    'variant'       : 'normal'
   };
 
   var config = dex.config.expandAndOverlay(custom, defaults);
   return config;
 };
 
-dex.config.optionValue = function (option) {
-  return function (d, i) {
-    if (dex.object.isFunction(option)) {
-      return option(d, i);
-    }
-    else {
-      return option;
-    }
-  };
-}
+/**
+ *
+ * @param node The node to be configured.
+ * @param config The configuration. (family, size, weight, style,
+ * decoration, wordSpacing, letterSpacing, variant)
+ * @returns {*} The newly configured node.
+ *
+ */
+dex.config.configureFont = function (node, config) {
+  dex.config.setAttr(node, 'font-family', config.family);
+  dex.config.setAttr(node, 'font-size', config.size);
+  dex.config.setAttr(node, 'font-weight', config.weight);
+  dex.config.setAttr(node, 'font-style', config.style);
+  dex.config.setAttr(node, 'text-decoration', config.decoration);
 
+  dex.config.setAttr(node, 'word-spacing', config.wordSpacing);
+  dex.config.setAttr(node, 'letter-spacing', config.letterSpacing);
+  dex.config.setAttr(node, 'variant', config.variant);
+
+  //dex.config.setStyle(node, 'stroke-width', config.width);
+  return node;
+};
+
+/**
+ *
+ * @param custom An object containing the caller's customizations.  Valid
+ * customizations include: font, x, y, textLength, lengthAdjust, transform,
+ * glyphOrientationVertical, text, dx, dy, writingMode, textAnchor, fill.
+ *
+ * @returns {Object|*} A text node with certain base defaults as well
+ * as the caller's customizations applied.
+ *
+ */
+dex.config.text = function (custom) {
+  var defaults =
+  {
+    'font'                     : dex.config.font(),
+    'x'                        : 0,
+    'y'                        : 0,
+    'textLength'               : undefined,
+    'lengthAdjust'             : undefined,
+    'transform'                : '',
+    'glyphOrientationVertical' : undefined,
+    'text'                     : undefined,
+    'dx'                       : 0,
+    'dy'                       : 0,
+    'writingMode'              : undefined,
+    'textAnchor'               : 'start',
+    'fill'                     : dex.config.fill(),
+    'format'                   : undefined
+  };
+
+  var config = dex.config.expandAndOverlay(custom, defaults);
+  return config;
+};
+
+/**
+ *
+ * This routine will dynamically configure an SVG text entity based upon the
+ * supplied configuration.
+ *
+ * @param node The SVG text node to be configured.
+ * @param config The configuration to be applied. (x, y, dx, dy, anchor,
+ * font, textLength, lengthAdjust, transform, glyphOrientationVertical,
+ * writingMode, text).
+ *
+ * @returns {*} The fully configured text node.
+ */
+dex.config.configureText = function (node, config) {
+  dex.config.setAttr(node, "x", config.x);
+  dex.config.setAttr(node, "y", config.y);
+  dex.config.setAttr(node, "dx", config.dx);
+  dex.config.setAttr(node, "dy", config.dy);
+  dex.config.setStyle(node, "text-anchor", config.anchor);
+  dex.config.configureFont(node, config.font);
+  dex.config.setAttr(node, 'textLength', config.textLength);
+  dex.config.setAttr(node, 'lengthAdjust', config.lengthAdjust);
+  dex.config.setAttr(node, 'transform', config.transform);
+  dex.config.setAttr(node, 'glyph-orientation-vertical',
+    config.glyphOrientationVertical);
+  dex.config.setAttr(node, 'writing-mode', config.writingMode);
+  dex.config.callIfDefined(node, 'text', config.text);
+  dex.config.configureFill(node, config.fill);
+
+  return node;
+};
+
+/**
+ *
+ * Return the configuration for a stroke.
+ *
+ * @param custom User customization. (width, color, opacity, dasharray)
+ * @returns The stroke configuration.
+ *
+ */
+dex.config.stroke = function (custom) {
+  var defaults =
+  {
+    'width'     : 1,
+    'color'     : "black",
+    'opacity'   : 1,
+    'dasharray' : '',
+    'transform' : ''
+  };
+
+  var config = dex.config.expandAndOverlay(custom, defaults);
+  return config;
+};
+
+/**
+ *
+ * Apply a stroke configuration to a node.
+ *
+ * @param node The node to be configured.
+ * @param config The stroke configuration (width, color, opacity,
+ * dasharray).
+ * @returns The newly configured node.
+ */
 dex.config.configureStroke = function (node, config) {
   dex.config.setStyle(node, 'stroke-width', config.width);
   dex.config.setStyle(node, 'stroke', config.color);
   dex.config.setStyle(node, 'stroke-opacity', config.opacity);
   dex.config.setStyle(node, 'stroke-dasharray', config.dasharray);
+  dex.config.setAttr(node, 'transform', config.transform);
 
   return node;
 };
@@ -181,8 +253,8 @@ dex.config.configureStroke = function (node, config) {
 dex.config.fill = function (custom) {
   var defaults =
   {
-    'fillColor': "blue",
-    'fillOpacity': 1
+    'fillColor'   : "grey",
+    'fillOpacity' : 1
   };
 
   var config = dex.config.expandAndOverlay(custom, defaults);
@@ -200,10 +272,10 @@ dex.config.configureFill = function (node, config) {
 dex.config.link = function (custom) {
   var defaults =
   {
-    'fill': this.fill(),
-    'stroke': this.stroke(),
-    'transform' : ''
-    //'d' : null
+    'fill'      : dex.config.fill(),
+    'stroke'    : dex.config.stroke(),
+    'transform' : '',
+    'd'         : undefined
   };
 
   var config = dex.config.expandAndOverlay(custom, defaults);
@@ -222,15 +294,15 @@ dex.config.configureLink = function (node, config) {
 dex.config.rectangle = function (custom) {
   var config =
   {
-    'width': 50,
-    'height': 50,
-    'x': 0,
-    'y': 0,
-    'rx': 0,
-    'ry': 0,
-    'stroke': dex.config.stroke(),
-    'opacity': 1,
-    'color': d3.scale.category20(),
+    'width'     : 50,
+    'height'    : 50,
+    'x'         : 0,
+    'y'         : 0,
+    'rx'        : 0,
+    'ry'        : 0,
+    'stroke'    : dex.config.stroke(),
+    'opacity'   : 1,
+    'color'     : d3.scale.category20(),
     'transform' : ''
   };
   if (custom) {
@@ -256,9 +328,9 @@ dex.config.configureRectangle = function (node, config) {
 dex.config.line = function (custom) {
   var defaults =
   {
-    'start': dex.config.point(),
-    'end': dex.config.point(),
-    'stroke': dex.config.stroke()
+    'start'  : dex.config.point(),
+    'end'    : dex.config.point(),
+    'stroke' : dex.config.stroke()
   };
   var config = dex.config.expandAndOverlay(custom, defaults);
   return config;
@@ -280,30 +352,53 @@ dex.config.setAttr = function (node, name, value) {
     //dex.console.log("Set Attr: '" + name + "'='" + value + "'");
     node.attr(name, dex.config.optionValue(value));
   }
-  else
-  {
+  else {
     //dex.console.log("Undefined Attr: '" + name + "'='" + value + "'");
   }
   return node;
-}
+};
 
 dex.config.setStyle = function (node, name, value) {
   if (typeof value !== 'undefined') {
     //dex.console.log("Set Style: '" + name + "'='" + dex.config.optionValue(value) + "'");
     node.style(name, dex.config.optionValue(value));
   }
-  else
-  {
+  else {
     //dex.console.log("Undefined Style: '" + name + "'='" + value + "'");
   }
   return node;
-}
+};
+
+dex.config.optionValue = function (option) {
+  return function (d, i) {
+    //dex.console.log("OPTION", option);
+    if (dex.object.isFunction(option)) {
+      return option(d, i);
+    }
+    else {
+      return option;
+    }
+  };
+};
+
+dex.config.callIfDefined = function (node, fn, value) {
+//dex.console.log("TYPE", typeof value);
+  if (typeof value === 'undefined') {
+    //dex.console.log("Skipping: " + fn + "()");
+  }
+  else {
+    //dex.console.log("Calling: '" + fn + "(" + value + ")");
+    return node[fn](dex.config.optionValue(value));
+  }
+
+  return node;
+};
 
 dex.config.point = function (custom) {
   var config =
   {
-    'x': 0,
-    'y': 0
+    'x' : undefined,
+    'y' : undefined
   };
   if (custom) {
     config = dex.object.overlay(custom, config);
@@ -328,13 +423,13 @@ dex.config.configureShapeStyle = function (node, config) {
 dex.config.circle = function (custom) {
   var config =
   {
-    'cx': 0,
-    'cy' : 0,
-    'r': 10,
-    'fill' : dex.config.fill(),
-    'stroke' : dex.config.stroke(),
+    'cx'        : 0,
+    'cy'        : 0,
+    'r'         : 10,
+    'fill'      : dex.config.fill(),
+    'stroke'    : dex.config.stroke(),
     'transform' : '',
-    'title' : ''
+    'title'     : ''
   };
   if (custom) {
     config = dex.object.overlay(custom, config);
@@ -354,52 +449,7 @@ dex.config.configureCircle = function (node, config) {
   return node;
 };
 
-dex.config.label = function (custom) {
-  var config =
-  {
-    'x': 0,
-    'y': 0,
-    'transform': "",
-    'dy': ".71em",
-    'font': this.font(),
-    'text': '',
-    'anchor': 'end',
-    'color': 'black'
-    //'textLength': null,
-    //'lengthAdjust': null,
-    //'writingMode': null,
-    //'glyphOrientationVertical': null
-  };
-  if (custom) {
-    config = dex.object.overlay(custom, config);
-  }
-  return config;
-};
-
-dex.config.configureLabel = function (node, config, text) {
-  //console.dir(node);
-
-  dex.config.setAttr(node, "x", config.x);
-  dex.config.setAttr(node, "y", config.y);
-  dex.config.setAttr(node, "transform", config.transform);
-  dex.config.setAttr(node, "dy", config.dy);
-  node.call(dex.config.configureFont, config.font);
-  dex.config.setStyle(node, "text-anchor", config.anchor);
-  dex.config.setAttr(node, "fill", config.color);
-  dex.config.setStyle(node, "fill-opacity", config.opacity);
-  dex.config.setStyle(node, "textLength", config.textLength);
-  dex.config.setStyle(node, "lengthAdjust", config.lengthAdjust);
-  dex.config.setStyle(node, "writing-mode", config.writingMode);
-  dex.config.setStyle(node, "glyph-orientation-vertical", config.glyphOrientationVertical);
-
-  if (typeof config.text != 'undefined') {
-    node.text(dex.config.optionValue(config.text));
-  }
-
-  return node;
-};
-
-dex.config.configureAxis = function (config) {
+dex.config.configureAxis_deprecate = function (config) {
   var axis = d3.svg.axis()
     .ticks(config.tick.count)
     .tickSubdivide(config.tick.subdivide)
@@ -420,6 +470,310 @@ dex.config.configureAxis = function (config) {
 
   //axis.scale = config.scale;
   return axis;
+};
+
+dex.config.tick_deprecate = function (custom) {
+  var config =
+  {
+    'count'     : 5,
+    //'tickValues'  : undefined,
+    'subdivide' : 3,
+    'size'      : {
+      'major' : 5,
+      'minor' : 3,
+      'end'   : 5
+    },
+    'padding'   : 5,
+    'format'    : d3.format(",d"),
+    'label'     : dex.config.text()
+  };
+  if (custom) {
+    config = dex.object.overlay(custom, config);
+  }
+  return config;
+};
+
+dex.config.xaxis_deprecate = function (custom) {
+  var config =
+  {
+    'scale'  : d3.scale.linear(),
+    'orient' : "bottom",
+    'tick'   : this.tick(),
+    'label'  : dex.config.text()
+  };
+  if (custom) {
+    config = dex.object.overlay(custom, config);
+  }
+  return config;
+};
+
+dex.config.yaxis_deprecate = function (custom) {
+  var config =
+  {
+    'scale'  : d3.scale.linear(),
+    'orient' : 'left',
+    'tick'   : this.tick(),
+    'label'  : dex.config.text({'transform' : 'rotate(-90)'})
+  };
+  if (custom) {
+    config = dex.object.overlay(custom, config);
+  }
+  return config;
+};
+
+dex.config.callConditionally = function (fn, value) {
+  if (typeof value !== 'undefined') {
+    //dex.console.log("- FN:" + fn);
+    //dex.console.log("- VALUE:" + value);
+    //dex.console.log("- CALLING...");
+    fn(value);
+  }
+  else {
+//    dex.console.log("- FN:" + fn);
+//    dex.console.log("- VALUE:" + value);
+//    dex.console.log("- NOT CALLING...");
+  }
+}
+
+dex.config.axis = function (custom) {
+  var defaults =
+  {
+    'scale'         : undefined,
+    'orient'        : 'bottom',
+    'ticks'         : undefined,
+    'tickValues'    : undefined,
+    'tickSize'      : undefined,
+    'innerTickSize' : undefined,
+    'outerTickSize' : undefined,
+    'tickPadding'   : undefined,
+    'tickFormat'    : undefined,
+    'tickSubdivide' : undefined
+  };
+
+  var config = dex.config.expandAndOverlay(custom, defaults);
+  return config;
+};
+
+dex.config.configureAxis = function (axis, config) {
+  [
+    'scale',
+    'orient',
+    'ticks',
+    'tickValues',
+    'tickSize',
+    'innerTickSize',
+    'outerTickSize',
+    'tickPadding',
+    'tickFormat',
+    'tickSubdivide'
+  ].forEach(function (fn) {
+      //dex.console.log("Calling: " + fn);
+      dex.config.callConditionally(axis[fn], config[fn]);
+    });
+
+  return axis;
+};
+
+dex.config.scale = function (custom) {
+  var fmap =
+  {
+    'linear'   : dex.config.linearScale,
+    'sqrt'     : dex.config.sqrtScale,
+    'pow'      : dex.config.powScale,
+    'time'     : dex.config.timeScale,
+    'log'      : dex.config.logScale,
+    'ordinal'  : dex.config.ordinalScale,
+    'quantile' : dex.config.quantileScale,
+    'quantize' : dex.config.quantizeScale,
+    'identity' : dex.config.identityScale,
+    'ordinal'  : dex.config.ordinalScale
+  };
+
+  var defaults =
+  {
+    'type' : 'linear'
+  };
+
+  var config = dex.config.expandAndOverlay(custom, defaults);
+
+  return fmap[config.type](config);
+}
+
+dex.config.createScale = function (config) {
+  var scale;
+  var fmap =
+  {
+    'linear'   : d3.scale.linear,
+    'sqrt'     : d3.scale.sqrt,
+    'pow'      : d3.scale.pow,
+    'time'     : d3.time.scale,
+    'log'      : d3.scale.log,
+    'ordinal'  : d3.scale.ordinal,
+    'quantile' : d3.scale.quantile,
+    'quantize' : d3.scale.quantize,
+    'identity' : d3.scale.identity,
+    'ordinal'  : d3.scale.ordinal
+  };
+
+  scale = fmap[config.type]();
+
+  dex.config.configureScale(scale, config);
+  return scale;
+}
+
+dex.config.linearScale = function (custom) {
+  var defaults =
+  {
+    'type'        : 'linear',
+    'domain'      : [0, 100],
+    'range'       : [0, 800],
+    'rangeRound'  : undefined,
+    'interpolate' : undefined,
+    'clamp'       : undefined,
+    'nice'        : undefined
+  };
+
+  var config = dex.config.expandAndOverlay(custom, defaults);
+  return config;
+};
+
+dex.config.powScale = function (custom) {
+  var defaults =
+  {
+    'type'        : 'pow',
+    'domain'      : [0, 100],
+    'range'       : [0, 800],
+    'rangeRound'  : undefined,
+    'interpolate' : undefined,
+    'clamp'       : undefined,
+    'nice'        : undefined
+  };
+
+  var config = dex.config.expandAndOverlay(custom, defaults);
+  return config;
+};
+
+dex.config.sqrtScale = function (custom) {
+  var defaults =
+  {
+    'type'        : 'sqrt',
+    'domain'      : [0, 100],
+    'range'       : [0, 800],
+    'rangeRound'  : undefined,
+    'interpolate' : undefined,
+    'clamp'       : undefined,
+    'nice'        : undefined
+  };
+
+  var config = dex.config.expandAndOverlay(custom, defaults);
+  return config;
+};
+
+dex.config.logScale = function (custom) {
+  var defaults =
+  {
+    'type'        : 'log',
+    'domain'      : [0, 100],
+    'range'       : [0, 800],
+    'rangeRound'  : undefined,
+    'interpolate' : undefined,
+    'clamp'       : undefined,
+    'nice'        : undefined
+  };
+
+  var config = dex.config.expandAndOverlay(custom, defaults);
+  return config;
+};
+
+dex.config.ordinalScale = function (custom) {
+  var defaults =
+  {
+    'type'            : 'ordinal',
+    'domain'          : undefined,
+    'range'           : undefined,
+    'rangeRoundBands' : undefined,
+    'rangePoints'     : undefined,
+    'rangeBands'      : undefined
+  };
+
+  var config = dex.config.expandAndOverlay(custom, defaults);
+  return config;
+};
+
+dex.config.timeScale = function (custom) {
+  var defaults =
+  {
+    'type'        : 'time',
+    'domain'      : undefined,
+    'range'       : undefined,
+    'rangeRound'  : undefined,
+    'interpolate' : undefined,
+    'clamp'       : undefined,
+    'ticks'       : undefined,
+    'tickFormat'  : undefined
+  };
+
+  var config = dex.config.expandAndOverlay(custom, defaults);
+  return config;
+};
+
+dex.config.quantileScale = function (custom) {
+  var defaults =
+  {
+    'type'   : 'quantile',
+    'domain' : undefined,
+    'range'  : undefined
+  };
+
+  var config = dex.config.expandAndOverlay(custom, defaults);
+  return config;
+};
+
+dex.config.quantizeScale = function (custom) {
+  var defaults =
+  {
+    'type'   : 'quantize',
+    'domain' : undefined,
+    'range'  : undefined
+  };
+
+  var config = dex.config.expandAndOverlay(custom, defaults);
+  return config;
+};
+
+dex.config.identityScale = function (custom) {
+  var defaults =
+  {
+    'type'   : 'identity',
+    'domain' : undefined,
+    'range'  : undefined
+  };
+
+  var config = dex.config.expandAndOverlay(custom, defaults);
+  return config;
+};
+
+dex.config.thresholdScale = function (custom) {
+  var defaults =
+  {
+    'type'   : 'threshold',
+    'domain' : undefined,
+    'range'  : undefined
+  };
+
+  var config = dex.config.expandAndOverlay(custom, defaults);
+  return config;
+};
+
+dex.config.configureScale = function (scale, config) {
+  for (var property in config) {
+    if (config.hasOwnProperty(property) && property !== 'type') {
+      //dex.console.log("Property: '" + property + "'");
+      dex.config.callConditionally(scale[property], config[property]);
+    }
+  }
+
+  return scale;
 };dex.array = {};
 
 /**
@@ -627,10 +981,8 @@ dex.array.selectiveJoin = function(array, rows, delimiter)
 };
 dex.color = {};
 
-dex.color.toHex = function(color)
-{
-  if (color.substr(0, 1) === '#')
-  {
+dex.color.toHex = function (color) {
+  if (color.substr(0, 1) === '#') {
     return color;
   }
   //console.log("COLOR: " + color)
@@ -639,68 +991,125 @@ dex.color.toHex = function(color)
   var red = parseInt(digits[1]);
   var green = parseInt(digits[2]);
   var blue = parseInt(digits[3]);
-    
+
   var rgb = blue | (green << 8) | (red << 16);
   return '#' + rgb.toString(16);
 };
 
-dex.color.colorScheme = function(colorScheme, numColors)
-{
-  if (colorScheme == "1")
-  {
-   return d3.scale.category10();
+dex.color.colorScheme = function (colorScheme, numColors) {
+  if (colorScheme == "1") {
+    return d3.scale.category10();
   }
-  else if (colorScheme == "2")
-  {
+  else if (colorScheme == "2") {
     return d3.scale.category20();
   }
-  else if (colorScheme == "3")
-  {
+  else if (colorScheme == "3") {
     return d3.scale.category20b();
   }
-  else if (colorScheme == "4")
-  {
+  else if (colorScheme == "4") {
     return d3.scale.category20c();
   }
-  else if (colorScheme == "HiContrast")
-  {
+  else if (colorScheme == "HiContrast") {
     return d3.scale.ordinal().range(colorbrewer[colorScheme][9]);
   }
-  else if (colorScheme in colorbrewer)
-  {
+  else if (colorScheme in colorbrewer) {
     //console.log("LENGTH: " + len);
     var c;
     var effColors = Math.pow(2, Math.ceil(Math.log(numColors) / Math.log(2)));
     //console.log("EFF LENGTH: " + len);
 
     // Find the best cmap:
-    if (effColors > 128)
-    {
+    if (effColors > 128) {
       effColors = 256;
     }
 
-    for (c=effColors; c >= 2; c--)
-    {
-      if (colorbrewer[colorScheme][c])
-      {
+    for (c = effColors; c >= 2; c--) {
+      if (colorbrewer[colorScheme][c]) {
         return d3.scale.ordinal().range(colorbrewer[colorScheme][c]);
       }
     }
-    for (c=effColors; c <= 256; c++)
-    {
-      if (colorbrewer[colorScheme][c])
-      {
+    for (c = effColors; c <= 256; c++) {
+      if (colorbrewer[colorScheme][c]) {
         return d3.scale.ordinal().range(colorbrewer[colorScheme][c]);
       }
     }
     return d3.scale.category20();
   }
-  else
-  {
+  else {
     return d3.scale.category20();
   }
 };
+
+dex.color.shadeColor = function (color, percent) {
+  var R = parseInt(color.substring(1, 3), 16)
+  var G = parseInt(color.substring(3, 5), 16)
+  var B = parseInt(color.substring(5, 7), 16);
+
+  R = parseInt(R * (100 + percent) / 100);
+  G = parseInt(G * (100 + percent) / 100);
+  B = parseInt(B * (100 + percent) / 100);
+
+  R = (R < 255) ? R : 255;
+  G = (G < 255) ? G : 255;
+  B = (B < 255) ? B : 255;
+
+  var RR = ((R.toString(16).length == 1) ? "0" + R.toString(16) : R.toString(16));
+  var GG = ((G.toString(16).length == 1) ? "0" + G.toString(16) : G.toString(16));
+  var BB = ((B.toString(16).length == 1) ? "0" + B.toString(16) : B.toString(16));
+
+  return "#" + RR + GG + BB;
+};
+
+dex.color.gradient = function (baseColor) {
+  if (baseColor.charAt(0) == 'r') {
+    baseColor = colorToHex(baseColor);
+  }
+  var gradientId;
+  gradientId = "gradient" + baseColor.substring(1)
+  console.log("GradientId: " + gradientId);
+  console.log("BaseColor : " + baseColor);
+
+  //var lightColor = shadeColor(baseColor, -10)
+  var darkColor = shadeColor(baseColor, -20)
+
+  var grad = d3.select("#gradients").selectAll("#" + gradientId)
+    .data([ gradientId ])
+    .enter()
+    .append("radialGradient")
+    .attr("class", "colorGradient")
+    .attr("id", gradientId)
+    .attr("gradientUnits", "objectBoundingBox")
+    .attr("fx", "30%")
+    .attr("fy", "30%")
+
+  grad.append("stop")
+    .attr("offset", "0%")
+    .attr("style", "stop-color:#FFFFFF")
+
+  // Middle
+  grad.append("stop")
+    .attr("offset", "40%")
+    .attr("style", "stop-color:" + baseColor)
+
+  // Outer Edges
+  grad.append("stop")
+    .attr("offset", "100%")
+    .attr("style", "stop-color:" + darkColor)
+
+  return "url(#" + gradientId + ")";
+};
 dex.console = {};
+
+var logLevels = {
+  'TRACE'  : 5,
+  'DEBUG'  : 4,
+  'NORMAL' : 3,
+  'WARN'   : 2,
+  'FATAL'  : 1,
+  'NONE'   : 0
+};
+
+var logLevel = logLevels.NORMAL;
 
 ////
 //
@@ -708,22 +1117,47 @@ dex.console = {};
 //
 ////
 
-dex.console.log = function()
-{
-	var i;
-	
-	for (i=0; i<arguments.length; i++)
-	{
-		if (typeof arguments[i] == 'object')
-		{
-			console.dir(arguments[i]);
-		}
-		else
-		{
-		  console.log(arguments[i]);
-		}
-	}
+dex.console.logWithLevel = function (msgLevel, msg) {
+//  console.log(dex.console.logLevel());
+//  console.log(msgLevel);
+//  console.dir(msg);
+  if (dex.console.logLevel() >= msgLevel) {
+    for (i = 0; i < msg.length; i++) {
+      if (typeof msg[i] == 'object') {
+        console.dir(msg[i]);
+      }
+      else {
+        console.log(msg[i]);
+      }
+    }
+  }
   return this;
+}
+
+dex.console.trace = function () {
+  return dex.console.logWithLevel(logLevels.TRACE, arguments)
+};
+
+dex.console.debug = function () {
+  return dex.console.logWithLevel(logLevels.DEBUG, arguments)
+};
+
+dex.console.log = function () {
+  return dex.console.logWithLevel(logLevels.NORMAL, arguments)
+};
+
+dex.console.warn = function () {
+  return dex.console.logWithLevel(logLevels.WARN, arguments)
+};
+
+dex.console.fatal = function () {
+  return dex.console.logWithLevel(logLevels.FATAL, arguments)
+};
+
+dex.console.logLevel = function (_) {
+  if (!arguments.length) return logLevel;
+  logLevel = logLevels[_];
+  return logLevel;
 };dex.csv =
 {
 };
@@ -1533,14 +1967,11 @@ dex.matrix.min = function(data, columnNum)
 //
 ////
 
-dex.object.keys = function(obj)
-{
+dex.object.keys = function (obj) {
   var keys = [];
 
-  for(var key in obj)
-  {
-    if(obj.hasOwnProperty(key))
-    {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
       keys.push(key);
     }
   }
@@ -1548,8 +1979,7 @@ dex.object.keys = function(obj)
   return keys;
 };
 
-dex.object.clone = function(obj)
-{
+dex.object.clone = function (obj) {
   var i, attr, len;
 
   // Handle the 3 simple types, and null or undefined
@@ -1557,19 +1987,16 @@ dex.object.clone = function(obj)
     return obj;
 
   // Handle Date
-  if ( obj instanceof Date)
-  {
+  if (obj instanceof Date) {
     var copy = new Date();
     copy.setTime(obj.getTime());
     return copy;
   }
 
   // Handle Array
-  if (obj instanceof Array)
-  {
+  if (obj instanceof Array) {
     var copy = [];
-    for (i = 0, len = obj.length; i < len; i++)
-    {
+    for (i = 0, len = obj.length; i < len; i++) {
       copy[i] = dex.object.clone(obj[i]);
     }
     return copy;
@@ -1577,20 +2004,16 @@ dex.object.clone = function(obj)
 
   // DOM Nodes are nothing but trouble.
   if (dex.object.isElement(obj) ||
-      dex.object.isNode(obj))
-  {
+    dex.object.isNode(obj)) {
     return obj;
   }
 
   // Handle Object
-  if (obj instanceof Object)
-  {
+  if (obj instanceof Object) {
     var copy = {};
     //jQuery.extend(copy, obj);
-    for (attr in obj)
-    {
-      if (obj.hasOwnProperty(attr))
-      {
+    for (attr in obj) {
+      if (obj.hasOwnProperty(attr)) {
         copy[attr] = dex.object.clone(obj[attr]);
         //copy[attr] = obj[attr];
       }
@@ -1599,49 +2022,41 @@ dex.object.clone = function(obj)
   }
 
   throw new Error("Unable to copy obj! Its type isn't supported.");
-}; 
+};
 
+/**
+ *
+ * Overlay the top object on top of the bottom.  This method will first clone
+ * the bottom object.  Then it will drop the values within the top object
+ * into the clone.
+ *
+ * @method dex.object.overlay
+ * @param {Object} top The object who's properties will be on top.
+ * @param {Object} bottom The object who's properties will be on bottom.
+ * @return {Object} The overlaid object where the properties in top override
+ *                  properties in bottom.  The return object is a clone or
+ *                  copy.
+ *
+ */
 
-
-  /**
-   *
-   * Overlay the top object on top of the bottom.  This method will first clone
-   * the bottom object.  Then it will drop the values within the top object
-   * into the clone.
-   *
-   * @method dex.object.overlay
-   * @param {Object} top The object who's properties will be on top.
-   * @param {Object} bottom The object who's properties will be on bottom.
-   * @return {Object} The overlaid object where the properties in top override
-   *                  properties in bottom.  The return object is a clone or
-   *                  copy.
-   *
-   */
-
-dex.object.overlay = function(top, bottom)
-{
+dex.object.overlay = function (top, bottom) {
   // Make a clone of the bottom object.
   var overlay = dex.object.clone(bottom);
   var prop;
-  
-	// If we have parameters in the top object, overlay them on top
-	// of the bottom object.
-  if (top !== 'undefined')
-  {
-  	// Iterate over the props in top.
-    for (prop in top)
-    {
-    	// Arrays are special cases. [A] on top of [A,B] should give [A], not [A,B]
-    	if (typeof top[prop] == 'object' && overlay[prop] != null &&
-    	  !(top[prop] instanceof Array))
-    	{
-    		//console.log("PROP: " + prop + ", top=" + top + ", overlay=" + overlay);
+
+  // If we have parameters in the top object, overlay them on top
+  // of the bottom object.
+  if (top !== 'undefined') {
+    // Iterate over the props in top.
+    for (prop in top) {
+      // Arrays are special cases. [A] on top of [A,B] should give [A], not [A,B]
+      if (typeof top[prop] == 'object' && overlay[prop] != null && !(top[prop] instanceof Array)) {
+        //console.log("PROP: " + prop + ", top=" + top + ", overlay=" + overlay);
         overlay[prop] = dex.object.overlay(top[prop], overlay[prop]);
       }
       // Simply overwrite for simple cases and arrays.
-      else
-      {
-      	overlay[prop] = top[prop];
+      else {
+        overlay[prop] = top[prop];
       }
     }
   }
@@ -1651,75 +2066,62 @@ dex.object.overlay = function(top, bottom)
 };
 
 //Returns true if it is a DOM node
-dex.object.isNode = function(o)
-{
+dex.object.isNode = function (o) {
   return (
-    typeof Node === "object" ? o instanceof Node : 
-    o && typeof o === "object" && typeof o.nodeType === "number" && typeof o.nodeName==="string"
-  );
+    typeof Node === "object" ? o instanceof Node :
+      o && typeof o === "object" && typeof o.nodeType === "number" && typeof o.nodeName === "string"
+    );
 };
 
 //Returns true if it is a DOM element    
-dex.object.isElement = function(o){
+dex.object.isElement = function (o) {
   return (
     typeof HTMLElement === "object" ? o instanceof HTMLElement : //DOM2
-    o && typeof o === "object" && o.nodeType === 1 && typeof o.nodeName==="string"
-);
+      o && typeof o === "object" && o.nodeType === 1 && typeof o.nodeName === "string"
+    );
 };
 
 /**
- * 
+ *
  * This method returns a boolean representing whether obj is contained
  * within container.
- * 
+ *
  * @param {Object} container
  * @param {Object} obj
  * @return True if container contains obj.  False otherwise.
  */
-dex.object.contains = function(container, obj)
-{
+dex.object.contains = function (container, obj) {
   var i = container.length;
-  while (i--)
-  {
-    if (container[i] === obj)
-    {
+  while (i--) {
+    if (container[i] === obj) {
       return true;
     }
   }
   return false;
 };
 
-dex.object.isFunction = function(functionToCheck)
-{
- var getType = {};
- return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+dex.object.isFunction = function (functionToCheck) {
+  return typeof functionToCheck === 'function';
 }
 
-dex.object.visit = function(obj, func)
-{
-	var prop;
-	func(obj);
-	for (prop in obj)
-	{
-		if (obj.hasOwnProperty(prop))
-		{
-			if (typeof obj[prop] === 'object')
-			{
-				dex.object.visit(obj[prop], func);
-			}
-		}
-	}
+dex.object.visit = function (obj, func) {
+  var prop;
+  func(obj);
+  for (prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      if (typeof obj[prop] === 'object') {
+        dex.object.visit(obj[prop], func);
+      }
+    }
+  }
 };
 
-dex.object.connect = function(map, values)
-{
-	//dex.console.log("  map:", map, "  values: ", values);
-  if (!values || values.length <= 0)
-  {
+dex.object.connect = function (map, values) {
+  //dex.console.log("  map:", map, "  values: ", values);
+  if (!values || values.length <= 0) {
     return this;
   }
-  if (!map[values[0]])
-  {
+  if (!map[values[0]]) {
     map[values[0]] = {};
   }
   dex.object.connect(map[values[0]], values.slice(1));
@@ -1727,45 +2129,36 @@ dex.object.connect = function(map, values)
   return this;
 };
 
-dex.object.isNumeric = function(obj)
-{
+dex.object.isNumeric = function (obj) {
   return !isNaN(parseFloat(obj)) && isFinite(obj);
 };
 
-dex.object.setHierarchical = function(hierarchy, name, value, delimiter)
-{
-  if (hierarchy == null)
-  {
+dex.object.setHierarchical = function (hierarchy, name, value, delimiter) {
+  if (hierarchy == null) {
     hierarchy = {};
   }
 
-  if (typeof hierarchy != 'object')
-  {
+  if (typeof hierarchy != 'object') {
     return hierarchy;
   }
 
   // Create an array of names by splitting delimiter, then call
   // this function in the 3 argument (Array of paths) context.
-  if (arguments.length == 4)
-  {
+  if (arguments.length == 4) {
     return dex.object.setHierarchical(hierarchy,
       name.split(delimiter), value);
   }
 
   // Array of paths context.
-  else
-  {
+  else {
     // This is the last variable name, just set the value.
-    if (name.length === 1)
-    {
+    if (name.length === 1) {
       hierarchy[name[0]] = value;
     }
     // We still have to traverse.
-    else
-    {
+    else {
       // Undefined container object, just create an empty.
-      if (!(name[0] in hierarchy))
-      {
+      if (!(name[0] in hierarchy)) {
         hierarchy[name[0]] = {};
       }
 

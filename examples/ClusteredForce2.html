@@ -1,50 +1,71 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+  body {
+    font: 10px sans-serif;
+  }
+
+  .arc path {
+    stroke: #fff;
+  }
 </style>
 <body>
-<script src="http://d3js.org/d3.v3.js"></script>
+<svg id="ChartArea" width="1000" height="800">
+  <defs id="gradients"></defs>
+</svg>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.3.9/d3.min.js"></script>
 <script src="../dex.js"></script>
 <script src="../js/dex/component/d3/ClusteredForce.js"></script>
 <script>
-  // Create an SVG for our chart.
-  var svg = d3.select("body").append("svg")
-      .attr("id", "ChartArea")
-      .attr("width", 1000)
-      .attr("height", 800)
-      .append("g")
-      .attr("transform", "translate(40,20)");
 
   // Configure a chart.
   var cforce = new ClusteredForce(
       {
-        'parent': "#ChartArea",
-        'xoffset': 10,
-        'yoffset': 0,
-        'width': 800,
-        'height': 800,
-        'transform' : 'translate(-500 0) skewX(45)',
-        'csv': {
-          'header': d3.range(10).map(function (d) {
+        'parent'                : "#ChartArea",
+        'xoffset'               : 10,
+        'yoffset'               : 0,
+        'width'                 : 800,
+        'height'                : 800,
+        'csv'                   : {
+          'header' : d3.range(10).map(function (d) {
             return "C" + d;
           }),
-          'data': dex.datagen.randomMatrix(
+          'data'   : dex.datagen.randomMatrix(
               {
-                'rows': 20,
-                'columns': 10,
-                'min': 1,
-                'max': 10
+                'rows'    : 20,
+                'columns' : 10,
+                'min'     : 1,
+                'max'     : 10
               })
         },
-        'padding': 10,
-        'charge': -20,
-        'gravity': 5,
-        'minRadius': 5,
-        'maxRadius': 20,
-        'circle.stroke.color' : 'red',
-        'circle.fill.fillOpacity' : 0.5,
-        'circle.stroke.dasharray' : '5 5'
-        //'circle.transform' : 'translate(500 300) skewX(120)'
+        'circle.fill.fillColor' : function (d, i) {
+          var darkColor = dex.color.shadeColor(d.color, -20);
+          var gradientId = "gradient" + d.color.substring(1)
+          var grad = d3.select("#gradients").selectAll("#" + gradientId)
+              .data([ gradientId ])
+              .enter()
+              .append("radialGradient")
+              .attr("class", "colorGradient")
+              .attr("id", gradientId)
+              .attr("gradientUnits", "objectBoundingBox")
+              .attr("fx", "30%")
+              .attr("fy", "30%");
+          grad.append("stop")
+              .attr("offset", "0%")
+              .attr("style", "stop-color:#FFFFFF");
+
+          // Middle
+          grad.append("stop")
+              .attr("offset", "40%")
+              .attr("style", "stop-color:" + d.color);
+
+          // Outer Edges
+          grad.append("stop")
+              .attr("offset", "100%")
+              .attr("style", "stop-color:" + darkColor);
+
+          return "url(#" + gradientId + ")";
+        }
       }
   );
   cforce.render();

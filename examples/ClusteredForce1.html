@@ -10,7 +10,7 @@
   }
 </style>
 <body>
-<script src="http://d3js.org/d3.v3.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.3.9/d3.min.js"></script>
 <script src="../dex.js"></script>
 <script src="../js/dex/component/d3/ClusteredForce.js"></script>
 <script>
@@ -25,21 +25,21 @@
   // Configure a chart.
   var cforce = new ClusteredForce(
       {
-        'parent': "#ChartArea",
-        'xoffset': 10,
-        'yoffset': 0,
-        'width': 800,
-        'height': 800,
-        'csv': {
-          'header': d3.range(10).map(function (d) {
+        'parent'  : "#ChartArea",
+        'xoffset' : 10,
+        'yoffset' : 0,
+        'width'   : 800,
+        'height'  : 800,
+        'csv'     : {
+          'header' : d3.range(10).map(function (d) {
             return "C" + d;
           }),
-          'data': dex.datagen.randomMatrix(
+          'data'   : dex.datagen.randomMatrix(
               {
-                'rows': 20,
-                'columns': 10,
-                'min': 1,
-                'max': 10
+                'rows'    : 20,
+                'columns' : 10,
+                'min'     : 1,
+                'max'     : 10
               })
         }
       }

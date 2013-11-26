@@ -30,7 +30,7 @@
 
 </style>
 <body>
-<script src="http://d3js.org/d3.v3.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.3.9/d3.min.js"></script>
 <script src="../dex.js"></script>
 <script src="../js/dex/component/d3/BarChart.js"></script>
 <script>
@@ -45,35 +45,39 @@
 
   var csv =
   {
-    'header': ["X", "SIN(X)", "COS(X)"],
-    'data': []
+    'header' : ["X", "SIN(X)", "COS(X)"],
+    'data'   : []
   };
 
   for (x = -360; x < 360; x += 1) {
     csv.data.push([ x, Math.sin(x * Math.PI / 180), Math.cos(x * Math.PI / 180)]);
   }
 
-  //dex.console.log("CDATA", d3.range(csv.data.length));
-  var color = d3.scale.category10();
+  var color = d3.scale.category20();
 
   // Configure a chart.
   var bar = new BarChart(
       {
-        'parent': "#MyChart",
-        'height': 400,
-        'width': 1000,
-        'csv': csv,
-        'yi': [1, 2],
-//  'ymin'   : 0,
-        'rectangle.color': function (d, i) {
-          dex.console.log("I", d);
-          return color(d[3]);
-        },
-        'bars.mouseover.opacity': 1,
-        'bars.mouseout.opacity': .5,
-        'bars.mouseover.stroke.width': 0,
-        'bars.mouseout.stroke.width': 0
-        //'xaxis.scale' : d3.scale.ordinal().range([0, 600])
+        'parent'                     : "#MyChart",
+        'csv'                        : csv,
+        'width'                      : 800,
+        'height'                     : 400,
+        'xi'                         : 0,
+        'yi'                         : [1, 2],
+        'xaxis.scale.type'           : 'linear',
+        'xaxis.scale.domain'         : [-360, 360],
+        'xaxis.scale.range'          : [ 0, 800 ],
+        'xaxis.label.text'           : "Angle",
+        'xaxis.label.transform'      : 'translate(380 50)',
+        'xaxis.tickFormat'           : d3.format('d'),
+        'yaxis.scale.type'           : 'linear',
+        'yaxis.scale.domain'         : [ 0, 1000 ],
+        'yaxis.scale.range'          : [ 400, 0 ],
+        'yaxis.label.text'           : "f(x)",
+        'yaxis.label.transform'      : 'translate(-60 205)',
+        'color'                      : d3.scale.category20(),
+        'bars.mouseout.stroke.width' : 0,
+        'bars.mouseout.opacity'      : .6
       });
 
   bar.render();

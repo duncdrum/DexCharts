@@ -2,14 +2,14 @@ function ClusteredForce(userConfig) {
 
   var defaults =
   {
-    'parent': null,
-    'id': "ClusteredForce",
-    'class': "ClusteredForce",
-    'height': 600,
-    'width': 600,
-    'csv': {
-      'header': [ "X", "Y" ],
-      'data': [
+    'parent'         : null,
+    'id'             : "ClusteredForce",
+    'class'          : "ClusteredForce",
+    'height'         : 600,
+    'width'          : 600,
+    'csv'            : {
+      'header' : [ "X", "Y" ],
+      'data'   : [
         [0, 0],
         [1, 1],
         [2, 4],
@@ -17,26 +17,30 @@ function ClusteredForce(userConfig) {
         [4, 16]
       ]
     },
-    'xi': 0,
-    'yi': 2,
-    'transform': '',
-    'color': d3.scale.category20(),
-    'padding': 10,
-    'sizingFunction': function () {
+    'xi'             : 0,
+    'yi'             : 2,
+    'transform'      : '',
+    'color'          : d3.scale.category20(),
+    'padding'        : 10,
+    'sizingFunction' : function () {
       return d3.scale.linear()
     },
-    'minRadius': 1,
-    'maxRadius': 20,
-    'gravity': 10,
-    'charge': -100,
-    'scaleColumns': true,
-    'circle' : dex.config.circle({
-      'r' : function(d) {
-           return (dex.object.isNumeric(d.radius) ? d.radius : 1);
-         },
-      'fill' : dex.config.fill({'fillColor' : function(d) { return d.color; }}),
-      'stroke' : dex.config.stroke(),
-      'title' : function(d) { return d.text; },
+    'minRadius'      : 1,
+    'maxRadius'      : 20,
+    'gravity'        : 10,
+    'charge'         : -100,
+    'scaleColumns'   : true,
+    'circle'         : dex.config.circle({
+      'r'         : function (d) {
+        return (dex.object.isNumeric(d.radius) ? d.radius : 1);
+      },
+      'fill'      : dex.config.fill({'fillColor' : function (d) {
+        return d.color;
+      }}),
+      'stroke'    : dex.config.stroke(),
+      'title'     : function (d) {
+        return d.text;
+      },
       'transform' : ''
     })
   };
@@ -98,7 +102,7 @@ function ClusteredForce(userConfig) {
       }
 
       for (ri = 0; ri < csv.data.length; ri++) {
-        dex.console.log("RI:", ri);
+        dex.console.debug("RI:", ri, csv.data[ri]);
         for (ci = 0; ci < numericIndices.length; ci++) {
           var label = "<table border='1'>";
           for (hi = 0; hi < csv.data[ri].length; hi++) {
@@ -113,10 +117,10 @@ function ClusteredForce(userConfig) {
 
           nodes[(ri) * numericIndices.length + ci] =
           {
-            radius: numericScales[ci](csv.data[ri][numericIndices[ci]]),
+            radius : numericScales[ci](csv.data[ri][numericIndices[ci]]),
             //radius: radius(0.1),
-            color: config.color(ci),
-            text: label
+            color  : config.color(ci),
+            text   : label
           };
         }
       }

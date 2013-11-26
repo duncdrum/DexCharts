@@ -9,15 +9,15 @@ function BarChart(userConfig) {
   var defaults =
   {
     // The parent container of this chart.
-    'parent': null,
+    'parent'    : null,
     // Set these when you need to CSS style components independently.
-    'id': 'BarChart',
-    'class': 'BarChart',
+    'id'        : 'BarChart',
+    'class'     : 'BarChart',
     // Our data...
-    'csv': {
+    'csv'       : {
       // Give folks without data something to look at anyhow.
-      'header': [ "X", "Y" ],
-      'data': [
+      'header' : [ "X", "Y" ],
+      'data'   : [
         [0, 0],
         [1, 1],
         [2, 4],
@@ -25,80 +25,69 @@ function BarChart(userConfig) {
         [4, 16]
       ]
     },
-    'ymin' : null,
-    'xmin' : null,
+    'ymin'      : undefined,
+    'xmin'      : undefined,
+    'xaxis'     : dex.config.axis({
+      'type'   : 'linear',
+      'orient' : 'bottom',
+      'label'  : dex.config.text()
+    }),
+    'yaxis'     : dex.config.axis({
+      'type'   : 'linear',
+      'orient' : 'left',
+      'label'  : dex.config.text()
+    }),
     // width and height of our bar chart.
-    'width': 600,
-    'height': 400,
+    'width'     : 600,
+    'height'    : 400,
     // The x an y indexes to chart.
-    'xi': 0,
-    'yi': [1],
-    'transform': 'translate(100 100)',
-    'color': d3.scale.category20(),
-    bars: {
-      'mouseover': dex.config.rectangle({
-        'stroke': {'width': 2, 'color' : "red"}}),
-      'mouseout': dex.config.rectangle()
+    'xi'        : 0,
+    'yi'        : [1],
+    'transform' : 'translate(100 100)',
+    'color'     : d3.scale.category20(),
+    'bars'      : {
+      'mouseover' : dex.config.rectangle({
+        'stroke' : {'width' : 2, 'color' : "red"},
+        'color'  : function (d) {
+          return config.color(d[3]);
+        }
+      }),
+      'mouseout'  : dex.config.rectangle({
+          'color' : function (d) {
+            return config.color(d[3]);
+          }
+        }
+      )
     }
   };
 
   var config = dex.object.overlay(dex.config.expand(userConfig), dex.config.expand(defaults));
 
-  //console.log("CDOMAIN: ");
-  //console.dir(config.csv.data.map(function (r) { return r[0]; }));
-
   // Things defined in terms of the defaults:
-  defaults.xaxis = dex.config.xaxis(
-    {
-      'scale': d3.scale.ordinal()
-        .domain(config.csv.data.map(function (r) {
-          return r[0];
-        }))
-        .rangeRoundBands([0, config.width], .1),
-      'label': {
-        'text': config.csv.header[config.xi],
-        'x': config.width / 2,
-        'y': 10
-      }
-    });
-
-  defaults.yaxis = dex.config.yaxis(
-    {
-      'scale': d3.scale.linear().range([config.height, 0]),
-      'label': { 'text': "Y", 'x': (-config.height / 2), 'y': -50 }
-    });
-
-  defaults.bars.mouseover.x = function (d) {
-    return defaults.xaxis.scale(d[0])
-  };
-  defaults.bars.mouseover.y = function (d) {
-    return defaults.yaxis.scale(d[1])
-  };
-  defaults.bars.mouseover.width =
-    defaults.xaxis.scale(config.csv.data[1][config.xi]) - defaults.xaxis.scale(config.csv.data[0][config.xi]);
-  defaults.bars.mouseover.height = function (d) {
-    return config.height - defaults.yaxis.scale(d[1]);
-  };
-  defaults.bars.mouseover.color = function (d) {
-    return config.color(d[3]);
-  };
-
-  defaults.bars.mouseout.x = function (d) {
-    return defaults.xaxis.scale(d[0])
-  };
-  defaults.bars.mouseout.y = function (d) {
-    return defaults.yaxis.scale(d[1])
-  };
-  defaults.bars.mouseout.width =
-    defaults.xaxis.scale(config.csv.data[1][config.xi]) - defaults.xaxis.scale(config.csv.data[0][config.xi]);
-  defaults.bars.mouseout.height = function (d) {
-    return config.height - defaults.yaxis.scale(d[1]);
-  };
-  defaults.bars.mouseout.color = function (d) {
-    return config.color(d[3]);
-  };
-
   var chart = new DexComponent(userConfig, defaults);
+
+  // Replace the scale configuration with a real scale.
+  var xscale = dex.config.createScale(dex.config.scale(chart.config.xaxis.scale));
+  chart.config.xaxis.scale = xscale;
+  // Replace the scale configuration with a real scale.
+  var yscale = dex.config.createScale(dex.config.scale(chart.config.yaxis.scale));
+  chart.config.yaxis.scale = yscale;
+
+  chart.config.bars.mouseover.height = chart.config.bars.mouseout.height =
+    function (d) {
+      return config.height - yscale(d[1]);
+    };
+
+  chart.config.bars.mouseout.width = chart.config.bars.mouseover.width =
+    xscale(config.csv.data[1][config.xi]) - xscale(config.csv.data[0][config.xi]);
+
+  chart.config.bars.mouseout.x = chart.config.bars.mouseover.x = function (d) {
+    return xscale(d[0])
+  };
+
+  chart.config.bars.mouseout.y = chart.config.bars.mouseover.y = function (d) {
+    return yscale(d[1])
+  };
 
   var data = config.csv.data;
 
@@ -118,10 +107,23 @@ function BarChart(userConfig) {
     yextent[1] = chart.config.ymax;
   }
 
-  //console.log("YEXTENT:" + yextent);
   chart.config.yaxis.scale.domain(yextent);
 
+  chart.resize = function()
+  {
+    //var width  = d3.select(config.parent).property("clientWidth");
+    //var height = d3.select(config.parent).property("clientHeight");
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    //dex.console.log(config.id + " RESIZING: " + width + "x" + height);
+    d3.selectAll("#" + config.id).remove();
+
+    chart.attr("width", width).attr("height", height).update();
+  };
+
   chart.render = function () {
+    window.onresize = this.resize;
     this.update();
   };
 
@@ -129,36 +131,16 @@ function BarChart(userConfig) {
     var chart = this;
     var config = chart.config;
 
-    //console.dir("XAXIS--");
-    //console.dir(config.xaxis);
-    var xaxis = dex.config.configureAxis(config.xaxis);
-    var yaxis = dex.config.configureAxis(config.yaxis);
+    var xaxis = d3.svg.axis();
+    dex.config.configureAxis(xaxis, config.xaxis);
+
+    var yaxis = d3.svg.axis();
+    dex.config.configureAxis(yaxis, config.yaxis);
 
     var chartContainer = d3.select(config.parent).append("g")
       .attr("id", config["id"])
       .attr("class", config["class"])
       .attr("transform", config.transform);
-
-    var data = config.csv.data;
-
-    // Translate all of the y data columns to numerics.
-    data.forEach(function (d) {
-      config.yi.forEach(function (c) {
-        d[c] = +d[c];
-      });
-    });
-
-    var yextent = dex.matrix.extent(data, config.yi);
-
-    if (chart.config.ymin != null) {
-      yextent[0] = chart.config.ymin;
-    }
-    if (chart.config.ymax != null) {
-      yextent[1] = chart.config.ymax;
-    }
-
-    // Establish the domain of the y axis.
-    yaxis.scale().domain(yextent);
 
     // X Axis
     chartContainer.append("g")
@@ -166,24 +148,17 @@ function BarChart(userConfig) {
       .attr("transform", "translate(0," + config.height + ")")
       .call(xaxis);
 
-    chartContainer.selectAll(".xaxis").selectAll("text")
-      .each(function (d) {
-        d3.select(this).call(dex.config.configureLabel,
-          config.xaxis.tick.label);
-      });
-
+    // Add the label
     chartContainer.select(".xaxis").append("text")
-      .call(dex.config.configureLabel, config.xaxis.label);
+      .call(dex.config.configureText, config.xaxis.label);
 
     // Y Axis
     chartContainer.append("g")
       .attr("class", "yaxis")
-      .call(yaxis)
-      .append("text")
-      .call(dex.config.configureLabel, config.yaxis.label);
+      .call(yaxis);
 
     chartContainer.select(".yaxis").append("text")
-      .call(dex.config.configureLabel, config.yaxis.label);
+      .call(dex.config.configureText, config.yaxis.label);
 
     var barData = dex.matrix.combine(
       dex.matrix.slice(data, [config.xi]),
@@ -198,10 +173,10 @@ function BarChart(userConfig) {
       .enter().append("rect")
       .call(dex.config.configureRectangle, config.bars.mouseout)
       .on("mouseover", function () {
-        d3.select(this).call(dex.config.configureRectangle, config.bars.mouseover)
+        d3.select(this).call(dex.config.configureRectangle, config.bars.mouseover);
       })
       .on("mouseout", function () {
-        d3.select(this).call(dex.config.configureRectangle, config.bars.mouseout)
+        d3.select(this).call(dex.config.configureRectangle, config.bars.mouseout);
       });
   };
 

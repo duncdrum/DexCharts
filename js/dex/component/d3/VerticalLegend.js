@@ -1,7 +1,6 @@
 function VerticalLegend(userConfig)
 {
-  var chart = new DexComponent(userConfig,
-  {
+  var defaults = {
     'labels'          : [ "A", "B", "C" ],
     'id'              : "VerticalLegend",
     'class'           : "VerticalLegend",
@@ -17,20 +16,24 @@ function VerticalLegend(userConfig)
     'captionFontSize' : 14,
     'captionXOffset'  : -30,
     'captionYOffset'  : -20,
-    'yaxis'           : dex.config.yaxis(),
     'cell'            :
     {
       'rect'  : dex.config.rectangle(),
-      'label' : dex.config.label()
+      'label' : dex.config.text()
     },
     'title'          :
-      dex.config.label(
+      dex.config.text(
         {
           'text' : 'Legend',
           'dy'   : -10,
           'x'    : 42
         })
-  });
+  };
+
+  var config = dex.object.overlay(dex.config.expand(userConfig), dex.config.expand(defaults));
+
+  // Things defined in terms of the defaults:
+  var chart = new DexComponent(userConfig, defaults);
 
   chart.render = function()
   {
@@ -80,12 +83,12 @@ function VerticalLegend(userConfig)
   chartContainer.selectAll("label")
     .data(config.labels)
     .enter().append("text")
-    .call(dex.config.configureLabel, config.cell.label)
+    .call(dex.config.configureText, config.cell.label)
     .attr("y", function(d) { return y(d); })
     .text(function(d) { return d;});
     
   chartContainer.append("text")
-    .call(dex.config.configureLabel, config.title)
+    .call(dex.config.configureText, config.title)
     .text(config.title.text);
   };
   

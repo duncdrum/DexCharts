@@ -95,8 +95,8 @@ function Chord(userConfig) {
         'color' : 'black'
         //'dasharray' : '1 2'
       }),
-    'title': dex.config.label(),
-    'label': dex.config.label()
+    'title': dex.config.text(),
+    'label': dex.config.text()
   };
 
   var config = dex.object.overlay(dex.config.expand(userConfig), dex.config.expand(defaults));
@@ -233,7 +233,7 @@ function Chord(userConfig) {
           .call(dex.config.configureLink, config.links.mouseout);
       });
 
-    var chartTitle = chartContainer.append("text").call(dex.config.configureLabel, config.title,
+    var chartTitle = chartContainer.append("text").call(dex.config.configureText, config.title,
       config.title.text);
 
     /** Returns an array of tick angles and labels, given a group. */
