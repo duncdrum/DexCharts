@@ -196,13 +196,15 @@ Most configuration options can be configured with literals or dynamic functions.
 
 ### Fonts
 
-| Option  | Default    | Description |
-| ------- |:-----------| -----:|
-| family  | sans-serif | Sets the basic font family.  Ex: 'Arial'. |
-| size    | 18         | Sets the size, in pixels, of the font. |
-| style   | normal     | Sets the style of the font. Ex: normal, italic, oblique |
-| variant | normal     | Sets the font variant.  Ex: normal, small-caps |
-| weight  | normal     | Sets the weight of the font.  Ex: normal, bold, 100, 200, 300, 400, 500, 600, 700, 800, 900 |
+| Option        | Default    | Description |
+| -------------- |:-----------| -----------:|
+| family         | sans-serif | Sets the basic font family.  Ex: 'Arial'. |
+| style          | normal     | Sets the style of the font. Ex: normal, italic, oblique |
+| variant        | normal     | Sets the font variant.  Ex: normal, small-caps |
+| weight         | normal     | Sets the weight of the font.  Ex: normal, bold, 100, 200, 300, 400, 500, 600, 700, 800, 900 |
+| stretch        |               | This property indicates the desired amount of condensing or expansion in the glyphs used to render the text. |
+| size           | 18         | Sets the size, in pixels, of the font. |
+| sizeAdjust     |            | Allows authors to specify an aspect value for an element that will preserve the x-height of the first choice font in a substitute font. |
 
 
 ### Strokes
@@ -229,7 +231,7 @@ Most configuration options can be configured with literals or dynamic functions.
 | fill        |         | Sets the color of the entity to be filled. |
 | fillOpacity |         | Sets the opacity of the filling. 
 
-### Labels
+### Text
 
 | Option     | Default | Description |
 | ---------- |:------------| -----:|
@@ -245,9 +247,14 @@ Most configuration options can be configured with literals or dynamic functions.
 | lengthAdjust             |       | Configures the tick label.  See Label configuration options. |
 | writingMode              |       | Specifies whether the text is left to right, right to left, top to bottom, etc... Ex: lr-tb, rl-tb, tb-rl, lr, rl, tb, inherit |
 | glyphOrientationVertical |       | The glyph orientation affects the amount that the current text position advances as each glyph is rendered.  |
-  
+| kerning        |            |  Indicates whether the user agent should adjust inter-glyph spacing based on kerning tables that are included in the relevant font (i.e., enable auto-kerning) or instead disable auto-kerning and instead set inter-character spacing to a specific length (typically, zero). |
+| letterSpacing  | normal     | Sets the amount of space that will be added between text characters supplemental any spacing due to the kerning property. |
+| wordSpacing    | 'normal' | Sets an additional amount of space between words. Ex: normal, <length>, iherit |
+| decoration     | none       | Allows for added characteristics or decorations to be added to the text. Ex: (none, underline, overline, line-through, blink, inherit) |
 
 ### Ticks
+
+Deprecated...
 
 | Option     | Default | Description |
 | ---------- |:------| -----:|
@@ -260,6 +267,105 @@ Most configuration options can be configured with literals or dynamic functions.
 | format     | ',d'  | Sets the format of the tick labels. |
 | label      | [Label](#labels) | Configures the tick label.  See Label configuration options. |
 
+### Scale
+
+| Option | Default | Description |
+| ------ |:--------| -----------:|
+| type   | linear  | Sets the base type of this scale.  Ex: linear, sqrt, pow, time, log, ordinal, quantile, quantize, identity |
+
+#### Linear Scale
+
+| Option      | Default  | Description |
+| ----------- |:-------- | -----------:|
+| domain      | [0, 100] | |
+| range       | [0, 800] | |
+| rangeRound  |          | |
+| interpolate |          | |
+| clamp       |          | |
+| nice        |          | |
+
+#### Pow Scale
+
+| Option      | Default  | Description |
+| ----------- |:-------- | -----------:|
+| domain      | [0, 100] | |
+| range       | [0, 800] | |
+| rangeRound  |          | |
+| interpolate |          | |
+| clamp       |          | |
+| nice        |          | |
+
+#### Sqrt Scale
+
+| Option      | Default  | Description |
+| ----------- |:-------- | -----------:|
+| domain      | [0, 100] | |
+| range       | [0, 800] | |
+| rangeRound  |          | |
+| interpolate |          | |
+| clamp       |          | |
+| nice        |          | |
+
+#### Log Scale
+
+| Option      | Default  | Description |
+| ----------- |:-------- | -----------:|
+| domain      | [0, 100] | |
+| range       | [0, 800] | |
+| rangeRound  |          | |
+| interpolate |          | |
+| clamp       |          | |
+| nice        |          | |
+
+#### Ordinal Scale
+
+| Option          | Default  | Description |
+| --------------- |:-------- | -----------:|
+| domain          |          | |
+| range           |          | |
+| rangeRoundBands |          | |
+| rangePoints     |          | |
+| rangeBands      |          | |
+
+#### Time Scale
+
+| Option      | Default  | Description |
+| ----------- |:-------- | -----------:|
+| domain      |          | |
+| range       |          | |
+| rangeRound  |          | |
+| interpolate |          | |
+| clamp       |          | |
+| ticks       |          | |
+| tickFormat  |          | |
+
+#### Quantile Scale
+
+| Option      | Default  | Description |
+| ----------- |:-------- | -----------:|
+| domain      |          | |
+| range       |          | |
+
+#### Quantize Scale
+
+| Option      | Default  | Description |
+| ----------- |:-------- | -----------:|
+| domain      |          | |
+| range       |          | |
+
+#### Identity Scale
+
+| Option      | Default  | Description |
+| ----------- |:-------- | -----------:|
+| domain      |          | |
+| range       |          | |
+
+#### Threshold Scale
+
+| Option      | Default  | Description |
+| ----------- |:-------- | -----------:|
+| domain      |          | |
+| range       |          | |
 ### Axis
 
 | Option | Default | Description |
