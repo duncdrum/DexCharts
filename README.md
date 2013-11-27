@@ -9,55 +9,55 @@ Pardon the dust right now.  I am in the middle of a documentation and refactorin
 There are many examples bundled with DexCharts.  Here are a few.
 
 
-| Chart Type             | Short Description | Long Description |
-|:--------------------------- |:----------------- |:-- |
-| [Bar Chart](#bar-chart)     | [Basic Example](http://dexvis.com/dexcharts/dist/current/examples/BarChart1.html) | This example demonstrates the basic use of a bar chart. |
-| [Bar Chart](#bar-chart)     | [High Resolution](http://dexvis.com/dexcharts/dist/current/examples/BarChart2.html) |  This chart looks like a line chart, however, in reality it is a fine grained bar chart. |
-| [Bar Chart](#bar-chart)     | [Styling](http://dexvis.com/dexcharts/dist/current/examples/BarChart3.html) | This demonstrates some of the styling options associated with a bar chart. |
-| [Chord Chart](#chord-chart) | [Basic Example](http://dexvis.com/dexcharts/dist/current/examples/Chord1.html)| This is a basic example of a chord chart. |
-| [Chord Chart](#chord-chart) | [Styling](http://dexvis.com/dexcharts/dist/current/examples/Chord2.html) | This is a more complicated example demonstrating parallel coordinates chart dynamically creating a Chord Chart. |
-| [Dendrogram](#dendrogram)   | [Basic Dendrogram](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram1.html) |A simple sample dendrogram.|
-| [Dendrogram](#dendrogram)   | [Skew This](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram2.html) |An demonstration of per-node skew.|
-| [Dendrogram](#dendrogram)   | [Orange/Blue](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram3.html) |An orange and blue dendrogram.|
-| [Dendrogram](#dendrogram)   | [Vertical Dendrogram](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram3.html) |A dendrogram rendered vertically.|
-| [HeatMap](#heatmap)         | [HeatMap 1](http://dexvis.com/dexcharts/dist/current/examples/HeatMap1.html) |A basic heat map with a legend.|
-| [Legend](#legends)          | [Horizontal Legend 1](http://dexvis.com/dexcharts/dist/current/examples/HorizontalLegend1.html) ||
-| [Legend](#legends)                 | [Legend 1](http://dexvis.com/dexcharts/dist/current/examples/Legends1.html) ||
-| [Legend](#legends)          | [Vertical Legend 1](http://dexvis.com/dexcharts/dist/current/examples/VerticalLegend1.html)||
-| [Line Chart](#line-charts)             | [Line Chart 1](http://dexvis.com/dexcharts/dist/current/examples/LineChart1.html) ||
-| [Line Chart](#line-charts)             | [Line Chart 2](http://dexvis.com/dexcharts/dist/current/examples/LineChart2.html) ||
-| [Line Chart](#line-charts)             | [Line Chart 3](http://dexvis.com/dexcharts/dist/current/examples/LineChart3.html) ||
-| [Line Chart](#line-charts)             | [Line Chart 4](http://dexvis.com/dexcharts/dist/current/examples/LineChart4.html) ||
-| [Parallel Coordinates](#parallel-coordinates)   | [Parallel Coordinates 1](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates1.html)||
-| [Parallel Coordinates](#parallel-coordinates)   | [Parallel Coordinates 2](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates2.html)||
-| [Parallel Coordinates](#parallel-coordinates)   | [Parallel Coordinates 3](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates3.html)||
-| [Parallel Coordinates](#parallel-coordinates)   | [Parallel Coordinates 4](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates4.html)||
-| [Pie Chart](#pie-chart)              | [Pie Chart 1](http://dexvis.com/dexcharts/dist/current/examples/PieChart1.html) ||
-| [Pie Chart](#pie-chart)              | [Pie Chart 2](http://dexvis.com/dexcharts/dist/current/examples/PieChart2.html) ||
-| [Pie Chart](#pie-chart)              | [Pie Chart 3](http://dexvis.com/dexcharts/dist/current/examples/PieChart3.html)||
-| [Sankey](#sankey-diagram)                 | [Sankey 1](http://dexvis.com/dexcharts/dist/current/examples/Sankey1.html)||
-| [Sankey](#sankey-diagram)                 | [Sankey 2](http://dexvis.com/dexcharts/dist/current/examples/Sankey2.html)||
-| [Sankey](#sankey-diagram)                 | [Sankey 3](http://dexvis.com/dexcharts/dist/current/examples/Sankey3.html)||
-| [Sankey](#sankey-diagram)                 | [Sankey 4](http://dexvis.com/dexcharts/dist/current/examples/Sankey4.html)||
-| [Sankey](#sankey-diagram)                 | [Sankey 5](http://dexvis.com/dexcharts/dist/current/examples/Sankey5.html)||
-| [Sankey](#sankey-diagram)                 | [Sankey 6](http://dexvis.com/dexcharts/dist/current/examples/Sankey6.html)||
-| [Sankey](#sankey-diagram)                 | [Sankey 7](http://dexvis.com/dexcharts/dist/current/examples/Sankey7.html)||
-| [Sankey](#sankey-diagram)                 | [Sankey 8](http://dexvis.com/dexcharts/dist/current/examples/Sankey8.html)||
-| [Sankey](#sankey-diagram)                 | [Sankey 9](http://dexvis.com/dexcharts/dist/current/examples/Sankey9.html)||
-| [Scatter Plot](#scatter-plot)           | [Scatter Plot 1](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot1.html)||
-| [Scatter Plot](#scatter-plot)           | [Scatter Plot 2](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot2.html)||
-| [Scatter Plot Matrix](#scatter-plot)    | [Scatter Plot Matrix](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlotMatrix1.html)||
-| [3D Scatter Plot](#scatterplot3d)        | [3D Scatter Plot 1](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot3D1.html)||
-| [3D Scatter Plot](#scatterplot3d)        | [3D Scatter Plot 2](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot3D2.html)||
-| [3D Scatter Plot](#scatterplot3d)        | [3D Scatter Plot 3](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot3D3.html)||
-| [Map](#us-state-map)                    | [State Map 1](http://dexvis.com/dexcharts/dist/current/examples/StateMap1.html)||
-| [Map](#us-state-map)                    | [State Map 2](http://dexvis.com/dexcharts/dist/current/examples/StateMap2.html)||
-| [Map](#us-county-map)                    | [US County Map 1](http://dexvis.com/dexcharts/dist/current/examples/USCountyMap1.html)||
-| [Map](#world-country-map)                    | [World Country Map 1](http://dexvis.com/dexcharts/dist/current/examples/WorldCountryMap1.html)||
-| [UI Controls](#ui-controls)            | [UI Controls 1](http://dexvis.com/dexcharts/dist/current/examples/UI1.html)||
-| [UI Controls](#ui-controls)            | [UI Controls 2](http://dexvis.com/dexcharts/dist/current/examples/UI2.html)||
-| [UI Controls](#ui-controls)            | [UI Controls 3](http://dexvis.com/dexcharts/dist/current/examples/UI3.html)||
-| [UI Controls](#ui-controls)            | [UI Controls 4](http://dexvis.com/dexcharts/dist/current/examples/UI4.html)||
+| Chart Type                                          | Short Description | Long Description |
+|:--------------------------------------------------- |:----------------- |:-- |
+| [Bar Chart](#bar-chart)                             | [Basic Example](http://dexvis.com/dexcharts/dist/current/examples/BarChart1.html) | This example demonstrates the basic use of a bar chart. |
+| [Bar Chart](#bar-chart)                             | [High Resolution](http://dexvis.com/dexcharts/dist/current/examples/BarChart2.html) |  This chart looks like a line chart, however, in reality it is a fine grained bar chart. |
+| [Bar Chart](#bar-chart)                             | [Styling](http://dexvis.com/dexcharts/dist/current/examples/BarChart3.html) | This demonstrates some of the styling options associated with a bar chart. |
+| [Chord Chart](#chord-chart)                         | [Basic Example](http://dexvis.com/dexcharts/dist/current/examples/Chord1.html)| This is a basic example of a chord chart. |
+| [Chord Chart](#chord-chart)                         | [Styling](http://dexvis.com/dexcharts/dist/current/examples/Chord2.html) | This is a more complicated example demonstrating parallel coordinates chart dynamically creating a Chord Chart. |
+| [Dendrogram](#dendrogram)                           | [Basic Dendrogram](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram1.html) |A simple sample dendrogram.|
+| [Dendrogram](#dendrogram)                           | [Skew This](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram2.html) |An demonstration of per-node skew.|
+| [Dendrogram](#dendrogram)                           | [Orange/Blue](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram3.html) |An orange and blue dendrogram.|
+| [Dendrogram](#dendrogram)                           | [Vertical Dendrogram](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram3.html) |A dendrogram rendered vertically.|
+| [HeatMap](#heatmap)                                 | [HeatMap 1](http://dexvis.com/dexcharts/dist/current/examples/HeatMap1.html) |A basic heat map with a legend.|
+| [Legend](#legends)                                  | [Horizontal Legend 1](http://dexvis.com/dexcharts/dist/current/examples/HorizontalLegend1.html) ||
+| [Legend](#legends)                                  | [Legend 1](http://dexvis.com/dexcharts/dist/current/examples/Legends1.html) ||
+| [Legend](#legends)                                  | [Vertical Legend 1](http://dexvis.com/dexcharts/dist/current/examples/VerticalLegend1.html)||
+| [Line Chart](#line-charts)                          | [Line Chart 1](http://dexvis.com/dexcharts/dist/current/examples/LineChart1.html) ||
+| [Line Chart](#line-charts)                          | [Line Chart 2](http://dexvis.com/dexcharts/dist/current/examples/LineChart2.html) ||
+| [Line Chart](#line-charts)                          | [Line Chart 3](http://dexvis.com/dexcharts/dist/current/examples/LineChart3.html) ||
+| [Line Chart](#line-charts)                          | [Line Chart 4](http://dexvis.com/dexcharts/dist/current/examples/LineChart4.html) ||
+| [Parallel Coordinates](#parallel-coordinates)       | [Parallel Coordinates 1](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates1.html)||
+| [Parallel Coordinates](#parallel-coordinates)       | [Parallel Coordinates 2](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates2.html)||
+| [Parallel Coordinates](#parallel-coordinates)       | [Parallel Coordinates 3](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates3.html)||
+| [Parallel Coordinates](#parallel-coordinates)       | [Parallel Coordinates 4](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates4.html)||
+| [Pie Chart](#pie-chart)                             | [Pie Chart 1](http://dexvis.com/dexcharts/dist/current/examples/PieChart1.html) ||
+| [Pie Chart](#pie-chart)                             | [Pie Chart 2](http://dexvis.com/dexcharts/dist/current/examples/PieChart2.html) ||
+| [Pie Chart](#pie-chart)                             | [Pie Chart 3](http://dexvis.com/dexcharts/dist/current/examples/PieChart3.html)||
+| [Sankey](#sankey-diagram)                           | [Sankey 1](http://dexvis.com/dexcharts/dist/current/examples/Sankey1.html)||
+| [Sankey](#sankey-diagram)                           | [Sankey 2](http://dexvis.com/dexcharts/dist/current/examples/Sankey2.html)||
+| [Sankey](#sankey-diagram)                           | [Sankey 3](http://dexvis.com/dexcharts/dist/current/examples/Sankey3.html)||
+| [Sankey](#sankey-diagram)                           | [Sankey 4](http://dexvis.com/dexcharts/dist/current/examples/Sankey4.html)||
+| [Sankey](#sankey-diagram)                           | [Sankey 5](http://dexvis.com/dexcharts/dist/current/examples/Sankey5.html)||
+| [Sankey](#sankey-diagram)                           | [Sankey 6](http://dexvis.com/dexcharts/dist/current/examples/Sankey6.html)||
+| [Sankey](#sankey-diagram)                           | [Sankey 7](http://dexvis.com/dexcharts/dist/current/examples/Sankey7.html)||
+| [Sankey](#sankey-diagram)                           | [Sankey 8](http://dexvis.com/dexcharts/dist/current/examples/Sankey8.html)||
+| [Sankey](#sankey-diagram)                           | [Sankey 9](http://dexvis.com/dexcharts/dist/current/examples/Sankey9.html)||
+| [Scatter Plot](#scatter-plot)                       | [Scatter Plot 1](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot1.html)||
+| [Scatter Plot](#scatter-plot)                       | [Scatter Plot 2](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot2.html)||
+| [Scatter Plot Matrix](#scatter-plot)                | [Scatter Plot Matrix](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlotMatrix1.html)||
+| [3D Scatter Plot](#scatterplot3d)                   | [3D Scatter Plot 1](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot3D1.html)||
+| [3D Scatter Plot](#scatterplot3d)                   | [3D Scatter Plot 2](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot3D2.html)||
+| [3D Scatter Plot](#scatterplot3d)                   | [3D Scatter Plot 3](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot3D3.html)||
+| [Map](#us-state-map)                                | [State Map 1](http://dexvis.com/dexcharts/dist/current/examples/StateMap1.html)||
+| [Map](#us-state-map)                                | [State Map 2](http://dexvis.com/dexcharts/dist/current/examples/StateMap2.html)||
+| [Map](#us-county-map)                               | [US County Map 1](http://dexvis.com/dexcharts/dist/current/examples/USCountyMap1.html)||
+| [Map](#world-country-map)                           | [World Country Map 1](http://dexvis.com/dexcharts/dist/current/examples/WorldCountryMap1.html)||
+| [UI Controls](#ui-controls)                         | [UI Controls 1](http://dexvis.com/dexcharts/dist/current/examples/UI1.html)||
+| [UI Controls](#ui-controls)                         | [UI Controls 2](http://dexvis.com/dexcharts/dist/current/examples/UI2.html)||
+| [UI Controls](#ui-controls)                         | [UI Controls 3](http://dexvis.com/dexcharts/dist/current/examples/UI3.html)||
+| [UI Controls](#ui-controls)                         | [UI Controls 4](http://dexvis.com/dexcharts/dist/current/examples/UI4.html)||
 
 ## Usage
 
