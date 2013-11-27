@@ -21,43 +21,43 @@ There are many examples bundled with DexCharts.  Here are a few.
 | [Dendrogram](#dendrogram)   | [Orange/Blue](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram3.html) |An orange and blue dendrogram.|
 | [Dendrogram](#dendrogram)   | [Vertical Dendrogram](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram3.html) |A dendrogram rendered vertically.|
 | [HeatMap](#heatmap)         | [HeatMap 1](http://dexvis.com/dexcharts/dist/current/examples/HeatMap1.html) |A basic heat map with a legend.|
-| Horizontal Legend      | [Horizontal Legend 1](http://dexvis.com/dexcharts/dist/current/examples/HorizontalLegend1.html) ||
-| Legends                | [Legend 1](http://dexvis.com/dexcharts/dist/current/examples/Legends1.html) ||
-| Line Chart             | [Line Chart 1](http://dexvis.com/dexcharts/dist/current/examples/LineChart1.html) ||
-| Line Chart             | [Line Chart 2](http://dexvis.com/dexcharts/dist/current/examples/LineChart2.html) ||
-| Line Chart             | [Line Chart 3](http://dexvis.com/dexcharts/dist/current/examples/LineChart3.html) ||
-| Line Chart             | [Line Chart 4](http://dexvis.com/dexcharts/dist/current/examples/LineChart4.html) ||
-| Parallel Coordinates   | [Parallel Coordinates 1](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates1.html)||
-| Parallel Coordinates   | [Parallel Coordinates 2](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates2.html)||
-| Parallel Coordinates   | [Parallel Coordinates 3](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates3.html)||
-| Parallel Coordinates   | [Parallel Coordinates 4](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates4.html)||
-| Pie Chart              | [Pie Chart 1](http://dexvis.com/dexcharts/dist/current/examples/PieChart1.html) ||
-| Pie Chart              | [Pie Chart 2](http://dexvis.com/dexcharts/dist/current/examples/PieChart2.html) ||
-| Pie Chart              | [Pie Chart 3](http://dexvis.com/dexcharts/dist/current/examples/PieChart3.html)||
-| Sankey                 | [Sankey 1](http://dexvis.com/dexcharts/dist/current/examples/Sankey1.html)||
-| Sankey                 | [Sankey 2](http://dexvis.com/dexcharts/dist/current/examples/Sankey2.html)||
-| Sankey                 | [Sankey 3](http://dexvis.com/dexcharts/dist/current/examples/Sankey3.html)||
-| Sankey                 | [Sankey 4](http://dexvis.com/dexcharts/dist/current/examples/Sankey4.html)||
-| Sankey                 | [Sankey 5](http://dexvis.com/dexcharts/dist/current/examples/Sankey5.html)||
-| Sankey                 | [Sankey 6](http://dexvis.com/dexcharts/dist/current/examples/Sankey6.html)||
-| Sankey                 | [Sankey 7](http://dexvis.com/dexcharts/dist/current/examples/Sankey7.html)||
-| Sankey                 | [Sankey 8](http://dexvis.com/dexcharts/dist/current/examples/Sankey8.html)||
-| Sankey                 | [Sankey 9](http://dexvis.com/dexcharts/dist/current/examples/Sankey9.html)||
-| Scatter Plot           | [Scatter Plot 1](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot1.html)||
-| Scatter Plot           | [Scatter Plot 2](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot2.html)||
-| 3D Scatter Plot        | [3D Scatter Plot 1](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot3D1.html)||
-| 3D Scatter Plot        | [3D Scatter Plot 2](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot3D2.html)||
-| 3D Scatter Plot        | [3D Scatter Plot 3](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot3D3.html)||
-| Scatter Plot Matrix    | [Scatter Plot Matrix](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlotMatrix1.html)||
-| Map                    | [State Map 1](http://dexvis.com/dexcharts/dist/current/examples/StateMap1.html)||
-| Map                    | [State Map 2](http://dexvis.com/dexcharts/dist/current/examples/StateMap2.html)||
-| UI Controls            | [UI Controls 1](http://dexvis.com/dexcharts/dist/current/examples/UI1.html)||
-| UI Controls            | [UI Controls 2](http://dexvis.com/dexcharts/dist/current/examples/UI2.html)||
-| UI Controls            | [UI Controls 3](http://dexvis.com/dexcharts/dist/current/examples/UI3.html)||
-| UI Controls            | [UI Controls 4](http://dexvis.com/dexcharts/dist/current/examples/UI4.html)||
-| Map                    | [US County Map 1](http://dexvis.com/dexcharts/dist/current/examples/USCountyMap1.html)||
-| Vertical Legend        | [Vertical Legend 1](http://dexvis.com/dexcharts/dist/current/examples/VerticalLegend1.html)||
-| Map                    | [World Country Map 1](http://dexvis.com/dexcharts/dist/current/examples/WorldCountryMap1.html)||
+| [Legend](#legends)          | [Horizontal Legend 1](http://dexvis.com/dexcharts/dist/current/examples/HorizontalLegend1.html) ||
+| [Legend](#legends)                 | [Legend 1](http://dexvis.com/dexcharts/dist/current/examples/Legends1.html) ||
+| [Legend](#legends)          | [Vertical Legend 1](http://dexvis.com/dexcharts/dist/current/examples/VerticalLegend1.html)||
+| [Line Chart](#line-charts)             | [Line Chart 1](http://dexvis.com/dexcharts/dist/current/examples/LineChart1.html) ||
+| [Line Chart](#line-charts)             | [Line Chart 2](http://dexvis.com/dexcharts/dist/current/examples/LineChart2.html) ||
+| [Line Chart](#line-charts)             | [Line Chart 3](http://dexvis.com/dexcharts/dist/current/examples/LineChart3.html) ||
+| [Line Chart](#line-charts)             | [Line Chart 4](http://dexvis.com/dexcharts/dist/current/examples/LineChart4.html) ||
+| [Parallel Coordinates](#parallel-coordinates)   | [Parallel Coordinates 1](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates1.html)||
+| [Parallel Coordinates](#parallel-coordinates)   | [Parallel Coordinates 2](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates2.html)||
+| [Parallel Coordinates](#parallel-coordinates)   | [Parallel Coordinates 3](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates3.html)||
+| [Parallel Coordinates](#parallel-coordinates)   | [Parallel Coordinates 4](http://dexvis.com/dexcharts/dist/current/examples/ParallelCoordinates4.html)||
+| [Pie Chart](#pie-chart)              | [Pie Chart 1](http://dexvis.com/dexcharts/dist/current/examples/PieChart1.html) ||
+| [Pie Chart](#pie-chart)              | [Pie Chart 2](http://dexvis.com/dexcharts/dist/current/examples/PieChart2.html) ||
+| [Pie Chart](#pie-chart)              | [Pie Chart 3](http://dexvis.com/dexcharts/dist/current/examples/PieChart3.html)||
+| [Sankey](#sankey-diagram)                 | [Sankey 1](http://dexvis.com/dexcharts/dist/current/examples/Sankey1.html)||
+| [Sankey](#sankey-diagram)                 | [Sankey 2](http://dexvis.com/dexcharts/dist/current/examples/Sankey2.html)||
+| [Sankey](#sankey-diagram)                 | [Sankey 3](http://dexvis.com/dexcharts/dist/current/examples/Sankey3.html)||
+| [Sankey](#sankey-diagram)                 | [Sankey 4](http://dexvis.com/dexcharts/dist/current/examples/Sankey4.html)||
+| [Sankey](#sankey-diagram)                 | [Sankey 5](http://dexvis.com/dexcharts/dist/current/examples/Sankey5.html)||
+| [Sankey](#sankey-diagram)                 | [Sankey 6](http://dexvis.com/dexcharts/dist/current/examples/Sankey6.html)||
+| [Sankey](#sankey-diagram)                 | [Sankey 7](http://dexvis.com/dexcharts/dist/current/examples/Sankey7.html)||
+| [Sankey](#sankey-diagram)                 | [Sankey 8](http://dexvis.com/dexcharts/dist/current/examples/Sankey8.html)||
+| [Sankey](#sankey-diagram)                 | [Sankey 9](http://dexvis.com/dexcharts/dist/current/examples/Sankey9.html)||
+| [Scatter Plot](#scatter-plot)           | [Scatter Plot 1](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot1.html)||
+| [Scatter Plot](#scatter-plot)           | [Scatter Plot 2](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot2.html)||
+| [Scatter Plot Matrix](#scatter-plot)    | [Scatter Plot Matrix](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlotMatrix1.html)||
+| [3D Scatter Plot](#scatterplot3d)        | [3D Scatter Plot 1](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot3D1.html)||
+| [3D Scatter Plot](#scatterplot3d)        | [3D Scatter Plot 2](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot3D2.html)||
+| [3D Scatter Plot](#scatterplot3d)        | [3D Scatter Plot 3](http://dexvis.com/dexcharts/dist/current/examples/ScatterPlot3D3.html)||
+| [Map](#us-state-map)                    | [State Map 1](http://dexvis.com/dexcharts/dist/current/examples/StateMap1.html)||
+| [Map](#us-state-map)                    | [State Map 2](http://dexvis.com/dexcharts/dist/current/examples/StateMap2.html)||
+| [Map](#us-county-map)                    | [US County Map 1](http://dexvis.com/dexcharts/dist/current/examples/USCountyMap1.html)||
+| [Map](#world-country-map)                    | [World Country Map 1](http://dexvis.com/dexcharts/dist/current/examples/WorldCountryMap1.html)||
+| [UI Controls](#ui-controls)            | [UI Controls 1](http://dexvis.com/dexcharts/dist/current/examples/UI1.html)||
+| [UI Controls](#ui-controls)            | [UI Controls 2](http://dexvis.com/dexcharts/dist/current/examples/UI2.html)||
+| [UI Controls](#ui-controls)            | [UI Controls 3](http://dexvis.com/dexcharts/dist/current/examples/UI3.html)||
+| [UI Controls](#ui-controls)            | [UI Controls 4](http://dexvis.com/dexcharts/dist/current/examples/UI4.html)||
 
 ## Usage
 
@@ -388,15 +388,6 @@ A bar chart or bar graph is a chart with rectangular bars with lengths proportio
 | class                      | HeatMap  | The class of this component's container element. |
 | csv                        |          | The data for this diagram.  See CSV. |
 
-### Horizontal Legends
-
-| Option                     | Default  | Description |
-| -------------------------- |:---------| -----:|
-| parent                     |          | The path to this component's parent element.  Ex: #HorizontalLegendParent |
-| id                         | HorizontalLegend | The id of this component's container element. |
-| class                      | HorizontalLegend | The class of this component's container element. |
-| csv                        |         | The data for this diagram.  See CSV. |
-
 ### Line Charts
 
 | Option                     | Default  | Description |
@@ -517,6 +508,27 @@ These are WebGL components based primarily up on the excellent work of mrdoob.  
 | class                      | ScatterPlot3D | The class of this component's container element. |
 | csv                        |               | The data for this diagram.  See CSV. |
 
+### Legends
+
+#### Horizontal Legends
+
+| Option                     | Default  | Description |
+| -------------------------- |:---------| -----:|
+| parent                     |          | The path to this component's parent element.  Ex: #HorizontalLegendParent |
+| id                         | HorizontalLegend | The id of this component's container element. |
+| class                      | HorizontalLegend | The class of this component's container element. |
+| csv                        |         | The data for this diagram.  See CSV. |
+
+#### Vertical Legend
+
+| Option                     | Default        | Description |
+| -------------------------- |:---------------| -----:|
+| parent                     |                | The path to this component's parent element.  Ex: #VerticalLegendParent |
+| id                         | VerticalLegend | The id of this component's container element. |
+| class                      | VerticalLegend | The class of this component's container element. |
+| csv                        |                | The data for this diagram.  See CSV. |
+
+
 ### Maps
 
 #### US County Map
@@ -545,12 +557,3 @@ These are WebGL components based primarily up on the excellent work of mrdoob.  
 | id                         | WorldMap | The id of this component's container element. |
 | class                      | WorldMap | The class of this component's container element. |
 | csv                        |          | The data for this diagram.  See CSV. |
-
-### Vertical Legend
-
-| Option                     | Default        | Description |
-| -------------------------- |:---------------| -----:|
-| parent                     |                | The path to this component's parent element.  Ex: #VerticalLegendParent |
-| id                         | VerticalLegend | The id of this component's container element. |
-| class                      | VerticalLegend | The class of this component's container element. |
-| csv                        |                | The data for this diagram.  See CSV. |
