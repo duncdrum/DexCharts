@@ -21,10 +21,10 @@ There are many examples bundled with DexCharts.  Here are a few.
 | [Dendrogram](#dendrogram)                           | [Orange/Blue](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram3.html) |An orange and blue dendrogram.|
 | [Dendrogram](#dendrogram)                           | [Vertical Dendrogram](http://dexvis.com/dexcharts/dist/current/examples/Dendrogram3.html) |A dendrogram rendered vertically.|
 | [HeatMap](#heatmap)                                 | [HeatMap 1](http://dexvis.com/dexcharts/dist/current/examples/HeatMap1.html) |A basic heat map with a legend.|
-| [Legend](#legends)                                  | [Horizontal Legend 1](http://dexvis.com/dexcharts/dist/current/examples/HorizontalLegend1.html) ||
-| [Legend](#legends)                                  | [Legend 1](http://dexvis.com/dexcharts/dist/current/examples/Legends1.html) ||
-| [Legend](#legends)                                  | [Vertical Legend 1](http://dexvis.com/dexcharts/dist/current/examples/VerticalLegend1.html)||
-| [Line Chart](#line-charts)                          | [Line Chart 1](http://dexvis.com/dexcharts/dist/current/examples/LineChart1.html) ||
+| [Legend](#legends)                                  | [Horizontal Legend 1](http://dexvis.com/dexcharts/dist/current/examples/HorizontalLegend1.html) |This demonstrates a basic horizontal legend.|
+| [Legend](#legends)                                  | [Legend 1](http://dexvis.com/dexcharts/dist/current/examples/Legends1.html) |This demonstrates a variety of legends.|
+| [Legend](#legends)                                  | [Vertical Legend 1](http://dexvis.com/dexcharts/dist/current/examples/VerticalLegend1.html)|A basic vertical legend example.|
+| [Line Chart](#line-charts)                          | [Line Chart 1](http://dexvis.com/dexcharts/dist/current/examples/LineChart1.html) |A basic line chart example.|
 | [Line Chart](#line-charts)                          | [Line Chart 2](http://dexvis.com/dexcharts/dist/current/examples/LineChart2.html) ||
 | [Line Chart](#line-charts)                          | [Line Chart 3](http://dexvis.com/dexcharts/dist/current/examples/LineChart3.html) ||
 | [Line Chart](#line-charts)                          | [Line Chart 4](http://dexvis.com/dexcharts/dist/current/examples/LineChart4.html) ||
@@ -202,7 +202,7 @@ Most configuration options can be configured with literals or dynamic functions.
 | style          | normal     | Sets the style of the font. Ex: normal, italic, oblique |
 | variant        | normal     | Sets the font variant.  Ex: normal, small-caps |
 | weight         | normal     | Sets the weight of the font.  Ex: normal, bold, 100, 200, 300, 400, 500, 600, 700, 800, 900 |
-| stretch        |               | This property indicates the desired amount of condensing or expansion in the glyphs used to render the text. |
+| stretch        |            | This property indicates the desired amount of condensing or expansion in the glyphs used to render the text. |
 | size           | 18         | Sets the size, in pixels, of the font. |
 | sizeAdjust     |            | Allows authors to specify an aspect value for an element that will preserve the x-height of the first choice font in a substitute font. |
 
@@ -277,12 +277,12 @@ Deprecated...
 
 | Option      | Default  | Description |
 | ----------- |:-------- | -----------:|
-| domain      | [0, 100] | |
-| range       | [0, 800] | |
-| rangeRound  |          | |
-| interpolate |          | |
-| clamp       |          | |
-| nice        |          | |
+| domain      | [0, 100] | If numbers is specified, sets the scale's input domain to the specified array of numbers. The array must contain two or more numbers. If the elements in the given array are not numbers, they will be coerced to numbers; this coercion happens similarly when the scale is called. Thus, a linear scale can be used to encode types such as date objects that can be converted to numbers; however, it is often more convenient to use d3.time.scale for dates. (You can implement your own convertible number objects using valueOf.) If numbers is not specified, returns the scale's current input domain.|
+| range       | [0, 800] | If values is specified, sets the scale's output range to the specified array of values. The array must contain two or more values, to match the cardinality of the input domain, otherwise the longer of the two is truncated to match the other. The elements in the given array need not be numbers; any value that is supported by the underlying interpolator will work. However, numeric ranges are required for the invert operator. If values is not specified, returns the scale's current output range.|
+| rangeRound  |          | Sets the scale's output range to the specified array of values, while also setting the scale's interpolator to d3.interpolateRound. This is a convenience routine for when the values output by the scale should be exact integers, such as to avoid antialiasing artifacts. It is also possible to round the output values manually after the scale is applied.|
+| interpolate |          | If factory is specified, sets the scale's output interpolator using the specified factory. The interpolator factory defaults to d3.interpolate, and is used to map the normalized domain parameter t in [0,1] to the corresponding value in the output range. The interpolator factory will be used to construct interpolators for each adjacent pair of values from the output range. If factory is not specified, returns the scale's interpolator factory.|
+| clamp       |          | If boolean is specified, enables or disables clamping accordingly. By default, clamping is disabled, such that if a value outside the input domain is passed to the scale, the scale may return a value outside the output range through linear extrapolation. For example, with the default domain and range of [0,1], an input value of 2 will return an output value of 2. If clamping is enabled, the normalized domain parameter t is clamped to the range [0,1], such that the return value of the scale is always within the scale's output range. If boolean is not specified, returns whether or not the scale currently clamps values to within the output range.|
+| nice        |          | Extends the domain so that it starts and ends on nice round values. This method typically modifies the scale's domain, and may only extend the bounds to the nearest round value. The precision of the round value is dependent on the extent of the domain dx according to the following formula: exp(round(log(dx)) - 1). Nicing is useful if the domain is computed from data and may be irregular. For example, for a domain of [0.20147987687960267, 0.996679553296417], the nice domain is [0.2, 1]. If the domain has more than two values, nicing the domain only affects the first and last value. The optional tick count argument allows greater control over the step size used to extend the bounds, guaranteeing that the returned ticks will exactly cover the domain.|
 
 #### Pow Scale
 
@@ -366,14 +366,21 @@ Deprecated...
 | ----------- |:-------- | -----------:|
 | domain      |          | |
 | range       |          | |
+
 ### Axis
 
-| Option | Default | Description |
-| ------ |:--------| -----------:|
-| tick   | [Tick](#ticks)    | See Ticks. |
-| orient | 3       | Sets the orientation of the axis. Ex: top, bottom, left, right. |
-| scale  | 5       | Set the scale of the axis.  Ex: d3.scale.linear(), d3.scale.ordinal() |
-| label  | [Label](#labels)   | See Labels. |
+| Option        | Default | Description |
+| --------------|:--------| -----------:|
+| scale         | 5       | Set the scale of the axis.  Ex: d3.scale.linear(), d3.scale.ordinal() |
+| orient        | 3       | Sets the orientation of the axis. Ex: top, bottom, left, right. This parameter also determines whether or not the axis runs vertically or horizontally. |
+| ticks         |         | A hint to suggest how many ticks to display. |
+| tickValues    |         | Specific values to display tick marks at. |
+| tickSize      |         | The size (in pixels) of a tick mark. |
+| innerTickSize |         | The size (in pixels) of inner tick marks. |
+| outerTickSize |         | The size (in pixels) of outer tick marks. |
+| tickPadding   |         | If padding is specified, sets the padding to the specified value in pixels and returns the axis. If padding is not specified, returns the current padding which defaults to 3 pixels. |
+| tickFormat    |         | If format is specified, sets the format to the specified function and returns the axis. If format is not specified, returns the current format function, which defaults to null. A null format indicates that the scale's default formatter should be used, which is generated by calling scale.tickFormat. In this case, the arguments specified by ticks are likewise passed to scale.tickFormat. |
+| tickSubdivide |         | This specifies how many minor ticks to place between major ticks. |
 
 ### CSV
 
