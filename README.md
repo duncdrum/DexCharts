@@ -252,20 +252,6 @@ Most configuration options can be configured with literals or dynamic functions.
 | wordSpacing    | 'normal' | Sets an additional amount of space between words. Ex: normal, <length>, iherit |
 | decoration     | none       | Allows for added characteristics or decorations to be added to the text. Ex: (none, underline, overline, line-through, blink, inherit) |
 
-### Ticks
-
-Deprecated...
-
-| Option     | Default | Description |
-| ---------- |:------| -----:|
-| count      | 5     | Sets the number of major ticks to display. |
-| subdivide  | 3     | Sets the number of minor ticks to display. |
-| size.major | 5     | Sets the size (in pixels) of the major ticks. |
-| size.minor | 3     | Sets the size (in pixels) of the minor ticks. |
-| size.end   | 5     | Sets the size (in pixels) of the ticks at either end of the axis. |
-| padding    | 5     | Sets the padding. |
-| format     | ',d'  | Sets the format of the tick labels. |
-| label      | [Label](#labels) | Configures the tick label.  See Label configuration options. |
 
 ### Scale
 
@@ -288,12 +274,13 @@ Deprecated...
 
 | Option      | Default  | Description |
 | ----------- |:-------- | -----------:|
-| domain      | [0, 100] | |
-| range       | [0, 800] | |
-| rangeRound  |          | |
-| interpolate |          | |
-| clamp       |          | |
-| nice        |          | |
+| domain      | [0, 100] | If numbers is specified, sets the scale's input domain to the specified array of numbers. The array must contain two or more numbers. If the elements in the given array are not numbers, they will be coerced to numbers; this coercion happens similarly when the scale is called. Thus, a power scale can be used to encode any type that can be converted to numbers. If numbers is not specified, returns the scale's current input domain.|
+| range       | [0, 800] | If values is specified, sets the scale's output range to the specified array of values. The array must contain two or more values, to match the cardinality of the input domain, otherwise the longer of the two is truncated to match the other. The elements in the given array need not be numbers; any value that is supported by the underlying interpolator will work. However, numeric ranges are required for the invert operator. If values is not specified, returns the scale's current output range.|
+| rangeRound  |          |Sets the scale's output range to the specified array of values, while also setting the scale's interpolator to d3.interpolateRound. This is a convenience routine for when the values output by the scale should be exact integers, such as to avoid antialiasing artifacts. It is also possible to round the output values manually after the scale is applied. |
+| exponent    |          | If k is specified, sets the current exponent to the given numeric value. If k is not specified, returns the current exponent. The default value is 1.|
+| interpolate |          | If k is specified, sets the current exponent to the given numeric value. If k is not specified, returns the current exponent. The default value is 1.|
+| clamp       |          | If boolean is specified, enables or disables clamping accordingly. By default, clamping is disabled, such that if a value outside the input domain is passed to the scale, the scale may return a value outside the output range through linear extrapolation. For example, with the default domain and range of [0,1], an input value of 2 will return an output value of 2. If clamping is enabled, the normalized domain parameter t is clamped to the range [0,1], such that the return value of the scale is always within the scale's output range. If boolean is not specified, returns whether or not the scale currently clamps values to within the output range.|
+| nice        |          | Extends the domain so that it starts and ends on nice round values. This method typically modifies the scale's domain, and may only extend the bounds to the nearest round value. The precision of the round value is dependent on the extent of the domain dx according to the following formula: exp(round(log(dx)) - 1). Nicing is useful if the domain is computed from data and may be irregular. For example, for a domain of [0.20147987687960267, 0.996679553296417], the nice domain is [0.2, 1]. If the domain has more than two values, nicing the domain only affects the first and last value. The optional m argument allows a tick count to be specified to control the step size used prior to extending the bounds.|
 
 #### Sqrt Scale
 
@@ -310,12 +297,13 @@ Deprecated...
 
 | Option      | Default  | Description |
 | ----------- |:-------- | -----------:|
-| domain      | [0, 100] | |
-| range       | [0, 800] | |
-| rangeRound  |          | |
-| interpolate |          | |
-| clamp       |          | |
-| nice        |          | |
+| domain      | [0, 100] | If numbers is specified, sets the scale's input domain to the specified array of numbers. The array must contain two or more numbers. If the elements in the given array are not numbers, they will be coerced to numbers; this coercion happens similarly when the scale is called. Thus, a log scale can be used to encode any type that can be converted to numbers. If numbers is not specified, returns the scale's current input domain.|
+| range       | [0, 800] | If values is specified, sets the scale's output range to the specified array of values. The array must contain two or more values, to match the cardinality of the input domain, otherwise the longer of the two is truncated to match the other. The elements in the given array need not be numbers; any value that is supported by the underlying interpolator will work. However, numeric ranges are required for the invert operator. If values is not specified, returns the scale's current output range.|
+| rangeRound  |          | Sets the scale's output range to the specified array of values, while also setting the scale's interpolator to d3.interpolateRound. This is a convenience routine for when the values output by the scale should be exact integers, such as to avoid antialiasing artifacts. It is also possible to round the output values manually after the scale is applied.|
+| base        |          |If base is specified, sets the base for this logarithmic scale. If base is not specified, returns the current base, which defaults to 10.|
+| interpolate |          | If factory is specified, sets the scale's output interpolator using the specified factory. The interpolator factory defaults to d3.interpolate, and is used to map the normalized domain parameter t in [0,1] to the corresponding value in the output range. The interpolator factory will be used to construct interpolators for each adjacent pair of values from the output range. If factory is not specified, returns the scale's interpolator factory.|
+| clamp       |          | If boolean is specified, enables or disables clamping accordingly. By default, clamping is disabled, such that if a value outside the input domain is passed to the scale, the scale may return a value outside the output range through linear extrapolation. For example, with the default domain and range of [0,1], an input value of 2 will return an output value of 2. If clamping is enabled, the normalized domain parameter t is clamped to the range [0,1], such that the return value of the scale is always within the scale's output range. If boolean is not specified, returns whether or not the scale currently clamps values to within the output range.|
+| nice        |          |Extends the domain so that it starts and ends on nice round values. This method typically modifies the scale's domain, and may only extend the bounds to the nearest round value. The nearest round value is based on integer powers of the scale’s base, which defaults to 10. Nicing is useful if the domain is computed from data and may be irregular. For example, for a domain of [0.20147987687960267, 0.996679553296417], the nice domain is [0.1, 1]. If the domain has more than two values, nicing the domain only affects the first and last value. |
 
 #### Ordinal Scale
 
@@ -348,6 +336,8 @@ Deprecated...
 
 #### Quantize Scale
 
+Quantize scales are a variant of linear scales with a discrete rather than continuous range. The input domain is still continuous, and divided into uniform segments based on the number of values in (the cardinality of) the output range. The mapping is linear in that the output range value y can be expressed as a linear function of the input domain value x: y = mx + b. The input domain is typically a dimension of the data that you want to visualize, such as the height of students (measured in meters) in a sample population. The output range is typically a dimension of the desired output visualization, such as the height of bars (measured in pixels) in a histogram.
+
 | Option      | Default  | Description |
 | ----------- |:-------- | -----------:|
 | domain      |          | |
@@ -357,8 +347,8 @@ Deprecated...
 
 | Option      | Default  | Description |
 | ----------- |:-------- | -----------:|
-| domain      |          | |
-| range       |          | |
+| domain      |          | If numbers is specified, sets the scale's input domain to the specified two-element array of numbers. If the array contains more than two numbers, only the first and last number are used. If the elements in the given array are not numbers, they will be coerced to numbers; this coercion happens similarly when the scale is called. Thus, a quantize scale can be used to encode any type that can be converted to numbers. If numbers is not specified, returns the scale's current input domain.|
+| range       |          |If values is specified, sets the scale's output range to the specified array of values. The array may contain any number of discrete values. The elements in the given array need not be numbers; any value or type will work. If values is not specified, returns the scale's current output range. |
 
 #### Threshold Scale
 
