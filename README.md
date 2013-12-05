@@ -186,11 +186,16 @@ map.addListener("selectState", pcChart, function(chartEvent)
 
 # Configuration
 
-Most configuration options can be configured with literals or dynamic functions.  Most of the visuals include reusable configurable types such as:
+Most configuration options can be configured with literals or dynamic functions.  DexCharts will figure out which is which and apply them appropriately. Most of the visuals include reusable configurable types such as:
 
-* Basic Shapes such as lines, circles and rectangles.
-* Strokes
-* Labels, fonts, etc...
+* Text and Fonts
+* Shapes such as lines, circles and rectangles.
+* Strokes used to outline shapes
+* Fills which are used to determine how things are shaded
+* Scales used to map values in very specific ways.
+* CSV, which is the universal input format for all Dex Charts.
+
+DexCharts has taken great pains to expose most of the capabilities found within D3 and SVG.
 
 ## General
 
@@ -209,6 +214,8 @@ Most configuration options can be configured with literals or dynamic functions.
 
 ### Strokes
 
+Strokes define the color of a line, text, or outline of an element.
+
 | Option    | Default | Description |
 | --------- |:--------| -----:|
 | color     | black   | Sets the color of the stroke. Named colors and colors of the form #fff and #ffffff are accepted. |
@@ -218,12 +225,16 @@ Most configuration options can be configured with literals or dynamic functions.
 
 ### Fills
 
+Fills specify how an element is filled or shaded.
+
 | Option      | Default | Description |
 | ----------- |:--------| -----:|
 | fill        |         | Sets the color of the entity to be filled. |
 | fillOpacity |         | Sets the opacity of the filling. |
 
 ### Links
+
+Links are really just a composite of a stroke and a fill.
 
 | Option      | Default | Description |
 | ----------- |:--------| -----:|
@@ -255,6 +266,8 @@ Most configuration options can be configured with literals or dynamic functions.
 
 ### Scale
 
+Scales are used to map one values from an input domain into an output range.  There are many different types of scales available in DexCharts via D3.
+
 | Option | Default | Description |
 | ------ |:--------| -----------:|
 | type   | linear  | Sets the base type of this scale.  Ex: linear, sqrt, pow, time, log, ordinal, quantile, quantize, identity |
@@ -272,6 +285,8 @@ Most configuration options can be configured with literals or dynamic functions.
 
 #### Pow Scale
 
+Power scales are similar to linear scales, except there's an exponential transform that is applied to the input domain value before the output range value is computed. The mapping to the output range value y can be expressed as a function of the input domain value x: y = mx^k + b, where k is the exponent value. Power scales also support negative values, in which case the input value is multiplied by -1, and the resulting output value is also multiplied by -1.
+
 | Option      | Default  | Description |
 | ----------- |:-------- | -----------:|
 | domain      | [0, 100] | If numbers is specified, sets the scale's input domain to the specified array of numbers. The array must contain two or more numbers. If the elements in the given array are not numbers, they will be coerced to numbers; this coercion happens similarly when the scale is called. Thus, a power scale can be used to encode any type that can be converted to numbers. If numbers is not specified, returns the scale's current input domain.|
@@ -284,14 +299,17 @@ Most configuration options can be configured with literals or dynamic functions.
 
 #### Sqrt Scale
 
+A sqrt scale is essentially a power scale with a default domain of [0,1], default range of [0,1] and an exponential transformation of x^.5.
+
 | Option      | Default  | Description |
 | ----------- |:-------- | -----------:|
-| domain      | [0, 100] | |
-| range       | [0, 800] | |
-| rangeRound  |          | |
-| interpolate |          | |
-| clamp       |          | |
-| nice        |          | |
+| domain      | [0, 100] | If numbers is specified, sets the scale's input domain to the specified array of numbers. The array must contain two or more numbers. If the elements in the given array are not numbers, they will be coerced to numbers; this coercion happens similarly when the scale is called. Thus, a power scale can be used to encode any type that can be converted to numbers. If numbers is not specified, returns the scale's current input domain.|
+| range       | [0, 800] | If values is specified, sets the scale's output range to the specified array of values. The array must contain two or more values, to match the cardinality of the input domain, otherwise the longer of the two is truncated to match the other. The elements in the given array need not be numbers; any value that is supported by the underlying interpolator will work. However, numeric ranges are required for the invert operator. If values is not specified, returns the scale's current output range. |
+| rangeRound  |          | Sets the scale's output range to the specified array of values, while also setting the scale's interpolator to d3.interpolateRound. This is a convenience routine for when the values output by the scale should be exact integers, such as to avoid antialiasing artifacts. It is also possible to round the output values manually after the scale is applied.|
+| exponent    |          | If k is specified, sets the current exponent to the given numeric value. If k is not specified, returns the current exponent. The default value is 0.5.|
+| interpolate |          | If factory is specified, sets the scale's output interpolator using the specified factory. The interpolator factory defaults to d3.interpolate, and is used to map the normalized domain parameter t in [0,1] to the corresponding value in the output range. The interpolator factory will be used to construct interpolators for each adjacent pair of values from the output range. If factory is not specified, returns the scale's interpolator factory.|
+| clamp       |          | If boolean is specified, enables or disables clamping accordingly. By default, clamping is disabled, such that if a value outside the input domain is passed to the scale, the scale may return a value outside the output range through linear extrapolation. For example, with the default domain and range of [0,1], an input value of 2 will return an output value of 2. If clamping is enabled, the normalized domain parameter t is clamped to the range [0,1], such that the return value of the scale is always within the scale's output range. If boolean is not specified, returns whether or not the scale currently clamps values to within the output range.|
+| nice        |          | Extends the domain so that it starts and ends on nice round values. This method typically modifies the scale's domain, and may only extend the bounds to the nearest round value. The precision of the round value is dependent on the extent of the domain dx according to the following formula: exp(round(log(dx)) - 1). Nicing is useful if the domain is computed from data and may be irregular. For example, for a domain of [0.20147987687960267, 0.996679553296417], the nice domain is [0.2, 1]. If the domain has more than two values, nicing the domain only affects the first and last value. The optional m argument allows a tick count to be specified to control the step size used prior to extending the bounds.|
 
 #### Log Scale
 
@@ -307,23 +325,28 @@ Most configuration options can be configured with literals or dynamic functions.
 
 #### Ordinal Scale
 
+Ordinal scales have a discrete domain, such as a set of names or categories.
+
 | Option          | Default  | Description |
 | --------------- |:-------- | -----------:|
-| domain          |          | |
-| range           |          | |
-| rangeRoundBands |          | |
-| rangePoints     |          | |
-| rangeBands      |          | |
+| domain          |          | If values is specified, sets the input domain of the ordinal scale to the specified array of values. The first element in values will be mapped to the first element in the output range, the second domain value to the second range value, and so on. Domain values are stored internally in an associative array as a mapping from value to index; the resulting index is then used to retrieve a value from the output range. Thus, an ordinal scale's values must be coercible to a string, and the stringified version of the domain value uniquely identifies the corresponding range value. If values is not specified, this method returns the current domain.  Setting the domain on an ordinal scale is optional. If no domain is set, a range must be set explicitly. Then, each unique value that is passed to the scale function will be assigned a new value from the output range; in other words, the domain will be inferred implicitly from usage. Although domains may thus be constructed implicitly, it is still a good idea to assign the ordinal scale's domain explicitly to ensure deterministic behavior, as inferring the domain from usage will be dependent on ordering.|
+| range           |          | If values is specified, sets the output range of the ordinal scale to the specified array of values. The first element in the domain will be mapped to the first element in values, the second domain value to the second range value, and so on. If there are fewer elements in the range than in the domain, the scale will recycle values from the start of the range. If values is not specified, this method returns the current output range. This method is intended for when the set of discrete output values is computed explicitly, such as a set of categorical colors. In other cases, such as determining the layout of an ordinal scatterplot or bar chart, you may find the rangePoints or rangeBands operators more convenient.|
+| rangeRoundBands |          | Like rangeBands, except guarantees that the band width and offset are integer values, so as to avoid antialiasing artifacts.|
+| rangePoints     |          | Sets the output range from the specified continuous interval. The array interval contains two elements representing the minimum and maximum numeric value. This interval is subdivided into n evenly-spaced points, where n is the number of (unique) values in the input domain. The first and last point may be offset from the edge of the interval according to the specified padding, which defaults to zero. The padding is expressed as a multiple of the spacing between points. A reasonable value is 1.0, such that the first and last point will be offset from the minimum and maximum value by half the distance between points.|
+| rangeBands      |          | Sets the output range from the specified continuous interval. The array interval contains two elements representing the minimum and maximum numeric value. This interval is subdivided into n evenly-spaced bands, where n is the number of (unique) values in the input domain. The bands may be offset from the edge of the interval and other bands according to the specified padding, which defaults to zero. The padding is typically in the range [0,1] and corresponds to the amount of space in the range interval to allocate to padding. A value of 0.5 means that the band width will be equal to the padding width. The outerPadding argument is for the entire group of bands; a value of 0 means there will be padding only between rangeBands.|
 
 #### Time Scale
 
+The time scale is an extension of d3.scale.linear that uses JavaScript Date objects as the domain representation. Thus, unlike the normal linear scale, domain values are coerced to dates rather than numbers; similarly, the invert function returns a date. Most conveniently, the time scale also provides suitable ticks based on time intervals, taking the pain out of generating axes for nearly any time-based domain.
+
 | Option      | Default  | Description |
 | ----------- |:-------- | -----------:|
-| domain      |          | |
-| range       |          | |
-| rangeRound  |          | |
-| interpolate |          | |
-| clamp       |          | |
+| domain      |          | If dates is specified, sets the scale's input domain to the specified array of dates. The array must contain two or more dates. If the elements in the given array are not dates, they will be coerced to dates; this coercion happens similarly when the scale is called. If dates is not specified, returns the scale's current input domain. Although time scales typically have just two dates in their domain, you can specify more than two dates for a polylinear scale. In this case, there must be an equivalent number of values in the output range.|
+| nice        |          | Extends the domain so that it starts and ends on nice round values as determined by the specified time interval and optional step count. As an alternative to specifying an explicit time interval, a numeric count can be specified, and a time interval will be chosen automatically to be consistent with scale.ticks. If count is not specified, it defaults to 10. This method typically extends the scale's domain, and may only extend the bounds to the nearest round value. Nicing is useful if the domain is computed from data and may be irregular. For example, for a domain of [2009-07-13T00:02, 2009-07-13T23:48], the nice domain is [2009-07-13, 2009-07-14]. If the domain has more than two values, nicing the domain only affects the first and last value. |
+| range       |          | If values is specified, sets the scale's output range to the specified array of values. The array must contain two or more values, to match the cardinality of the input domain. The elements in the given array need not be numbers; any value that is supported by the underlying interpolator will work. However, numeric ranges are required for the invert operator. If values is not specified, returns the scale's current output range.|
+| rangeRound  |          | Sets the scale's output range to the specified array of values, while also setting the scale's interpolator to d3.interpolateRound. This is a convenience routine for when the values output by the scale should be exact integers, such as to avoid antialiasing artifacts. It is also possible to round the output values manually after the scale is applied.|
+| interpolate |          | If factory is specified, sets the scale's output interpolator using the specified factory. The interpolator factory defaults to d3.interpolate, and is used to map the normalized domain parameter t in [0,1] to the corresponding value in the output range. The interpolator factory will be used to construct interpolators for each adjacent pair of values from the output range. If factory is not specified, returns the scale's interpolator factory.|
+| clamp       |          | If boolean is specified, enables or disables clamping accordingly. By default, clamping is disabled, such that if a value outside the input domain is passed to the scale, the scale may return a value outside the output range through linear extrapolation. For example, with the default domain and range of [0,1], an input value of 2 will return an output value of 2. If clamping is enabled, the normalized domain parameter t is clamped to the range [0,1], such that the return value of the scale is always within the scale's output range. If boolean is not specified, returns whether or not the scale currently clamps values to within the output range.|
 | ticks       |          | |
 | tickFormat  |          | |
 
@@ -340,10 +363,12 @@ Quantize scales are a variant of linear scales with a discrete rather than conti
 
 | Option      | Default  | Description |
 | ----------- |:-------- | -----------:|
-| domain      |          | |
-| range       |          | |
+| domain      |          | If numbers is specified, sets the scale's input domain to the specified two-element array of numbers. If the array contains more than two numbers, only the first and last number are used. If the elements in the given array are not numbers, they will be coerced to numbers; this coercion happens similarly when the scale is called. Thus, a quantize scale can be used to encode any type that can be converted to numbers. If numbers is not specified, returns the scale's current input domain.|
+| range       |          | If values is specified, sets the scale's output range to the specified array of values. The array may contain any number of discrete values. The elements in the given array need not be numbers; any value or type will work. If values is not specified, returns the scale's current output range.|
 
 #### Identity Scale
+
+Identity scales are a special case of linear scales where the domain and range are identical; the scale and its invert method are both the identity function. These scales are occasionally useful when working with pixel coordinates, say in conjunction with the axis and brush components.
 
 | Option      | Default  | Description |
 | ----------- |:-------- | -----------:|
